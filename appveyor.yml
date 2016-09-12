@@ -13,6 +13,24 @@ install:
 # Adapt as necessary starting from here
 
 build_script:
+  - travis-tool.sh install_r devtools
+  - travis-tool.sh install_r roxygen2
+  - travis-tool.sh install_r testthat
+  - travis-tool.sh install_r knitr
+  - travis-tool.sh install_r rmarkdown
+  - travis-tool.sh install_r Rcpp
+  - travis-tool.sh install_r RcppArmadillo
+  - travis-tool.sh install_r shiny
+  - travis-tool.sh install_r jpeg
+  - travis-tool.sh install_r png
+  - travis-tool.sh install_r tiff
+  - travis-tool.sh install_r covr
+  - travis-tool.sh install_r htmltools
+  - travis-tool.sh install_r
+  - travis-tool.sh install_r
+  - travis-tool.sh install_r
+  - travis-tool.sh install_r
+  - travis-tool.sh install_r
   - travis-tool.sh install_deps
 
 test_script:
