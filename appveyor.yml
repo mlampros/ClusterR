@@ -45,7 +45,7 @@ install:
 build_script:
   #- mkdir build
   #- cd build
-  - if [%COMPILER%]==[MinGW] cmake --build . --config --prefix=${gmp-install} --disable-static --enable-shared
+  - if [%COMPILER%]==[MinGW] cmake --build . --config --prefix=${gmp-install}
   #- if [%COMPILER%]==[MinGW] cmake install
   #- if [%COMPILER%]==[MinGW] cmake -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH=C:\MinGW -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ..
   #- if [%COMPILER%]==[MinGW] cmake -DCMAKE_PREFIX_PATH=C:\MinGW -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ..
