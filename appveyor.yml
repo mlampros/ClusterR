@@ -30,7 +30,7 @@ build_script:
   #- cmake -DCMAKE_INSTALL_PREFIX=${gmp_install}
   #- cmake -DCMAKE_INSTALL_PREFIX=C:/projects/clusterr ..
   #- cmake --build . --config %BUILD_TYPE% --target install
-  - ./configure --prefix=${gmp_install}
+  - /configure --prefix=${gmp_install}
   - make
   - make install
   - travis-tool.sh install_r devtools
