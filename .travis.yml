@@ -1,5 +1,91 @@
-# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
-sudo: false
+language: r
+warnings_are_errors: false
+sudo: required
 cache: packages
+
+os:
+  - linux
+  #- osx
+
+compiler:
+  - gcc
+  #- clang
+
+env:
+  global:
+    - R_BUILD_ARGS="--no-build-vignettes --no-manual"
+    - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
+
+before_install:
+
+  # LINUX
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test -y; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq install gcc-4.8; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq install g++-4.8; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 90; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.8 90; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libgfortran3; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install r-base-dev; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libarmadillo-dev; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libarmadillo2; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libopenblas-dev; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libblas-dev liblapack-dev; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libarpack++2-dev; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install gfortran; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo ln -s /usr/lib/x86_64-linux-gnu/libgfortran.so.3 /usr/lib/libgfortran.so; fi
+  
+  # MAC
+  #- if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; fi
+  
+  # clang 3.4
+  #- if [ "$CXX" == "clang++" ]; then sudo add-apt-repository -y ppa:h-rayflood/llvm; fi
+
+  #- if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
+  #- if [ "$CXX" == "clang++" ]; then export CXXFLAGS="-std=c++0x -stdlib=libc++"; fi
+  #- if [ "$CXX" == "clang++" ]; then svn co --quiet http://llvm.org/svn/llvm-project/libcxx/trunk libcxx; fi
+
+  #- if [ "$CXX" == "clang++" ]; then cd libcxx/lib && bash buildit; fi
+  #- if [ "$CXX" == "clang++" ]; then sudo cp ./libc++.so.1.0 /usr/lib/; fi
+  #- if [ "$CXX" == "clang++" ]; then sudo mkdir /usr/include/c++/v1; fi
+  #- if [ "$CXX" == "clang++" ]; then cd .. && sudo cp -r include/* /usr/include/c++/v1/; fi
+  #- if [ "$CXX" == "clang++" ]; then cd /usr/lib && sudo ln -sf libc++.so.1.0 libc++.so; fi
+  #- if [ "$CXX" == "clang++" ]; then sudo ln -sf libc++.so.1.0 libc++.so.1 && cd $cwd; fi
+
+  #- if [ "$CXX" == "clang++" ]; then export CXX="clang++-3.4"; fi
+
+
+r_packages:
+  - devtools
+  - roxygen2
+  - testthat
+  - knitr
+  - rmarkdown
+  - Rcpp
+  - RcppArmadillo
+  - shiny
+  - jpeg
+  - png
+  - tiff
+  - covr
+  - OpenImageR
+  - graphics
+  - grDevices
+  - utils
+  - gmp
+  - FD
+  - stats
+  - ggplot2
+  
+
+after_success:
+  - Rscript -e 'covr::codecov(line_exclusions = c("R/RcppExports.R", "src/RcppExports.cpp"), quiet = FALSE)'
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
