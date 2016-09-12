@@ -57,6 +57,7 @@ r_packages:
   - gmp
   - FD
   - ggplot2
+  - gtools
   
 
 after_success:
