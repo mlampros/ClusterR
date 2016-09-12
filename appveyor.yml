@@ -9,12 +9,13 @@ init:
 
 install:
   - ps: Bootstrap
-  - update
-  - upgrade mingw32-libstdc++
-  - install mingw32-gmp
-  - ./configure --prefix=${gmp_install}
-  - make
-  - make install
+  - if [%COMPILER%]==[MinGW] set PATH=C:\MinGW\bin;%PATH%
+  - if [%COMPILER%]==[MinGW] mingw-get update
+  - if [%COMPILER%]==[MinGW] mingw-get upgrade mingw32-libstdc++
+  - if [%COMPILER%]==[MinGW] mingw-get install mingw32-gmp
+  - if [%COMPILER%]==[MinGW] mingw-get ./configure
+  - if [%COMPILER%]==[MinGW] mingw-get make
+  - if [%COMPILER%]==[MinGW] mingw-get make install
   
 
 # Adapt as necessary starting from here
