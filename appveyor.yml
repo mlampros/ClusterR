@@ -26,9 +26,9 @@ install:
 build_script:
   - mkdir build
   - cd build
-  - if [%COMPILER%]==[MinGW] cmake -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH=C:\MinGW -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ..
+  #- if [%COMPILER%]==[MinGW] cmake -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH=C:\MinGW -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ..
   - cmake -DCMAKE_INSTALL_PREFIX=${gmp_install}
-  #- cmake -DCMAKE_INSTALL_PREFIX=C:\symengine ..
+  #- cmake -DCMAKE_INSTALL_PREFIX=C:/projects/clusterr ..
   - cmake --build . --config %BUILD_TYPE% --target install
   - travis-tool.sh install_r devtools
   - travis-tool.sh install_r roxygen2
