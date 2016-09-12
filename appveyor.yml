@@ -7,24 +7,23 @@ init:
         Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
         Import-Module '..\appveyor-tool.ps1'
 
-#environment:
-#  matrix:
- #   - BUILD_TYPE: Release
- #     COMPILER: MinGW
- #     PLATFORM: Win32
+environment:
+  matrix:
+    - BUILD_TYPE: Release
+      COMPILER: MinGW
+      PLATFORM: Win32
 
 
 install:
   - ps: Bootstrap
-  - ps: mingw32-gmp
-  #- if [%COMPILER%]==[MinGW] set PATH=C:\MinGW\bin;%PATH%
-  #- if [%COMPILER%]==[MinGW] mingw-get update
-  #- if [%COMPILER%]==[MinGW] mingw-get upgrade mingw32-libstdc++
-  #- if [%COMPILER%]==[MinGW] mingw-get install mingw32-gmp
+  - if [%COMPILER%]==[MinGW] set PATH=C:\MinGW\bin;%PATH%
+  - if [%COMPILER%]==[MinGW] mingw-get update
+  - if [%COMPILER%]==[MinGW] mingw-get upgrade mingw32-libstdc++
+  - if [%COMPILER%]==[MinGW] mingw-get install mingw32-gmp
 
 # Adapt as necessary starting from here
 
-platform: Any CPU
+#platform: Any CPU
 
 # to add several platforms to build matrix:
 #platform:
@@ -32,20 +31,22 @@ platform: Any CPU
 #  - Any CPU
 
 # build Configuration, i.e. Debug, Release, etc.
-configuration: Release
+#configuration: Release
 
 # to add several configurations to build matrix:
 #configuration:
 #  - Debug
 #  - Release
 
-build:
-  parallel: true  
+#build:
+ # parallel: true  
 
 
 build_script:
   #- mkdir build
   #- cd build
+  - if [%COMPILER%]==[MinGW] cmake --build . --config --prefix=${gmp-install} --disable-static --enable-shared
+  #- if [%COMPILER%]==[MinGW] cmake install
   #- if [%COMPILER%]==[MinGW] cmake -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH=C:\MinGW -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ..
   #- if [%COMPILER%]==[MinGW] cmake -DCMAKE_PREFIX_PATH=C:\MinGW -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ..
   #- if [%COMPILER%]==[MinGW] cmake -DCMAKE_INSTALL_PREFIX=${gmp_install}
