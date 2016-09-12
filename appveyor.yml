@@ -26,11 +26,14 @@ build_script:
   - travis-tool.sh install_r tiff
   - travis-tool.sh install_r covr
   - travis-tool.sh install_r htmltools
-  - travis-tool.sh install_r
-  - travis-tool.sh install_r
-  - travis-tool.sh install_r
-  - travis-tool.sh install_r
-  - travis-tool.sh install_r
+  - travis-tool.sh install_r OpenImageR
+  - travis-tool.sh install_r graphics
+  - travis-tool.sh install_r grDevices
+  - travis-tool.sh install_r utils
+  - travis-tool.sh install_r gmp
+  - travis-tool.sh install_r FD
+  - travis-tool.sh install_r stats
+  - travis-tool.sh install_r ggplot2
   - travis-tool.sh install_deps
 
 test_script:
