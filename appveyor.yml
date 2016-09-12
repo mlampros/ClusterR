@@ -9,12 +9,12 @@ init:
 
 install:
   - ps: Bootstrap
-  - mingw-get update
+  - update
   - upgrade mingw32-libstdc++
-  - mingw-get install mingw32-gmp
-  - mingw-get ./configure --prefix=${gmp_install}
-  - mingw-get make
-  - mingw-get make install
+  - install mingw32-gmp
+  - ./configure --prefix=${gmp_install}
+  - make
+  - make install
   
 
 # Adapt as necessary starting from here
