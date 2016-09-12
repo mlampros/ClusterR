@@ -1,0 +1,34 @@
+Package: ClusterR
+Type: Package
+Title: Gaussian Mixture Models, K-Means, Mini-Batch-Kmeans and K-Medoids
+    Clustering
+Version: 1.0.1
+Date: 2016-09-09
+Author: Lampros Mouselimis <mouselimislampros@gmail.com>
+Maintainer: Lampros Mouselimis <mouselimislampros@gmail.com>
+Description: Gaussian mixture models, k-means, mini-batch-kmeans and k-medoids
+    clustering with the option to plot, validate, predict (new data) and estimate the
+    optimal number of clusters. The package takes advantage of 'RcppArmadillo' to
+    speed up the computationally intensive parts of the functions.
+License: MIT + file LICENSE
+LazyData: TRUE
+Depends:
+    R(>= 3.2.3), gtools
+Imports:
+    Rcpp (>= 0.12.5),
+    OpenImageR,
+    graphics,
+    grDevices,
+    utils,
+    gmp,
+    FD,
+    stats,
+    ggplot2
+LinkingTo: Rcpp, RcppArmadillo (>= 0.7.2)
+Suggests:
+    testthat,
+    covr,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+RoxygenNote: 5.0.1
