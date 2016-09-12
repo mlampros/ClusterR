@@ -8,7 +8,7 @@ init:
         Import-Module '..\appveyor-tool.ps1'
 
 install:
-  ps: Bootstrap
+  - ps: Bootstrap
   - if [%COMPILER%]==[MinGW] set PATH=C:\MinGW\bin;%PATH%
   - if [%COMPILER%]==[MinGW] mingw-get update
   - if [%COMPILER%]==[MinGW] mingw-get upgrade mingw32-libstdc++
