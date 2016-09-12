@@ -9,6 +9,11 @@ init:
 
 install:
   ps: Bootstrap
+  - if [%COMPILER%]==[MinGW] set PATH=C:\MinGW\bin;%PATH%
+  - if [%COMPILER%]==[MinGW] mingw-get update
+  - if [%COMPILER%]==[MinGW] mingw-get upgrade mingw32-libstdc++
+  - if [%COMPILER%]==[MinGW] mingw-get install mingw32-gmp
+  
 
 # Adapt as necessary starting from here
 
@@ -34,6 +39,7 @@ build_script:
   - travis-tool.sh install_r FD
   - travis-tool.sh install_r stats
   - travis-tool.sh install_r ggplot2
+  - travis-tool.sh install_r gtools
   - travis-tool.sh install_deps
 
 test_script:
