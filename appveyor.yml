@@ -21,18 +21,15 @@ install:
   - if [%COMPILER%]==[MinGW] mingw-get upgrade mingw32-libstdc++
   - if [%COMPILER%]==[MinGW] mingw-get install mingw32-gmp
 
-build_script:
-- mkdir build
-- cd build
-- if [%COMPILER%]==[MinGW] cmake -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH=C:\MinGW -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ..
-- cmake -DCMAKE_INSTALL_PREFIX=${gmp_install}
-#- cmake -DCMAKE_INSTALL_PREFIX=C:\symengine ..
-- cmake --build . --config %BUILD_TYPE% --target install
-  
-
 # Adapt as necessary starting from here
 
 build_script:
+  - mkdir build
+  - cd build
+  - if [%COMPILER%]==[MinGW] cmake -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH=C:\MinGW -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ..
+  - cmake -DCMAKE_INSTALL_PREFIX=${gmp_install}
+  #- cmake -DCMAKE_INSTALL_PREFIX=C:\symengine ..
+  - cmake --build . --config %BUILD_TYPE% --target install
   - travis-tool.sh install_r devtools
   - travis-tool.sh install_r roxygen2
   - travis-tool.sh install_r testthat
