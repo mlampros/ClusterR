@@ -14,6 +14,17 @@ MEDOIDS_continuous = matrix(runif(20), ncol = ncol(binary_data), nrow = 2)
 set.seed(3)
 MEDOIDS_binary = matrix(sample(0:1, 20, replace = T), ncol = ncol(binary_data), nrow = 2)
 
+
+# data which includes missing values 
+
+set.seed(4)
+mt_NAs = matrix(runif(1000), nrow = 100, ncol = 10)
+mt_NAs[sample(1:nrow(mt_NAs), 20), 1] = NA
+mt_NAs[sample(1:nrow(mt_NAs), 20), 3] = NA
+mt_NAs[sample(1:nrow(mt_NAs), 20), 4] = NA
+mt_NAs[sample(1:nrow(mt_NAs), 20), 7] = NA
+
+
 #=============================================================
 
 
@@ -68,6 +79,15 @@ testthat::test_that("in case that the data is numeric it returns the correct out
 
 
 
+testthat::test_that("in case that the data includes missing values (NA) the 'dissim_mat' function returns the correct output ", {
+  
+  out = dissim_mat(mt_NAs, "euclidean", upper = T, diagonal = T)
+  
+  testthat::expect_true( is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(mt_NAs) && ncol(out) == nrow(mt_NAs) && sum(as.vector(colSums(is.na(out)))) == 0 )
+})
+
+
+
 ##########################
 # dissim_MEDOIDS function
 ##########################
@@ -112,5 +132,13 @@ testthat::test_that("in case that the data is numeric it returns the correct out
   out = dissim_MEDOIDS(continuous_data, "minkowski", MEDOIDS_continuous, minkowski_p = 1.0)
   
   testthat::expect_true( is.matrix(out) && nrow(out) == nrow(continuous_data) && ncol(out) == nrow(MEDOIDS_continuous) )
+})
+
+
+testthat::test_that("in case that the data includes missing values (NA) the function returns the correct output taking into account the medoids", {
+  
+  out = dissim_MEDOIDS(mt_NAs, "euclidean", MEDOIDS_continuous)
+  
+  testthat::expect_true( is.matrix(out) && nrow(out) == nrow(continuous_data) && ncol(out) == nrow(MEDOIDS_continuous) && sum(as.vector(colSums(is.na(out)))) == 0  )
 })
 

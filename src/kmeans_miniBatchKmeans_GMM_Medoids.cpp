@@ -21,7 +21,6 @@
 //============================================ k-means ====================================================================================
 
 
-
 // center, square and take the sum of the data to calculate the total sum of squares
 // http://stackoverflow.com/questions/8637460/k-means-return-value-in-r
 //
@@ -921,7 +920,7 @@ arma::mat INV_COV(arma::vec COV_VEC) {
 //
 // formula for log-likelihood function : SEE "http://jonathantemplin.com/files/multivariate/mv12uga/mv12uga_section05.pdf", page 15 and 26
 //
-// The predictions are based on centroids, covariance matrix and weights using the formulas and not the log-likelihoods.
+// The predictions are based on centroids, covariance matrix and weights using the formulas and not on the log-likelihoods.
 //
 
 // [[Rcpp::export]]
@@ -945,11 +944,19 @@ Rcpp::List predict_MGausDPDF(arma::mat data, arma::mat CENTROIDS, arma::mat COVA
       
       arma::mat tmp_cov_mt = arma::diagmat(arma::conv_to< arma::vec >::from(COVARIANCE.row(i)));
       
-      double tmp_val = 1.0 / std::sqrt(2.0 * arma::datum::pi * arma::det(tmp_cov_mt));               // use determinant to get a single value
+      double tmp_determinant = arma::det(tmp_cov_mt);
+      
+      //if (tmp_determinant <= 1.0e-8) {
+      if (tmp_determinant == 0.0) {
+        
+        Rcpp::stop("the determinant is zero or approximately zero. The data might include highly correlated variables or variables with low variance");
+      }
+      
+      double tmp_val = 1.0 / std::sqrt(2.0 * arma::datum::pi * tmp_determinant);               // use determinant to get a single value
       
       double inner_likelih = 0.5 * (arma::as_scalar(tmp_vec.t() * INV_COV(arma::conv_to< arma::vec >::from(COVARIANCE.row(i))) * arma::conv_to< arma::mat >::from(tmp_vec)));
       
-      gaus_vec_log(j) = -(n / 2.0) * std::log(2.0 * arma::datum::pi) - (1.0 / 2.0) * (std::log(arma::det(tmp_cov_mt))) - inner_likelih;
+      gaus_vec_log(j) = -(n / 2.0) * std::log(2.0 * arma::datum::pi) - (1.0 / 2.0) * (std::log(tmp_determinant)) - inner_likelih;
       
       gaus_vec(j) = tmp_val * std::exp(-inner_likelih);
     }
@@ -1049,6 +1056,7 @@ arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, unsigned int max_clusters, std::s
 
 
 // dissimilarity matrix using various distance metrics [ test cases for all methods as I changed some parameters ]
+// the function can handle missing values by using pair-wise deletion
 //
 
 // [[Rcpp::export]]
@@ -1057,6 +1065,13 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
   #ifdef _OPENMP
   omp_set_num_threads(threads);
   #endif
+  
+  bool flag_isfinite = data.is_finite();
+  
+  if (!flag_isfinite && method == "mahalanobis") {
+    
+    Rcpp::stop("in case of missing values the mahalanobis distance calculation is not feasible");
+  }
   
   arma::mat cov_mat;
   
@@ -1074,7 +1089,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
   #endif
   for (unsigned int i = 0; i < data.n_rows - 1; i++) {
     
-    int k = i;
+    unsigned int k = i;
     
     #ifdef _OPENMP
     #pragma omp parallel for schedule(static)
@@ -1085,62 +1100,354 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
       
       if (method == "euclidean") {
         
-        tmp_idx = std::sqrt(arma::as_scalar(arma::accu(arma::square((data.row(i) - data.row(j))))));
+        if (flag_isfinite) {
+          
+          tmp_idx = std::sqrt(arma::as_scalar(arma::accu(arma::square((data.row(i) - data.row(j))))));}
+        
+        else {
+          
+          arma::rowvec tmp_idx1;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f) - data.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          tmp_idx = std::sqrt(arma::as_scalar(arma::accu(arma::square(tmp_idx1))));
+        }
       }
       
       else if (method == "manhattan") {
         
-        tmp_idx = arma::as_scalar(arma::accu(arma::abs((data.row(i) - data.row(j)))));
+        if (flag_isfinite) {
+          
+          tmp_idx = arma::as_scalar(arma::accu(arma::abs((data.row(i) - data.row(j)))));}
+        
+        else {
+          
+          arma::rowvec tmp_idx1;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f) - data.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          tmp_idx = arma::as_scalar(arma::accu(arma::abs(tmp_idx1)));
+        }
       }
       
       else if (method == "chebyshev") {
         
-        tmp_idx = arma::as_scalar(arma::max(arma::abs((data.row(i) - data.row(j)))));
+        if (flag_isfinite) {
+          
+          tmp_idx = arma::as_scalar(arma::max(arma::abs((data.row(i) - data.row(j)))));}
+        
+        else {
+          
+          arma::rowvec tmp_idx1;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f) - data.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          tmp_idx = arma::as_scalar(arma::max(arma::abs(tmp_idx1)));
+        }
       }
       
       else if (method == "canberra") {
         
-        tmp_idx = arma::as_scalar(arma::accu(arma::abs((data.row(i) - data.row(j)) + eps)/(arma::abs(data.row(i)) + arma::abs(data.row(j)) + eps)));                 // added 1.0e-6 otherwise rstudio crashes
+        if (flag_isfinite) {
+          
+          tmp_idx = arma::as_scalar(arma::accu(arma::abs((data.row(i) - data.row(j)) + eps)/(arma::abs(data.row(i)) + arma::abs(data.row(j)) + eps)));}       // added 'eps' otherwise rstudio crashes
+        
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = data.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            tmp_idx = arma::as_scalar(arma::accu(arma::abs((tmp_idx1 - tmp_idx2) + eps)/(arma::abs(tmp_idx1) + arma::abs(tmp_idx2) + eps)));}
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "braycurtis") {
         
-        tmp_idx = arma::as_scalar(arma::accu(arma::abs((data.row(i) - data.row(j))))/(arma::accu(arma::abs(data.row(i))) + arma::accu(arma::abs(data.row(j)))));
+        if (flag_isfinite) {
+          
+          tmp_idx = arma::as_scalar(arma::accu(arma::abs((data.row(i) - data.row(j))))/(arma::accu(arma::abs(data.row(i))) + arma::accu(arma::abs(data.row(j)))));}
+        
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = data.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            tmp_idx = arma::as_scalar(arma::accu(arma::abs((tmp_idx1 - tmp_idx2)))/(arma::accu(arma::abs(tmp_idx1)) + arma::accu(arma::abs(tmp_idx2))));}
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "pearson_correlation") {
         
-        tmp_idx = arma::as_scalar(1.0 - arma::cor(data.row(i), data.row(j)));
+        if (flag_isfinite) {
+          
+          tmp_idx = arma::as_scalar(1.0 - arma::cor(data.row(i), data.row(j)));}
+        
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = data.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            tmp_idx = arma::as_scalar(1.0 - arma::cor(tmp_idx1, tmp_idx2));}
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "simple_matching_coefficient") {                                                    // for binary data
         
-        double a = eps;
-        double d = eps;
-        
-        for (unsigned int t = 0; t < data.row(i).n_elem; t++) {
+        if (flag_isfinite) {
           
-          if (data.row(i)(t) == 1 && data.row(j)(t) == 1) {
-            
-            a += 1.0;}
+          double a = eps;
+          double d = eps;
           
-          if (data.row(i)(t) == 0 && data.row(j)(t) == 0) {
+          for (unsigned int t = 0; t < data.row(i).n_elem; t++) {
             
-            d += 1.0;
+            if (data.row(i)(t) == 1 && data.row(j)(t) == 1) {
+              
+              a += 1.0;}
+            
+            if (data.row(i)(t) == 0 && data.row(j)(t) == 0) {
+              
+              d += 1.0;
+            }
           }
+          
+          tmp_idx = 1.0 - ((a + d) / data.row(i).n_elem);
         }
         
-        tmp_idx = 1.0 - ((a + d) / data.row(i).n_elem);
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = data.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            double a = eps;
+            double d = eps;
+            
+            for (unsigned int t = 0; t < tmp_idx1.n_elem; t++) {
+              
+              if (tmp_idx1(t) == 1 && tmp_idx2(t) == 1) {
+                
+                a += 1.0;}
+              
+              if (tmp_idx1(t) == 0 && tmp_idx2(t) == 0) {
+                
+                d += 1.0;
+              }
+            }
+            
+            tmp_idx = 1.0 - ((a + d) / tmp_idx1.n_elem);
+          }
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "minkowski") {                                                                                     // by default the order of the minkowski parameter equals k
         
-        tmp_idx = std::pow(arma::as_scalar(arma::accu(arma::pow(arma::abs((data.row(i) - data.row(j))), minkowski_p))), 1.0 / minkowski_p);
+        if (flag_isfinite) {
+          
+          tmp_idx = std::pow(arma::as_scalar(arma::accu(arma::pow(arma::abs((data.row(i) - data.row(j))), minkowski_p))), 1.0 / minkowski_p);
+        }
+        
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = data.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            tmp_idx = std::pow(arma::as_scalar(arma::accu(arma::pow(arma::abs((tmp_idx1 -tmp_idx2)), minkowski_p))), 1.0 / minkowski_p);}
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "hamming") {                                                                                     // for binary data
         
-        tmp_idx = arma::as_scalar(arma::accu(data.row(i) != data.row(j))/(data.row(i).n_elem * 1.0));
+        if (flag_isfinite) {
+          
+          tmp_idx = arma::as_scalar(arma::accu(data.row(i) != data.row(j))/(data.row(i).n_elem * 1.0));
+        }
+        
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = data.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            tmp_idx = arma::as_scalar(arma::accu(tmp_idx1 != tmp_idx2)/(tmp_idx1.n_elem * 1.0));}
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "mahalanobis") {                                                                                     // first create covariance matrix from data
@@ -1150,52 +1457,149 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
       
       else if (method == "jaccard_coefficient") {                                                                                     // for binary data
         
-        double a = eps;
-        double b = eps;
-        double c = eps;
-        
-        for (unsigned int t = 0; t < data.row(i).n_elem; t++) {
+        if (flag_isfinite) {
           
-          if (data.row(i)(t) == 1 && data.row(j)(t) == 1) {
-            
-            a += 1.0;}
+          double a = eps;
+          double b = eps;
+          double c = eps;
           
-          if (data.row(i)(t) == 1 && data.row(j)(t) == 0) {
+          for (unsigned int t = 0; t < data.row(i).n_elem; t++) {
             
-            b += 1.0;}
-          
-          if (data.row(i)(t) == 0 && data.row(j)(t) == 1) {
+            if (data.row(i)(t) == 1 && data.row(j)(t) == 1) {
+              
+              a += 1.0;}
             
-            c += 1.0;
+            if (data.row(i)(t) == 1 && data.row(j)(t) == 0) {
+              
+              b += 1.0;}
+            
+            if (data.row(i)(t) == 0 && data.row(j)(t) == 1) {
+              
+              c += 1.0;
+            }
           }
+          
+          tmp_idx = 1.0 - (a / (a + b + c));
         }
         
-        tmp_idx = 1.0 - (a / (a + b + c));
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = data.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            double a = eps;
+            double b = eps;
+            double c = eps;
+            
+            for (unsigned int t = 0; t < tmp_idx1.n_elem; t++) {
+              
+              if (tmp_idx1(t) == 1 && tmp_idx2(t) == 1) {
+                
+                a += 1.0;}
+              
+              if (tmp_idx1(t) == 1 && tmp_idx2(t) == 0) {
+                
+                b += 1.0;}
+              
+              if (tmp_idx1(t) == 0 && tmp_idx2(t) == 1) {
+                
+                c += 1.0;
+              }
+            }
+            
+            tmp_idx = 1.0 - (a / (a + b + c));
+          }
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "Rao_coefficient") {                                                                                     // for binary data
         
-        double a = eps;
-        
-        for (unsigned int t = 0; t < data.row(i).n_elem; t++) {
+        if (flag_isfinite) {
           
-          if (data.row(i)(t) == 1 && data.row(j)(t) == 1) {
+          double a = eps;
+          
+          for (unsigned int t = 0; t < data.row(i).n_elem; t++) {
             
-            a += 1.0;
+            if (data.row(i)(t) == 1 && data.row(j)(t) == 1) {
+              
+              a += 1.0;
+            }
           }
+          
+          tmp_idx = 1.0 - (a / data.row(i).n_elem);
         }
         
-        tmp_idx = 1.0 - (a / data.row(i).n_elem);
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = data.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            double a = eps;
+            
+            for (unsigned int t = 0; t < tmp_idx1.n_elem; t++) {
+              
+              if (tmp_idx1(t) == 1 && tmp_idx2(t) == 1) {
+                
+                a += 1.0;
+              }
+            }
+            
+            tmp_idx = 1.0 - (a / tmp_idx1.n_elem);
+          }
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else {
         
-        tmp_idx = 0;                                             // default = 0; create exceptions in R, so that tmp_idx != 0;
-      }
-      
-      if ( tmp_idx != tmp_idx ) {                                // handling of NAs, if NaN then distance 1.0 [  NaN will compare false to everything, including itself ], http://stackoverflow.com/questions/11569337/using-an-if-statement-to-switch-nan-values-in-an-array-to-0-0]
-        
-        tmp_idx = 1.0;
+        tmp_idx = arma::datum::nan;                                             // default = 0; create exceptions in R, so that tmp_idx = arma::datum::nan;
       }
       
       mt(j,i) = tmp_idx;
@@ -1214,6 +1618,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
   
   return(mt);
 }
+
 
 
 
@@ -1592,11 +1997,12 @@ Rcpp::List ClusterMedoids(arma::mat& data, unsigned int clusters, std::string me
                             
                             Rcpp::Named("clusters") = end_indices_vec, Rcpp::Named("end_cost_vec") = end_cost_vec, Rcpp::Named("silhouette_matrix") = silh_lst[0], 
                                         
-                                        Rcpp::Named("fuzzy_probs") = fuz_out, Rcpp::Named("clustering_stats") = silh_lst[1], Rcpp::Named("flag_dissim_mat") = flag_dissim_mat);
+                            Rcpp::Named("fuzzy_probs") = fuz_out, Rcpp::Named("clustering_stats") = silh_lst[1], Rcpp::Named("flag_dissim_mat") = flag_dissim_mat);
 }
 
 
 // calculate global dissimilarities for claraMedoids
+// the function can handle missing values by using pair-wise deletion
 //
 
 // [[Rcpp::export]]
@@ -1606,6 +2012,13 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
   omp_set_num_threads(threads);
   #endif
   
+  bool flag_isfinite = data.is_finite();
+  
+  if (!flag_isfinite && method == "mahalanobis") {
+    
+    Rcpp::stop("in case of missing values the mahalanobis distance calculation is not feasible");
+  }
+  
   arma::mat cov_mat;
   
   if (method == "mahalanobis") {
@@ -1614,7 +2027,7 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
   }
   
   arma::mat mt(data.n_rows, MEDOIDS.n_rows);
-  
+
   #ifdef _OPENMP
   #pragma omp parallel for schedule(static)
   #endif
@@ -1631,62 +2044,354 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
       
       if (method == "euclidean") {
         
-        tmp_idx = std::sqrt(arma::as_scalar(arma::accu(arma::square((data.row(i) - MEDOIDS.row(j))))));
+        if (flag_isfinite) {
+          
+          tmp_idx = std::sqrt(arma::as_scalar(arma::accu(arma::square((data.row(i) - MEDOIDS.row(j))))));}
+        
+        else {
+          
+          arma::rowvec tmp_idx1;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(MEDOIDS.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f) - MEDOIDS.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          tmp_idx = std::sqrt(arma::as_scalar(arma::accu(arma::square(tmp_idx1))));
+        }
       }
       
       else if (method == "manhattan") {
         
-        tmp_idx = arma::as_scalar(arma::accu(arma::abs((data.row(i) - MEDOIDS.row(j)))));
+        if (flag_isfinite) {
+          
+          tmp_idx = arma::as_scalar(arma::accu(arma::abs((data.row(i) - MEDOIDS.row(j)))));}
+        
+        else {
+          
+          arma::rowvec tmp_idx1;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(MEDOIDS.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f) - MEDOIDS.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          tmp_idx = arma::as_scalar(arma::accu(arma::abs(tmp_idx1)));
+        }
       }
       
       else if (method == "chebyshev") {
         
-        tmp_idx = arma::as_scalar(arma::max(arma::abs((data.row(i) - MEDOIDS.row(j)))));
+        if (flag_isfinite) {
+          
+          tmp_idx = arma::as_scalar(arma::max(arma::abs((data.row(i) - MEDOIDS.row(j)))));}
+        
+        else {
+          
+          arma::rowvec tmp_idx1;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(MEDOIDS.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f) - MEDOIDS.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          tmp_idx = arma::as_scalar(arma::max(arma::abs(tmp_idx1)));
+        }
       }
       
       else if (method == "canberra") {
         
-        tmp_idx = arma::as_scalar(arma::accu(arma::abs((data.row(i) - MEDOIDS.row(j)) + eps)/(arma::abs(data.row(i)) + arma::abs(MEDOIDS.row(j)) + eps)));                 // added 1.0e-6 otherwise rstudio crashes
+        if (flag_isfinite) {
+          
+          tmp_idx = arma::as_scalar(arma::accu(arma::abs((data.row(i) - MEDOIDS.row(j)) + eps)/(arma::abs(data.row(i)) + arma::abs(MEDOIDS.row(j)) + eps)));}       // added 'eps' otherwise rstudio crashes
+        
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(MEDOIDS.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = MEDOIDS.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            tmp_idx = arma::as_scalar(arma::accu(arma::abs((tmp_idx1 - tmp_idx2) + eps)/(arma::abs(tmp_idx1) + arma::abs(tmp_idx2) + eps)));}
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "braycurtis") {
         
-        tmp_idx = arma::as_scalar(arma::accu(arma::abs((data.row(i) - MEDOIDS.row(j))))/(arma::accu(arma::abs(data.row(i))) + arma::accu(arma::abs(MEDOIDS.row(j)))));
+        if (flag_isfinite) {
+          
+          tmp_idx = arma::as_scalar(arma::accu(arma::abs((data.row(i) - MEDOIDS.row(j))))/(arma::accu(arma::abs(data.row(i))) + arma::accu(arma::abs(MEDOIDS.row(j)))));}
+        
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(MEDOIDS.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = MEDOIDS.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            tmp_idx = arma::as_scalar(arma::accu(arma::abs((tmp_idx1 - tmp_idx2)))/(arma::accu(arma::abs(tmp_idx1)) + arma::accu(arma::abs(tmp_idx2))));}
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "pearson_correlation") {
         
-        tmp_idx = arma::as_scalar(1.0 - arma::cor(data.row(i), MEDOIDS.row(j)));
+        if (flag_isfinite) {
+          
+          tmp_idx = arma::as_scalar(1.0 - arma::cor(data.row(i), MEDOIDS.row(j)));}
+        
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(MEDOIDS.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = MEDOIDS.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            tmp_idx = arma::as_scalar(1.0 - arma::cor(tmp_idx1, tmp_idx2));}
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "simple_matching_coefficient") {                                                    // for binary data
         
-        double a = eps;
-        double d = eps;
-        
-        for (unsigned int t = 0; t < data.row(i).n_elem; t++) {
+        if (flag_isfinite) {
           
-          if (data.row(i)(t) == 1 && MEDOIDS.row(j)(t) == 1) {
-            
-            a += 1.0;}
+          double a = eps;
+          double d = eps;
           
-          if (data.row(i)(t) == 0 && MEDOIDS.row(j)(t) == 0) {
+          for (unsigned int t = 0; t < data.row(i).n_elem; t++) {
             
-            d += 1.0;
+            if (data.row(i)(t) == 1 && MEDOIDS.row(j)(t) == 1) {
+              
+              a += 1.0;}
+            
+            if (data.row(i)(t) == 0 && MEDOIDS.row(j)(t) == 0) {
+              
+              d += 1.0;
+            }
           }
+          
+          tmp_idx = 1.0 - ((a + d) / data.row(i).n_elem);
         }
         
-        tmp_idx = 1.0 - ((a + d) / data.row(i).n_elem);
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(MEDOIDS.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = MEDOIDS.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            double a = eps;
+            double d = eps;
+            
+            for (unsigned int t = 0; t < tmp_idx1.n_elem; t++) {
+              
+              if (tmp_idx1(t) == 1 && tmp_idx2(t) == 1) {
+                
+                a += 1.0;}
+              
+              if (tmp_idx1(t) == 0 && tmp_idx2(t) == 0) {
+                
+                d += 1.0;
+              }
+            }
+            
+            tmp_idx = 1.0 - ((a + d) / tmp_idx1.n_elem);
+          }
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "minkowski") {                                                                                     // by default the order of the minkowski parameter equals k
         
-        tmp_idx = std::pow(arma::as_scalar(arma::accu(arma::pow(arma::abs((data.row(i) - MEDOIDS.row(j))), minkowski_p))), 1.0 / minkowski_p);
+        if (flag_isfinite) {
+          
+          tmp_idx = std::pow(arma::as_scalar(arma::accu(arma::pow(arma::abs((data.row(i) - MEDOIDS.row(j))), minkowski_p))), 1.0 / minkowski_p);
+        }
+        
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(MEDOIDS.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = MEDOIDS.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            tmp_idx = std::pow(arma::as_scalar(arma::accu(arma::pow(arma::abs((tmp_idx1 -tmp_idx2)), minkowski_p))), 1.0 / minkowski_p);}
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "hamming") {                                                                                     // for binary data
         
-        tmp_idx = arma::as_scalar(arma::accu(data.row(i) != MEDOIDS.row(j))/(data.row(i).n_elem * 1.0));
+        if (flag_isfinite) {
+          
+          tmp_idx = arma::as_scalar(arma::accu(data.row(i) != MEDOIDS.row(j))/(data.row(i).n_elem * 1.0));
+        }
+        
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(MEDOIDS.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = MEDOIDS.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            tmp_idx = arma::as_scalar(arma::accu(tmp_idx1 != tmp_idx2)/(tmp_idx1.n_elem * 1.0));}
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "mahalanobis") {                                                                                     // first create covariance matrix from data
@@ -1696,52 +2401,149 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
       
       else if (method == "jaccard_coefficient") {                                                                                     // for binary data
         
-        double a = eps;
-        double b = eps;
-        double c = eps;
-        
-        for (unsigned int t = 0; t < data.row(i).n_elem; t++) {
+        if (flag_isfinite) {
           
-          if (data.row(i)(t) == 1 && MEDOIDS.row(j)(t) == 1) {
-            
-            a += 1.0;}
+          double a = eps;
+          double b = eps;
+          double c = eps;
           
-          if (data.row(i)(t) == 1 && MEDOIDS.row(j)(t) == 0) {
+          for (unsigned int t = 0; t < data.row(i).n_elem; t++) {
             
-            b += 1.0;}
-          
-          if (data.row(i)(t) == 0 && MEDOIDS.row(j)(t) == 1) {
+            if (data.row(i)(t) == 1 && MEDOIDS.row(j)(t) == 1) {
+              
+              a += 1.0;}
             
-            c += 1.0;
+            if (data.row(i)(t) == 1 && MEDOIDS.row(j)(t) == 0) {
+              
+              b += 1.0;}
+            
+            if (data.row(i)(t) == 0 && MEDOIDS.row(j)(t) == 1) {
+              
+              c += 1.0;
+            }
           }
+          
+          tmp_idx = 1.0 - (a / (a + b + c));
         }
         
-        tmp_idx = 1.0 - (a / (a + b + c));
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(MEDOIDS.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = MEDOIDS.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            double a = eps;
+            double b = eps;
+            double c = eps;
+            
+            for (unsigned int t = 0; t < tmp_idx1.n_elem; t++) {
+              
+              if (tmp_idx1(t) == 1 && tmp_idx2(t) == 1) {
+                
+                a += 1.0;}
+              
+              if (tmp_idx1(t) == 1 && tmp_idx2(t) == 0) {
+                
+                b += 1.0;}
+              
+              if (tmp_idx1(t) == 0 && tmp_idx2(t) == 1) {
+                
+                c += 1.0;
+              }
+            }
+            
+            tmp_idx = 1.0 - (a / (a + b + c));
+          }
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else if (method == "Rao_coefficient") {                                                                                     // for binary data
         
-        double a = eps;
-        
-        for (unsigned int t = 0; t < data.row(i).n_elem; t++) {
+        if (flag_isfinite) {
           
-          if (data.row(i)(t) == 1 && MEDOIDS.row(j)(t) == 1) {
+          double a = eps;
+          
+          for (unsigned int t = 0; t < data.row(i).n_elem; t++) {
             
-            a += 1.0;
+            if (data.row(i)(t) == 1 && MEDOIDS.row(j)(t) == 1) {
+              
+              a += 1.0;
+            }
           }
+          
+          tmp_idx = 1.0 - (a / data.row(i).n_elem);
         }
         
-        tmp_idx = 1.0 - (a / data.row(i).n_elem);
+        else {
+          
+          arma::rowvec tmp_idx1, tmp_idx2;
+          
+          unsigned int count = 1;
+          
+          for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+            
+            if (arma::is_finite(data.row(i)(f)) && arma::is_finite(MEDOIDS.row(j)(f))) {
+              
+              tmp_idx1.set_size(count);
+              
+              tmp_idx2.set_size(count);
+              
+              tmp_idx1(count - 1) = data.row(i)(f);
+              
+              tmp_idx2(count - 1) = MEDOIDS.row(j)(f);
+              
+              count += 1;
+            }
+          }
+          
+          if (!tmp_idx1.is_empty()) {
+            
+            double a = eps;
+            
+            for (unsigned int t = 0; t < tmp_idx1.n_elem; t++) {
+              
+              if (tmp_idx1(t) == 1 && tmp_idx2(t) == 1) {
+                
+                a += 1.0;
+              }
+            }
+            
+            tmp_idx = 1.0 - (a / tmp_idx1.n_elem);
+          }
+          
+          else {
+            
+            tmp_idx = arma::datum::nan;
+          }
+        }
       }
       
       else {
         
-        tmp_idx = 0;                                             // default = 0; create exceptions in R, so that tmp_idx is never 0;
-      }
-      
-      if ( tmp_idx != tmp_idx ) {                                // handling of NAs, if NaN then distance 1.0 [  NaN will compare false to everything, including itself ], http://stackoverflow.com/questions/11569337/using-an-if-statement-to-switch-nan-values-in-an-array-to-0-0]
-        
-        tmp_idx = 1.0;
+        tmp_idx = 1.0;                                             // default = 1.0; create exceptions in R, so that tmp_idx is never 1.0;
       }
       
       tmp_vec(i) = tmp_idx;
@@ -2086,9 +2888,11 @@ Rcpp::List OptClust(arma::mat& data, unsigned int iter_clust, std::string method
   
   for (unsigned int iter = 0; iter < iter_clust; iter++) {
     
-    if (iter == 0) { 
+    if (iter == 0) {
       
-      if (verbose) { Rcpp::Rcout << "number of clusters: "<< iter + 1 << "  -->  " << criterion << ": " <<  arma::datum::inf << std::endl; }}
+      std::string tmp_c = criterion == "dissimilarity" ? "average dissimilarity" : "average silhouette";
+      
+      if (verbose) { Rcpp::Rcout << "number of clusters: "<< iter + 1 << "  -->  " << tmp_c << ": " <<  arma::datum::inf << std::endl; }}
     
     else {
       
@@ -2096,22 +2900,50 @@ Rcpp::List OptClust(arma::mat& data, unsigned int iter_clust, std::string method
         
         Rcpp::List cm_out = ClusterMedoids(data, iter + 1, method, minkowski_p, threads, false, swap_phase, false);
         
-        medoids_object[iter] = split_rcpp_lst(cm_out);
+        Rcpp::List tmp_split = split_rcpp_lst(cm_out);
         
-        double dissiml = Rcpp::as<double> (cm_out[1]);
+        medoids_object[iter] = tmp_split;
         
-        if (verbose) { Rcpp::Rcout << "number of clusters: "<< iter + 1 << "  -->  " << criterion << ": " << dissiml << std::endl; }
+        double tmp_val = 0.0;
+        
+        if (criterion == "dissimilarity" && verbose) {
+          
+          tmp_val =  Rcpp::as<double> (tmp_split[0]);
+          
+          Rcpp::Rcout << "number of clusters: "<< iter + 1 << "  -->  " << "average dissimilarity: " << tmp_val << std::endl;
+        }
+        
+        if (criterion == "silhouette" && verbose) {
+          
+          tmp_val =  Rcpp::as<double> (tmp_split[2]);
+          
+          Rcpp::Rcout << "number of clusters: "<< iter + 1 << "  -->  " << "average silhouette: " << tmp_val << std::endl;
+        }
       }
       
       else {
         
         Rcpp::List cl_out = ClaraMedoids(data, iter + 1, method, samples, sample_size, minkowski_p, threads, false, swap_phase,false);
         
-        medoids_object[iter] = split_rcpp_lst(cl_out);
+        Rcpp::List tmp_split = split_rcpp_lst(cl_out);
         
-        double dissiml = Rcpp::as<double> (cl_out[1]);
+        medoids_object[iter] = tmp_split;
         
-        if (verbose) { Rcpp::Rcout << "number of clusters: "<< iter + 1 << "  -->  " << criterion << ": " <<  dissiml << std::endl; }
+        double tmp_val = 0.0;
+        
+        if (criterion == "dissimilarity" && verbose) {
+          
+          tmp_val =  Rcpp::as<double> (tmp_split[0]);
+          
+          Rcpp::Rcout << "number of clusters: "<< iter + 1 << "  -->  " << "average dissimilarity: " << tmp_val << std::endl;
+        }
+        
+        if (criterion == "silhouette" && verbose) {
+          
+          tmp_val =  Rcpp::as<double> (tmp_split[2]);
+          
+          Rcpp::Rcout << "number of clusters: "<< iter + 1 << "  -->  " << "average silhouette: " << tmp_val << std::endl;
+        }
       }
     }
   }

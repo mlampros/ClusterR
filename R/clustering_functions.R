@@ -1234,7 +1234,7 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
       
       SUM_dis = sum(na.omit(tmp_dis))
       
-      for (i in 2:max_clusters) { tmp_dis[i] = tmp_dis[i] / SUM_dis }
+      for (i in 2:max_clusters) { tmp_dis[i] = tmp_dis[i] / SUM_dis }           # the dissimilarities are divided by the sum, so that they are in the range 0 to 1
 
       tmp_VAL = as.vector(na.omit(tmp_dis))
       
@@ -1276,7 +1276,7 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
       
       SUM_dis = sum(na.omit(tmp_dis))
       
-      for (i in 2:max_clusters) { tmp_dis[i] = tmp_dis[i] / SUM_dis }
+      for (i in 2:max_clusters) { tmp_dis[i] = tmp_dis[i] / SUM_dis }            # the dissimilarities are divided by the sum, so that they are in the range 0 to 1
 
       if (length(which(is.na(tmp_dis))) > 0) {
         
@@ -1297,7 +1297,7 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
       
       SUM_sil = sum(na.omit(tmp_silh))
       
-      for (i in 2:max_clusters) { tmp_silh[i] = tmp_silh[i] / SUM_sil }
+      for (i in 2:max_clusters) { tmp_silh[i] = tmp_silh[i] / SUM_sil }             # the silhoutte widths are divided by the sum, so that they are in the range 0 to 1
       
       if (length(which(is.na(tmp_silh))) > 0) {
         

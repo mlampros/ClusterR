@@ -25,3 +25,8 @@ devtools::install_github('mlampros/ClusterR')
 
 ```
 <br>
+
+Use the following link to report bugs/issues,
+<br><br>
+
+[https://github.com/mlampros/ClusterR/issues](https://github.com/mlampros/ClusterR/issues)
