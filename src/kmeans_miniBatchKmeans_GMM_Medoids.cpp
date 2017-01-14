@@ -53,11 +53,13 @@ double tot_ss_data(arma::mat x) {
 //
 
 // [[Rcpp::export]]
-Rcpp::List KMEANS_rcpp(arma::mat& data, unsigned int clusters, int num_init = 1, int max_iters = 200, std::string initializer = "kmeans++", bool fuzzy = false, int threads = 1, 
+Rcpp::List KMEANS_rcpp(arma::mat& data, int clusters, int num_init = 1, int max_iters = 200, std::string initializer = "kmeans++", bool fuzzy = false, int threads = 1, 
                        
                        bool verbose = false, Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS = R_NilValue, double tol = 1e-4, double eps = 1.0e-6, double tol_optimal_init = 0.5, int seed = 1) {
   
-  if (clusters > data.n_rows - 2 || clusters < 1) { Rcpp::stop("the number of clusters should be at most equal to nrow(data) - 2 and never less than 1"); }
+  int dat_n_rows = data.n_rows;
+  
+  if (clusters > dat_n_rows - 2 || clusters < 1) { Rcpp::stop("the number of clusters should be at most equal to nrow(data) - 2 and never less than 1"); }
 
   #ifdef _OPENMP
   omp_set_num_threads(threads);
@@ -164,7 +166,7 @@ Rcpp::List KMEANS_rcpp(arma::mat& data, unsigned int clusters, int num_init = 1,
         CLUSTERS(i) = tmp_idx;
       }
       
-      for (unsigned int j = 0; j < clusters; j++) {
+      for (int j = 0; j < clusters; j++) {
         
         new_centroids.row(j) /= arma::as_scalar(num_obs(j));
       }
@@ -250,7 +252,7 @@ Rcpp::List KMEANS_rcpp(arma::mat& data, unsigned int clusters, int num_init = 1,
 //
 
 // [[Rcpp::export]]
-arma::mat KMEANS_arma(arma::mat& data, unsigned int clusters, int n_iter, bool verbose, std::string seed_mode = "random_subset",
+arma::mat KMEANS_arma(arma::mat& data, int clusters, int n_iter, bool verbose, std::string seed_mode = "random_subset",
                       
                       Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS = R_NilValue, int seed = 1) {
   
@@ -564,13 +566,15 @@ Rcpp::List evaluation_rcpp(arma::mat& data, arma::vec CLUSTER, bool silhouette =
 //
 
 // [[Rcpp::export]]
-Rcpp::List mini_batch_kmeans(arma::mat& data, unsigned int clusters, int batch_size, int max_iters, int num_init = 1, double init_fraction = 1.0, std::string initializer = "kmeans++", 
+Rcpp::List mini_batch_kmeans(arma::mat& data, int clusters, int batch_size, int max_iters, int num_init = 1, double init_fraction = 1.0, std::string initializer = "kmeans++", 
                              
                              int early_stop_iter = 10, bool verbose = false, Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS = R_NilValue, double tol = 1e-4, double tol_optimal_init = 0.5, int seed = 1) {
   
   set_seed(seed);             // R's RNG
   
-  if (clusters > data.n_rows - 2 || clusters < 1) { Rcpp::stop("the number of clusters should be at most equal to nrow(data) - 2 and never less than 1"); }
+  int dat_n_rows = data.n_rows;
+  
+  if (clusters > dat_n_rows - 2 || clusters < 1) { Rcpp::stop("the number of clusters should be at most equal to nrow(data) - 2 and never less than 1"); }
   
   bool flag = false;
   
@@ -820,7 +824,7 @@ Rcpp::List Predict_mini_batch_kmeans(arma::mat& data, Rcpp::Nullable<Rcpp::Numer
 //
 
 // [[Rcpp::export]]
-Rcpp::List GMM_arma(arma::mat& data, unsigned int gaussian_comps, std::string dist_mode, std::string seed_mode, int km_iter, int em_iter, 
+Rcpp::List GMM_arma(arma::mat& data, int gaussian_comps, std::string dist_mode, std::string seed_mode, int km_iter, int em_iter, 
                     
                     bool verbose, double var_floor = 1e-10, int seed = 1) {
   
@@ -880,7 +884,7 @@ Rcpp::List GMM_arma(arma::mat& data, unsigned int gaussian_comps, std::string di
   
   arma::mat loglik(data.n_rows, gaussian_comps, arma::fill::zeros);
   
-  for (unsigned int j = 0; j < gaussian_comps; j++) {
+  for (int j = 0; j < gaussian_comps; j++) {
     
     loglik.col(j) = arma::conv_to< arma::vec >::from(model.log_p(data.t(), j));
   }
@@ -995,7 +999,7 @@ Rcpp::List predict_MGausDPDF(arma::mat data, arma::mat CENTROIDS, arma::mat COVA
 //
 
 // [[Rcpp::export]]
-arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, unsigned int max_clusters, std::string dist_mode, std::string seed_mode,
+arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, int max_clusters, std::string dist_mode, std::string seed_mode,
                               
                               int km_iter, int em_iter, bool verbose, double var_floor = 1e-10, std::string criterion = "AIC", int seed = 1) {
   
@@ -1003,7 +1007,7 @@ arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, unsigned int max_clusters, std::s
   
   arma::rowvec evaluate_comps(max_clusters, arma::fill::zeros), aic_avg_weights(max_clusters, arma::fill::zeros);
   
-  for (unsigned int i = 0; i < max_clusters; i++) {
+  for (int i = 0; i < max_clusters; i++) {
     
     if (verbose) { Rcpp::Rcout << "iteration: " << i + 1 << std::endl; }
     
@@ -1089,7 +1093,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
   #endif
   for (unsigned int i = 0; i < data.n_rows - 1; i++) {
     
-    unsigned int k = i;
+    int k = i;
     
     #ifdef _OPENMP
     #pragma omp parallel for schedule(static)
@@ -1108,7 +1112,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
           
           arma::rowvec tmp_idx1;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -1136,7 +1140,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
           
           arma::rowvec tmp_idx1;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -1164,7 +1168,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
           
           arma::rowvec tmp_idx1;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -1192,7 +1196,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -1231,7 +1235,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -1270,7 +1274,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -1325,7 +1329,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -1381,7 +1385,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -1421,7 +1425,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -1486,7 +1490,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -1557,7 +1561,7 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -1786,7 +1790,7 @@ arma::uvec subset_vec(arma::uvec x, arma::uvec y) {
 //
 
 // [[Rcpp::export]]
-Rcpp::List ClusterMedoids(arma::mat& data, unsigned int clusters, std::string method, double minkowski_p = 1.0, int threads = 1, bool verbose = false, bool swap_phase = false, 
+Rcpp::List ClusterMedoids(arma::mat& data, int clusters, std::string method, double minkowski_p = 1.0, int threads = 1, bool verbose = false, bool swap_phase = false, 
                           
                           bool fuzzy = false, int seed = 1) {
   
@@ -1821,7 +1825,7 @@ Rcpp::List ClusterMedoids(arma::mat& data, unsigned int clusters, std::string me
   
   end_indices_vec.fill(first_medoid);
   
-  unsigned int count_clusters = 1;
+  int count_clusters = 1;
   
   if (verbose) { Rcpp::Rcout << " " << std::endl; Rcpp::Rcout << "medoid " << first_medoid + 1 << " was added. Current dissimilarity of build phase  --> " << total_cost << std::endl; }
   
@@ -2052,7 +2056,7 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
           
           arma::rowvec tmp_idx1;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -2080,7 +2084,7 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
           
           arma::rowvec tmp_idx1;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -2108,7 +2112,7 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
           
           arma::rowvec tmp_idx1;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -2136,7 +2140,7 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -2175,7 +2179,7 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -2214,7 +2218,7 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -2269,7 +2273,7 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -2325,7 +2329,7 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -2365,7 +2369,7 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -2430,7 +2434,7 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -2501,7 +2505,7 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
           
           arma::rowvec tmp_idx1, tmp_idx2;
           
-          unsigned int count = 1;
+          int count = 1;
           
           for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
             
@@ -2654,7 +2658,7 @@ arma::rowvec isolation(arma::mat dissim_mat_subset, arma::uvec x) {
 
 
 // [[Rcpp::export]]
-Rcpp::List ClaraMedoids(arma::mat& data, unsigned int clusters, std::string method, int samples, double sample_size, double minkowski_p = 1.0,
+Rcpp::List ClaraMedoids(arma::mat& data, int clusters, std::string method, int samples, double sample_size, double minkowski_p = 1.0,
                         
                         int threads = 1, bool verbose = false, bool swap_phase = false, bool fuzzy = false, int seed = 1) {
   
@@ -2876,7 +2880,7 @@ Rcpp::List split_rcpp_lst(Rcpp::List lst) {
 //
 
 // [[Rcpp::export]]
-Rcpp::List OptClust(arma::mat& data, unsigned int iter_clust, std::string method, bool clara = false, int samples = 5, double sample_size = 0.001, double minkowski_p = 1.0, 
+Rcpp::List OptClust(arma::mat& data, int iter_clust, std::string method, bool clara = false, int samples = 5, double sample_size = 0.001, double minkowski_p = 1.0, 
                     
                     std::string criterion = "dissimilarity", int threads = 1, bool swap_phase = false, bool verbose = false, int seed = 1) {
   
@@ -2886,7 +2890,7 @@ Rcpp::List OptClust(arma::mat& data, unsigned int iter_clust, std::string method
   
   if (verbose) { Rcpp::Rcout << " " << std::endl; }
   
-  for (unsigned int iter = 0; iter < iter_clust; iter++) {
+  for (int iter = 0; iter < iter_clust; iter++) {
     
     if (iter == 0) {
       

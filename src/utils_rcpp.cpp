@@ -226,7 +226,7 @@ double kmeans_pp_dist(arma::rowvec vec, arma::rowvec centroid) {
 //
 
 // [[Rcpp::export]]
-arma::mat kmeans_pp_init(arma::mat& data, unsigned int clusters, bool medoids = false) {
+arma::mat kmeans_pp_init(arma::mat& data, int clusters, bool medoids = false) {
   
   arma::rowvec centroid_data(data.n_rows);                                                 // begin with inf values as I'll pick in every iteration the minimum
   
@@ -242,7 +242,7 @@ arma::mat kmeans_pp_init(arma::mat& data, unsigned int clusters, bool medoids = 
   
   int idx = first(0);                                                                      // update idx in every iteration
   
-  for (unsigned int clust = 0; clust < clusters; clust++) {
+  for (int clust = 0; clust < clusters; clust++) {
     
     indices(clust) = idx;
     
@@ -343,7 +343,7 @@ Rcpp::NumericVector quantile_value(arma::rowvec x, int clusters) {
 //
 
 // [[Rcpp::export]]
-arma::mat quantile_init_rcpp(arma::mat data, int sample_rows, unsigned int clusters, bool medoids = false) {
+arma::mat quantile_init_rcpp(arma::mat data, int sample_rows, int clusters, bool medoids = false) {
   
   arma::rowvec tmp_idx = sample_vec(sample_rows, 0, data.n_rows - 1, false);
   
@@ -416,7 +416,7 @@ arma::mat quantile_init_rcpp(arma::mat data, int sample_rows, unsigned int clust
 //
 
 // [[Rcpp::export]]
-arma::mat check_medoids(arma::mat data, unsigned int clust, double tol = 0.5, bool medoids = true) {
+arma::mat check_medoids(arma::mat data, int clust, double tol = 0.5, bool medoids = true) {
   
   arma::vec medoids_out(clust);
   
@@ -430,7 +430,7 @@ arma::mat check_medoids(arma::mat data, unsigned int clust, double tol = 0.5, bo
   
   arma::mat shufl_dat = data.rows(shufl_idx);
   
-  unsigned int count_m = 0;
+  int count_m = 0;
   
   for (unsigned int i = 0; i < shufl_dat.n_rows; i++) {
     

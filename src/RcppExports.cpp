@@ -18,13 +18,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // KMEANS_rcpp
-Rcpp::List KMEANS_rcpp(arma::mat& data, unsigned int clusters, int num_init, int max_iters, std::string initializer, bool fuzzy, int threads, bool verbose, Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS, double tol, double eps, double tol_optimal_init, int seed);
+Rcpp::List KMEANS_rcpp(arma::mat& data, int clusters, int num_init, int max_iters, std::string initializer, bool fuzzy, int threads, bool verbose, Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS, double tol, double eps, double tol_optimal_init, int seed);
 RcppExport SEXP ClusterR_KMEANS_rcpp(SEXP dataSEXP, SEXP clustersSEXP, SEXP num_initSEXP, SEXP max_itersSEXP, SEXP initializerSEXP, SEXP fuzzySEXP, SEXP threadsSEXP, SEXP verboseSEXP, SEXP CENTROIDSSEXP, SEXP tolSEXP, SEXP epsSEXP, SEXP tol_optimal_initSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type clusters(clustersSEXP);
+    Rcpp::traits::input_parameter< int >::type clusters(clustersSEXP);
     Rcpp::traits::input_parameter< int >::type num_init(num_initSEXP);
     Rcpp::traits::input_parameter< int >::type max_iters(max_itersSEXP);
     Rcpp::traits::input_parameter< std::string >::type initializer(initializerSEXP);
@@ -41,13 +41,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // KMEANS_arma
-arma::mat KMEANS_arma(arma::mat& data, unsigned int clusters, int n_iter, bool verbose, std::string seed_mode, Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS, int seed);
+arma::mat KMEANS_arma(arma::mat& data, int clusters, int n_iter, bool verbose, std::string seed_mode, Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS, int seed);
 RcppExport SEXP ClusterR_KMEANS_arma(SEXP dataSEXP, SEXP clustersSEXP, SEXP n_iterSEXP, SEXP verboseSEXP, SEXP seed_modeSEXP, SEXP CENTROIDSSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type clusters(clustersSEXP);
+    Rcpp::traits::input_parameter< int >::type clusters(clustersSEXP);
     Rcpp::traits::input_parameter< int >::type n_iter(n_iterSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
     Rcpp::traits::input_parameter< std::string >::type seed_mode(seed_modeSEXP);
@@ -121,13 +121,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // mini_batch_kmeans
-Rcpp::List mini_batch_kmeans(arma::mat& data, unsigned int clusters, int batch_size, int max_iters, int num_init, double init_fraction, std::string initializer, int early_stop_iter, bool verbose, Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS, double tol, double tol_optimal_init, int seed);
+Rcpp::List mini_batch_kmeans(arma::mat& data, int clusters, int batch_size, int max_iters, int num_init, double init_fraction, std::string initializer, int early_stop_iter, bool verbose, Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS, double tol, double tol_optimal_init, int seed);
 RcppExport SEXP ClusterR_mini_batch_kmeans(SEXP dataSEXP, SEXP clustersSEXP, SEXP batch_sizeSEXP, SEXP max_itersSEXP, SEXP num_initSEXP, SEXP init_fractionSEXP, SEXP initializerSEXP, SEXP early_stop_iterSEXP, SEXP verboseSEXP, SEXP CENTROIDSSEXP, SEXP tolSEXP, SEXP tol_optimal_initSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type clusters(clustersSEXP);
+    Rcpp::traits::input_parameter< int >::type clusters(clustersSEXP);
     Rcpp::traits::input_parameter< int >::type batch_size(batch_sizeSEXP);
     Rcpp::traits::input_parameter< int >::type max_iters(max_itersSEXP);
     Rcpp::traits::input_parameter< int >::type num_init(num_initSEXP);
@@ -158,13 +158,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // GMM_arma
-Rcpp::List GMM_arma(arma::mat& data, unsigned int gaussian_comps, std::string dist_mode, std::string seed_mode, int km_iter, int em_iter, bool verbose, double var_floor, int seed);
+Rcpp::List GMM_arma(arma::mat& data, int gaussian_comps, std::string dist_mode, std::string seed_mode, int km_iter, int em_iter, bool verbose, double var_floor, int seed);
 RcppExport SEXP ClusterR_GMM_arma(SEXP dataSEXP, SEXP gaussian_compsSEXP, SEXP dist_modeSEXP, SEXP seed_modeSEXP, SEXP km_iterSEXP, SEXP em_iterSEXP, SEXP verboseSEXP, SEXP var_floorSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type gaussian_comps(gaussian_compsSEXP);
+    Rcpp::traits::input_parameter< int >::type gaussian_comps(gaussian_compsSEXP);
     Rcpp::traits::input_parameter< std::string >::type dist_mode(dist_modeSEXP);
     Rcpp::traits::input_parameter< std::string >::type seed_mode(seed_modeSEXP);
     Rcpp::traits::input_parameter< int >::type km_iter(km_iterSEXP);
@@ -203,13 +203,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // GMM_arma_AIC_BIC
-arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, unsigned int max_clusters, std::string dist_mode, std::string seed_mode, int km_iter, int em_iter, bool verbose, double var_floor, std::string criterion, int seed);
+arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, int max_clusters, std::string dist_mode, std::string seed_mode, int km_iter, int em_iter, bool verbose, double var_floor, std::string criterion, int seed);
 RcppExport SEXP ClusterR_GMM_arma_AIC_BIC(SEXP dataSEXP, SEXP max_clustersSEXP, SEXP dist_modeSEXP, SEXP seed_modeSEXP, SEXP km_iterSEXP, SEXP em_iterSEXP, SEXP verboseSEXP, SEXP var_floorSEXP, SEXP criterionSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type max_clusters(max_clustersSEXP);
+    Rcpp::traits::input_parameter< int >::type max_clusters(max_clustersSEXP);
     Rcpp::traits::input_parameter< std::string >::type dist_mode(dist_modeSEXP);
     Rcpp::traits::input_parameter< std::string >::type seed_mode(seed_modeSEXP);
     Rcpp::traits::input_parameter< int >::type km_iter(km_iterSEXP);
@@ -278,13 +278,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // ClusterMedoids
-Rcpp::List ClusterMedoids(arma::mat& data, unsigned int clusters, std::string method, double minkowski_p, int threads, bool verbose, bool swap_phase, bool fuzzy, int seed);
+Rcpp::List ClusterMedoids(arma::mat& data, int clusters, std::string method, double minkowski_p, int threads, bool verbose, bool swap_phase, bool fuzzy, int seed);
 RcppExport SEXP ClusterR_ClusterMedoids(SEXP dataSEXP, SEXP clustersSEXP, SEXP methodSEXP, SEXP minkowski_pSEXP, SEXP threadsSEXP, SEXP verboseSEXP, SEXP swap_phaseSEXP, SEXP fuzzySEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type clusters(clustersSEXP);
+    Rcpp::traits::input_parameter< int >::type clusters(clustersSEXP);
     Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
     Rcpp::traits::input_parameter< double >::type minkowski_p(minkowski_pSEXP);
     Rcpp::traits::input_parameter< int >::type threads(threadsSEXP);
@@ -339,13 +339,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // ClaraMedoids
-Rcpp::List ClaraMedoids(arma::mat& data, unsigned int clusters, std::string method, int samples, double sample_size, double minkowski_p, int threads, bool verbose, bool swap_phase, bool fuzzy, int seed);
+Rcpp::List ClaraMedoids(arma::mat& data, int clusters, std::string method, int samples, double sample_size, double minkowski_p, int threads, bool verbose, bool swap_phase, bool fuzzy, int seed);
 RcppExport SEXP ClusterR_ClaraMedoids(SEXP dataSEXP, SEXP clustersSEXP, SEXP methodSEXP, SEXP samplesSEXP, SEXP sample_sizeSEXP, SEXP minkowski_pSEXP, SEXP threadsSEXP, SEXP verboseSEXP, SEXP swap_phaseSEXP, SEXP fuzzySEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type clusters(clustersSEXP);
+    Rcpp::traits::input_parameter< int >::type clusters(clustersSEXP);
     Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
     Rcpp::traits::input_parameter< int >::type samples(samplesSEXP);
     Rcpp::traits::input_parameter< double >::type sample_size(sample_sizeSEXP);
@@ -388,13 +388,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // OptClust
-Rcpp::List OptClust(arma::mat& data, unsigned int iter_clust, std::string method, bool clara, int samples, double sample_size, double minkowski_p, std::string criterion, int threads, bool swap_phase, bool verbose, int seed);
+Rcpp::List OptClust(arma::mat& data, int iter_clust, std::string method, bool clara, int samples, double sample_size, double minkowski_p, std::string criterion, int threads, bool swap_phase, bool verbose, int seed);
 RcppExport SEXP ClusterR_OptClust(SEXP dataSEXP, SEXP iter_clustSEXP, SEXP methodSEXP, SEXP claraSEXP, SEXP samplesSEXP, SEXP sample_sizeSEXP, SEXP minkowski_pSEXP, SEXP criterionSEXP, SEXP threadsSEXP, SEXP swap_phaseSEXP, SEXP verboseSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type iter_clust(iter_clustSEXP);
+    Rcpp::traits::input_parameter< int >::type iter_clust(iter_clustSEXP);
     Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
     Rcpp::traits::input_parameter< bool >::type clara(claraSEXP);
     Rcpp::traits::input_parameter< int >::type samples(samplesSEXP);
@@ -526,13 +526,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // kmeans_pp_init
-arma::mat kmeans_pp_init(arma::mat& data, unsigned int clusters, bool medoids);
+arma::mat kmeans_pp_init(arma::mat& data, int clusters, bool medoids);
 RcppExport SEXP ClusterR_kmeans_pp_init(SEXP dataSEXP, SEXP clustersSEXP, SEXP medoidsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type clusters(clustersSEXP);
+    Rcpp::traits::input_parameter< int >::type clusters(clustersSEXP);
     Rcpp::traits::input_parameter< bool >::type medoids(medoidsSEXP);
     rcpp_result_gen = Rcpp::wrap(kmeans_pp_init(data, clusters, medoids));
     return rcpp_result_gen;
@@ -563,27 +563,27 @@ BEGIN_RCPP
 END_RCPP
 }
 // quantile_init_rcpp
-arma::mat quantile_init_rcpp(arma::mat data, int sample_rows, unsigned int clusters, bool medoids);
+arma::mat quantile_init_rcpp(arma::mat data, int sample_rows, int clusters, bool medoids);
 RcppExport SEXP ClusterR_quantile_init_rcpp(SEXP dataSEXP, SEXP sample_rowsSEXP, SEXP clustersSEXP, SEXP medoidsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type data(dataSEXP);
     Rcpp::traits::input_parameter< int >::type sample_rows(sample_rowsSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type clusters(clustersSEXP);
+    Rcpp::traits::input_parameter< int >::type clusters(clustersSEXP);
     Rcpp::traits::input_parameter< bool >::type medoids(medoidsSEXP);
     rcpp_result_gen = Rcpp::wrap(quantile_init_rcpp(data, sample_rows, clusters, medoids));
     return rcpp_result_gen;
 END_RCPP
 }
 // check_medoids
-arma::mat check_medoids(arma::mat data, unsigned int clust, double tol, bool medoids);
+arma::mat check_medoids(arma::mat data, int clust, double tol, bool medoids);
 RcppExport SEXP ClusterR_check_medoids(SEXP dataSEXP, SEXP clustSEXP, SEXP tolSEXP, SEXP medoidsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type clust(clustSEXP);
+    Rcpp::traits::input_parameter< int >::type clust(clustSEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< bool >::type medoids(medoidsSEXP);
     rcpp_result_gen = Rcpp::wrap(check_medoids(data, clust, tol, medoids));
