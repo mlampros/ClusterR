@@ -4,6 +4,8 @@ warnings_are_errors: false
 sudo: required
 cache: packages
 
+dist: precise
+
 os:
   - linux
 
