@@ -7,7 +7,7 @@
 Optimal_Clusters_KMeans(data, max_clusters, criterion = "variance_explained",
   fK_threshold = 0.85, num_init = 1, max_iters = 200,
   initializer = "optimal_init", threads = 1, tol = 1e-04,
-  plot_clusters = TRUE, verbose = FALSE, tol_optimal_init = 0.5,
+  plot_clusters = TRUE, verbose = FALSE, tol_optimal_init = 0.3,
   seed = 1)
 }
 \arguments{
@@ -46,7 +46,7 @@ Optimal number of Clusters for k-means
 \details{
 ---------------criteria--------------------------
 
-\strong{variance_explained} : the sum of the within-cluster-sum-of-squares-of-all-clusters divided by the total sum of squares 
+\strong{variance_explained} : the sum of the within-cluster-sum-of-squares-of-all-clusters divided by the total sum of squares
 
 \strong{WCSSE}              : the sum of the within-cluster-sum-of-squares-of-all-clusters
 

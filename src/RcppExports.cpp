@@ -562,31 +562,40 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// duplicated_flag
+bool duplicated_flag(arma::uvec x);
+RcppExport SEXP ClusterR_duplicated_flag(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::uvec >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(duplicated_flag(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // quantile_init_rcpp
-arma::mat quantile_init_rcpp(arma::mat data, int sample_rows, int clusters, bool medoids);
-RcppExport SEXP ClusterR_quantile_init_rcpp(SEXP dataSEXP, SEXP sample_rowsSEXP, SEXP clustersSEXP, SEXP medoidsSEXP) {
+arma::uvec quantile_init_rcpp(arma::mat data, int sample_rows, int clusters);
+RcppExport SEXP ClusterR_quantile_init_rcpp(SEXP dataSEXP, SEXP sample_rowsSEXP, SEXP clustersSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type data(dataSEXP);
     Rcpp::traits::input_parameter< int >::type sample_rows(sample_rowsSEXP);
     Rcpp::traits::input_parameter< int >::type clusters(clustersSEXP);
-    Rcpp::traits::input_parameter< bool >::type medoids(medoidsSEXP);
-    rcpp_result_gen = Rcpp::wrap(quantile_init_rcpp(data, sample_rows, clusters, medoids));
+    rcpp_result_gen = Rcpp::wrap(quantile_init_rcpp(data, sample_rows, clusters));
     return rcpp_result_gen;
 END_RCPP
 }
 // check_medoids
-arma::mat check_medoids(arma::mat data, int clust, double tol, bool medoids);
-RcppExport SEXP ClusterR_check_medoids(SEXP dataSEXP, SEXP clustSEXP, SEXP tolSEXP, SEXP medoidsSEXP) {
+arma::vec check_medoids(arma::mat data, int clust, double tol);
+RcppExport SEXP ClusterR_check_medoids(SEXP dataSEXP, SEXP clustSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type data(dataSEXP);
     Rcpp::traits::input_parameter< int >::type clust(clustSEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
-    Rcpp::traits::input_parameter< bool >::type medoids(medoidsSEXP);
-    rcpp_result_gen = Rcpp::wrap(check_medoids(data, clust, tol, medoids));
+    rcpp_result_gen = Rcpp::wrap(check_medoids(data, clust, tol));
     return rcpp_result_gen;
 END_RCPP
 }

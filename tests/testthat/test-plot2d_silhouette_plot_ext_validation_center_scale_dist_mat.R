@@ -354,14 +354,16 @@ testthat::test_that("in case that the threads parameter is less than 1, it retur
 })
 
 
-testthat::test_that("in case that the data includes NaN or Inf values, it returns an error", {
-  
-  tmp_dat = X
-  
-  tmp_dat[1,1] = Inf
-  
-  testthat::expect_error( distance_matrix(tmp_dat, method = 'euclidean', upper = TRUE, diagonal = TRUE)  )
-})
+# from version 1.0.3 the "distance_matrix" function can accept data with missing values
+#
+# testthat::test_that("in case that the data includes NaN or Inf values, it returns an error", {
+#   
+#   tmp_dat = X
+#   
+#   tmp_dat[1,1] = Inf
+#   
+#   testthat::expect_error( distance_matrix(tmp_dat, method = 'euclidean', upper = TRUE, diagonal = TRUE)  )
+# })
 
 
 ##########################

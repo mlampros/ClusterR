@@ -48,217 +48,216 @@ context('dissimilarity - matrices')
 
 # complete data ------------
 
-if (Sys.getenv("R_ARCH") %in% c("/x64", "")) {                     # exclude x386 version of windows
 
-  testthat::test_that("in case that the data is binary it returns the correct output for the binary methods", {
+testthat::test_that("in case that the data is binary it returns the correct output for the binary methods", {
+
+  binary_methods = c("simple_matching_coefficient", "hamming", "jaccard_coefficient", "Rao_coefficient")
   
-    binary_methods = c("simple_matching_coefficient", "hamming", "jaccard_coefficient", "Rao_coefficient")
-    
-    res = rep(NA, length(binary_methods))
-    
-    for (i in 1:length(binary_methods)) {
-      
-      out = dissim_mat(binary_data, binary_methods[i], upper = T, diagonal = T)
-      
-      res[i] = is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(binary_data) && ncol(out) == nrow(binary_data)
-    }
-    
-    testthat::expect_true( length(binary_methods) == sum(res) )
-  })
+  res = rep(NA, length(binary_methods))
   
-  
-  testthat::test_that("in case that the data is numeric it returns the correct output for the numeric methods", {
+  for (i in 1:length(binary_methods)) {
     
-    continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "mahalanobis")
+    out = dissim_mat(binary_data, binary_methods[i], upper = T, diagonal = T)
     
-    res = rep(NA, length(continuous_methods))
+    res[i] = is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(binary_data) && ncol(out) == nrow(binary_data)
+  }
+  
+  testthat::expect_true( length(binary_methods) == sum(res) )
+})
+
+
+testthat::test_that("in case that the data is numeric it returns the correct output for the numeric methods", {
+  
+  continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "mahalanobis")
+  
+  res = rep(NA, length(continuous_methods))
+  
+  for (i in 1:length(continuous_methods)) {
     
-    for (i in 1:length(continuous_methods)) {
-      
-      out = dissim_mat(continuous_data, continuous_methods[i], upper = T, diagonal = T)
-      
-      res[i] = is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(continuous_data) && ncol(out) == nrow(continuous_data)
-    }
+    out = dissim_mat(continuous_data, continuous_methods[i], upper = T, diagonal = T)
     
-    testthat::expect_true( length(continuous_methods) == sum(res) )
-  })
+    res[i] = is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(continuous_data) && ncol(out) == nrow(continuous_data)
+  }
   
+  testthat::expect_true( length(continuous_methods) == sum(res) )
+})
+
+
+
+# missing data ------------
+
+
+testthat::test_that("in case that the data is binary AND INCLUDE MISSING VALUES it returns the correct output for the binary methods", {
   
+  binary_methods = c("simple_matching_coefficient", "hamming", "jaccard_coefficient", "Rao_coefficient")
   
-  # missing data ------------
+  res = rep(NA, length(binary_methods))
   
-  
-  testthat::test_that("in case that the data is binary AND INCLUDE MISSING VALUES it returns the correct output for the binary methods", {
+  for (i in 1:length(binary_methods)) {
     
-    binary_methods = c("simple_matching_coefficient", "hamming", "jaccard_coefficient", "Rao_coefficient")
+    out = dissim_mat(binary_NAs, binary_methods[i], upper = T, diagonal = T)
     
-    res = rep(NA, length(binary_methods))
-    
-    for (i in 1:length(binary_methods)) {
-      
-      out = dissim_mat(binary_NAs, binary_methods[i], upper = T, diagonal = T)
-      
-      res[i] = is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(binary_NAs) && ncol(out) == nrow(binary_NAs) && sum(as.vector(colSums(is.na(out)))) == 0 
-    }
-    
-    testthat::expect_true( length(binary_methods) == sum(res) )
-  })
+    res[i] = is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(binary_NAs) && ncol(out) == nrow(binary_NAs) && sum(as.vector(colSums(is.na(out)))) == 0 
+  }
   
+  testthat::expect_true( length(binary_methods) == sum(res) )
+})
+
+
+testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES it returns the correct output for the numeric methods", {
   
-  testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES it returns the correct output for the numeric methods", {
+  continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation")
+  
+  res = rep(NA, length(continuous_methods))
+  
+  for (i in 1:length(continuous_methods)) {
     
-    continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation")
+    out = dissim_mat(mt_NAs, continuous_methods[i], upper = T, diagonal = T)
+
+    res[i] = is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(mt_NAs) && ncol(out) == nrow(mt_NAs) && sum(as.vector(colSums(is.na(out)))) == 0
+  }
+  
+  testthat::expect_true( length(continuous_methods) == sum(res) )
+})
+
+
+testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES AND method = mahalanobis it returns an error", {
+
+  testthat::expect_error( dissim_mat(mt_NAs, "mahalanobis", upper = T, diagonal = T) )
+})
+
+
+testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES it returns the correct output for the minkowski method", {
+  
+  out = dissim_mat(mt_NAs, "minkowski", upper = T, diagonal = T, minkowski_p = 1.0)
+  
+  testthat::expect_true( is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(mt_NAs) && ncol(out) == nrow(mt_NAs) )
+})
+
+
+testthat::test_that("in case that the data is numeric it returns the correct output for the minkowski method", {
+  
+  out = dissim_mat(continuous_data, "minkowski", upper = T, diagonal = T, minkowski_p = 1.0)
+  
+  testthat::expect_true( is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(continuous_data) && ncol(out) == nrow(continuous_data) )
+})
+
+
+
+testthat::test_that("in case that the data includes missing values (NA) the 'dissim_mat' function returns the correct output ", {
+  
+  out = dissim_mat(mt_NAs, "euclidean", upper = T, diagonal = T)
+  
+  testthat::expect_true( is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(mt_NAs) && ncol(out) == nrow(mt_NAs) && sum(as.vector(colSums(is.na(out)))) == 0 )
+})
+
+
+
+##########################
+# dissim_MEDOIDS function
+##########################
+
+
+# complete data ----------------
+
+testthat::test_that("in case that the data is binary it returns the correct output for the binary methods", {
+  
+  binary_methods = c("simple_matching_coefficient", "hamming", "jaccard_coefficient", "Rao_coefficient")
+  
+  res = rep(NA, length(binary_methods))
+  
+  for (i in 1:length(binary_methods)) {
     
-    res = rep(NA, length(continuous_methods))
+    out = dissim_MEDOIDS(binary_data, binary_methods[i], MEDOIDS_binary)
     
-    for (i in 1:length(continuous_methods)) {
-      
-      out = dissim_mat(mt_NAs, continuous_methods[i], upper = T, diagonal = T)
+    res[i] = is.matrix(out) && nrow(out) == nrow(binary_data) && ncol(out) == nrow(MEDOIDS_binary)
+  }
   
-      res[i] = is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(mt_NAs) && ncol(out) == nrow(mt_NAs) && sum(as.vector(colSums(is.na(out)))) == 0
-    }
+  testthat::expect_true( length(binary_methods) == sum(res) )
+})
+
+
+testthat::test_that("in case that the data is numeric it returns the correct output for the numeric methods", {
+  
+  continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "mahalanobis")
+  
+  res = rep(NA, length(continuous_methods))
+  
+  for (i in 1:length(continuous_methods)) {
     
-    testthat::expect_true( length(continuous_methods) == sum(res) )
-  })
-  
-  
-  testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES AND method = mahalanobis it returns an error", {
-  
-    testthat::expect_error( dissim_mat(mt_NAs, "mahalanobis", upper = T, diagonal = T) )
-  })
-  
-  
-  testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES it returns the correct output for the minkowski method", {
+    out = dissim_MEDOIDS(continuous_data, continuous_methods[i], MEDOIDS_continuous)
     
-    out = dissim_mat(mt_NAs, "minkowski", upper = T, diagonal = T, minkowski_p = 1.0)
-    
-    testthat::expect_true( is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(mt_NAs) && ncol(out) == nrow(mt_NAs) )
-  })
+    res[i] = is.matrix(out) && nrow(out) == nrow(continuous_data) && ncol(out) == nrow(MEDOIDS_continuous)
+  }
   
+  testthat::expect_true( length(continuous_methods) == sum(res) )
+})
+
+
+# missing data ----------------
+
+testthat::test_that("in case that the data is binary AND INCLUDE MISSING VALUES it returns the correct output for the binary methods", {
   
-  testthat::test_that("in case that the data is numeric it returns the correct output for the minkowski method", {
-    
-    out = dissim_mat(continuous_data, "minkowski", upper = T, diagonal = T, minkowski_p = 1.0)
-    
-    testthat::expect_true( is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(continuous_data) && ncol(out) == nrow(continuous_data) )
-  })
+  binary_methods = c("simple_matching_coefficient", "hamming", "jaccard_coefficient", "Rao_coefficient")
   
+  res = rep(NA, length(binary_methods))
   
+  for (i in 1:length(binary_methods)) {
+    
+    out = dissim_MEDOIDS(binary_NAs, binary_methods[i], MEDOIDS_binary)
+
+    res[i] = is.matrix(out) && nrow(out) == nrow(binary_NAs) && ncol(out) == nrow(MEDOIDS_binary) && sum(as.vector(colSums(is.na(out)))) == 0
+  }
   
-  testthat::test_that("in case that the data includes missing values (NA) the 'dissim_mat' function returns the correct output ", {
-    
-    out = dissim_mat(mt_NAs, "euclidean", upper = T, diagonal = T)
-    
-    testthat::expect_true( is.matrix(out) && nrow(out) == ncol(out) && nrow(out) == nrow(mt_NAs) && ncol(out) == nrow(mt_NAs) && sum(as.vector(colSums(is.na(out)))) == 0 )
-  })
+  testthat::expect_true( length(binary_methods) == sum(res) )
+})
+
+
+testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES it returns the correct output for the numeric methods", {
   
+  continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation")
   
+  res = rep(NA, length(continuous_methods))
   
-  ##########################
-  # dissim_MEDOIDS function
-  ##########################
+  for (i in 1:length(continuous_methods)) {
+    
+    out = dissim_MEDOIDS(mt_NAs, continuous_methods[i], MEDOIDS_continuous)
+    
+    res[i] = is.matrix(out) && nrow(out) == nrow(mt_NAs) && ncol(out) == nrow(MEDOIDS_continuous) && sum(as.vector(colSums(is.na(out)))) == 0
+  }
   
+  testthat::expect_true( length(continuous_methods) == sum(res) )
+})
+
+
+testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES AND method = mahalanobis it returns an error", {
   
-  # complete data ----------------
+  testthat::expect_error( dissim_MEDOIDS(mt_NAs, "mahalanobis", MEDOIDS_continuous) )
+})
+
+
+testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES it returns the correct output for the minkowski method", {
   
-  testthat::test_that("in case that the data is binary it returns the correct output for the binary methods", {
-    
-    binary_methods = c("simple_matching_coefficient", "hamming", "jaccard_coefficient", "Rao_coefficient")
-    
-    res = rep(NA, length(binary_methods))
-    
-    for (i in 1:length(binary_methods)) {
-      
-      out = dissim_MEDOIDS(binary_data, binary_methods[i], MEDOIDS_binary)
-      
-      res[i] = is.matrix(out) && nrow(out) == nrow(binary_data) && ncol(out) == nrow(MEDOIDS_binary)
-    }
-    
-    testthat::expect_true( length(binary_methods) == sum(res) )
-  })
+  out = dissim_MEDOIDS(mt_NAs, "minkowski", MEDOIDS_continuous, minkowski_p = 1.0)
   
+  testthat::expect_true( is.matrix(out) && nrow(out) == nrow(mt_NAs) && ncol(out) == nrow(MEDOIDS_continuous) )
+})
+
+
+testthat::test_that("in case that the data is numeric it returns the correct output for the minkowski method", {
   
-  testthat::test_that("in case that the data is numeric it returns the correct output for the numeric methods", {
-    
-    continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "mahalanobis")
-    
-    res = rep(NA, length(continuous_methods))
-    
-    for (i in 1:length(continuous_methods)) {
-      
-      out = dissim_MEDOIDS(continuous_data, continuous_methods[i], MEDOIDS_continuous)
-      
-      res[i] = is.matrix(out) && nrow(out) == nrow(continuous_data) && ncol(out) == nrow(MEDOIDS_continuous)
-    }
-    
-    testthat::expect_true( length(continuous_methods) == sum(res) )
-  })
+  out = dissim_MEDOIDS(continuous_data, "minkowski", MEDOIDS_continuous, minkowski_p = 1.0)
   
+  testthat::expect_true( is.matrix(out) && nrow(out) == nrow(continuous_data) && ncol(out) == nrow(MEDOIDS_continuous) )
+})
+
+
+testthat::test_that("in case that the data includes missing values (NA) the function returns the correct output taking into account the medoids", {
   
-  # missing data ----------------
+  out = dissim_MEDOIDS(mt_NAs, "euclidean", MEDOIDS_continuous)
   
-  testthat::test_that("in case that the data is binary AND INCLUDE MISSING VALUES it returns the correct output for the binary methods", {
-    
-    binary_methods = c("simple_matching_coefficient", "hamming", "jaccard_coefficient", "Rao_coefficient")
-    
-    res = rep(NA, length(binary_methods))
-    
-    for (i in 1:length(binary_methods)) {
-      
-      out = dissim_MEDOIDS(binary_NAs, binary_methods[i], MEDOIDS_binary)
-  
-      res[i] = is.matrix(out) && nrow(out) == nrow(binary_NAs) && ncol(out) == nrow(MEDOIDS_binary) && sum(as.vector(colSums(is.na(out)))) == 0
-    }
-    
-    testthat::expect_true( length(binary_methods) == sum(res) )
-  })
-  
-  
-  testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES it returns the correct output for the numeric methods", {
-    
-    continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation")
-    
-    res = rep(NA, length(continuous_methods))
-    
-    for (i in 1:length(continuous_methods)) {
-      
-      out = dissim_MEDOIDS(mt_NAs, continuous_methods[i], MEDOIDS_continuous)
-      
-      res[i] = is.matrix(out) && nrow(out) == nrow(mt_NAs) && ncol(out) == nrow(MEDOIDS_continuous) && sum(as.vector(colSums(is.na(out)))) == 0
-    }
-    
-    testthat::expect_true( length(continuous_methods) == sum(res) )
-  })
-  
-  
-  testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES AND method = mahalanobis it returns an error", {
-    
-    testthat::expect_error( dissim_MEDOIDS(mt_NAs, "mahalanobis", MEDOIDS_continuous) )
-  })
-  
-  
-  testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES it returns the correct output for the minkowski method", {
-    
-    out = dissim_MEDOIDS(mt_NAs, "minkowski", MEDOIDS_continuous, minkowski_p = 1.0)
-    
-    testthat::expect_true( is.matrix(out) && nrow(out) == nrow(mt_NAs) && ncol(out) == nrow(MEDOIDS_continuous) )
-  })
-  
-  
-  testthat::test_that("in case that the data is numeric it returns the correct output for the minkowski method", {
-    
-    out = dissim_MEDOIDS(continuous_data, "minkowski", MEDOIDS_continuous, minkowski_p = 1.0)
-    
-    testthat::expect_true( is.matrix(out) && nrow(out) == nrow(continuous_data) && ncol(out) == nrow(MEDOIDS_continuous) )
-  })
-  
-  
-  testthat::test_that("in case that the data includes missing values (NA) the function returns the correct output taking into account the medoids", {
-    
-    out = dissim_MEDOIDS(mt_NAs, "euclidean", MEDOIDS_continuous)
-    
-    testthat::expect_true( is.matrix(out) && nrow(out) == nrow(continuous_data) && ncol(out) == nrow(MEDOIDS_continuous) && sum(as.vector(colSums(is.na(out)))) == 0  )
-  })
-}
+  testthat::expect_true( is.matrix(out) && nrow(out) == nrow(continuous_data) && ncol(out) == nrow(MEDOIDS_continuous) && sum(as.vector(colSums(is.na(out)))) == 0  )
+})
+
 
   

@@ -316,9 +316,11 @@ testthat::test_that("KMeans_rcpp returns the correct output for the initializers
   
   count = 1
   
+  set.seed(1)
+  
   for (i in c('kmeans++', 'random', 'optimal_init', 'quantile_init')) {
     
-    km = KMeans_rcpp(X, clusters = clust, num_init = 5, max_iters = 10, initializer = i)
+    km = KMeans_rcpp(X, clusters = clust, num_init = 5, max_iters = 10, initializer = i, tol_optimal_init = 0.2)
     
     res[count] = (names(km) %in% c("clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS")  
                   
@@ -553,7 +555,7 @@ testthat::test_that("Optimal_Clusters_KMeans returns the correct output if the i
   
   nr_clust = 10
 
-  res =  Optimal_Clusters_KMeans(dat, max_clusters = nr_clust, criterion = 'distortion_fK', plot_clusters = FALSE)
+  res =  Optimal_Clusters_KMeans(dat, max_clusters = nr_clust, criterion = 'distortion_fK', plot_clusters = FALSE, tol_optimal_init = 0.2)
   
   testthat::expect_true( length(res) == nr_clust && class(res) == "k-means clustering"  )
 })
@@ -574,7 +576,7 @@ testthat::test_that("Optimal_Clusters_KMeans returns the correct output for diff
   
   for (i in vec) {
 
-    res =  Optimal_Clusters_KMeans(dat, max_clusters = nr_clust, criterion = i, plot_clusters = T)
+    res =  Optimal_Clusters_KMeans(dat, max_clusters = nr_clust, criterion = i, plot_clusters = T, tol_optimal_init = 0.2)
     
     out[count] = (length(res) == nr_clust && class(res) == "k-means clustering")
       
@@ -715,7 +717,7 @@ testthat::test_that("in case that the data is a matrix the result is a list and 
   
   numinit = 5
   
-  km = MiniBatchKmeans(X, clusters = clust, batch_size = 20, num_init = numinit, early_stop_iter = 10)
+  km = MiniBatchKmeans(X, clusters = clust, batch_size = 20, num_init = numinit, early_stop_iter = 10, tol_optimal_init = 0.2)
   
   testthat::expect_true( names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization")  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
                            
@@ -731,7 +733,7 @@ testthat::test_that("in case that the data is a matrix the result is a list and 
   
   numinit = 5
   
-  km = MiniBatchKmeans(dat, clusters = clust, batch_size = 20, num_init = numinit, early_stop_iter = 10)
+  km = MiniBatchKmeans(dat, clusters = clust, batch_size = 20, num_init = numinit, early_stop_iter = 10, tol_optimal_init = 0.2)
   
   testthat::expect_true( names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization")  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
                            
@@ -754,7 +756,7 @@ testthat::test_that("for different parameter settings it returns the correct out
   
   for (i in 1:length(inits)) {
     
-    km = MiniBatchKmeans(dat, clusters = clust, batch_size = 20, num_init = numinit, initializer = inits[i], early_stop_iter = 10)
+    km = MiniBatchKmeans(dat, clusters = clust, batch_size = 20, num_init = numinit, initializer = inits[i], early_stop_iter = 10, tol_optimal_init = 0.2)
     
     res[i] = (names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization")  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
                 
@@ -774,7 +776,7 @@ testthat::test_that("it returns the correct output if the CENTROIDS parameter is
   
   cntr = matrix(runif(clust * (ncol(X))), nrow = clust, ncol = ncol(dat))
 
-  km = MiniBatchKmeans(dat, clusters = clust, batch_size = 20, early_stop_iter = 10, CENTROIDS = cntr)
+  km = MiniBatchKmeans(dat, clusters = clust, batch_size = 20, early_stop_iter = 10, CENTROIDS = cntr, tol_optimal_init = 0.2)
 
   testthat::expect_true( names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization")  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
                            
@@ -807,7 +809,7 @@ testthat::test_that("in case that the init_fraction is greater than 0.0 and the 
   
   numinit = 5
   
-  km = MiniBatchKmeans(X, clusters = clust, batch_size = 20, num_init = numinit, early_stop_iter = 10, init_fraction = 0.4, initializer = "quantile_init")
+  km = MiniBatchKmeans(X, clusters = clust, batch_size = 20, num_init = numinit, early_stop_iter = 10, init_fraction = 0.4, initializer = "quantile_init", tol_optimal_init = 0.2)
   
   testthat::expect_true( names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization")  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
                            
