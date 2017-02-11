@@ -1,4 +1,9 @@
 
+## ClusterR 1.0.5
+
+I fixed the valgrind memory errors
+
+
 ## ClusterR 1.0.4
 
 I removed the warnings, which occured during compilation.

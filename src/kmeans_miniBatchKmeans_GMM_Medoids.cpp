@@ -94,7 +94,7 @@ Rcpp::List KMEANS_rcpp(arma::mat& data, int clusters, int num_init = 1, int max_
 
   if (verbose && threads == 1) { Rcpp::Rcout << " " << std::endl; }
   
-  arma::rowvec flag_exception(num_init);
+  arma::rowvec flag_exception(num_init, arma::fill::zeros);
 
   #ifdef _OPENMP
   #pragma omp parallel for schedule(dynamic)
@@ -231,20 +231,22 @@ Rcpp::List KMEANS_rcpp(arma::mat& data, int clusters, int num_init = 1, int max_
     if (verbose && threads == 1) { Rcpp::Rcout << " " << std::endl; Rcpp::Rcout << "===================== end of initialization " << init_count + 1 << " =====================" << std::endl; Rcpp::Rcout << " " << std::endl; }
   }
   
-  int exc = flag_exception(end_init - 1);                        // print warning OR stop function only if duplicates OR NA's are present in relevant output centroids [ end_init - 1 ]
+  int exc = arma::as_scalar(flag_exception(end_init - 1));                        // print warning OR stop function only if duplicates OR NA's are present in relevant output centroids [ end_init - 1 ]
   
-  if (exc > 0 && initializer == "quantile_init") {
+  if (exc > 0) {
     
-    std::string message = "the centroid matrix using 'quantile_init' as initializer contains duplicates for number of clusters equal to : " + std::to_string(clusters);
+    if (initializer == "quantile_init") {
+      
+      std::string message = "the centroid matrix using 'quantile_init' as initializer contains duplicates for number of clusters equal to : " + std::to_string(clusters);
     
-    Rcpp::warning(message);
-  }
-  
-  if (exc > 0 && initializer == "optimal_init") {
+      Rcpp::warning(message);}
     
-    std::string message = "The centroid matrix using 'optimal_init' as initializer contains NA's. Thus, the 'tol_optimal_init' parameter should be (probably) decreased for number of clusters equal to : " + std::to_string(clusters);
+    if (initializer == "optimal_init") {
+      
+      std::string message = "The centroid matrix using 'optimal_init' as initializer contains NA's. Thus, the 'tol_optimal_init' parameter should be (probably) decreased for number of clusters equal to : " + std::to_string(clusters);
     
-    Rcpp::stop(message);
+      Rcpp::stop(message);
+    }
   }
 
   double tmp_sse = tot_ss_data(data);
@@ -629,7 +631,7 @@ Rcpp::List mini_batch_kmeans(arma::mat& data, int clusters, int batch_size, int 
 
   if (verbose) { Rcpp::Rcout << " " << std::endl; }
 
-  arma::rowvec flag_exception(num_init);
+  arma::rowvec flag_exception(num_init, arma::fill::zeros);
   
   for (int init = 0; init < num_init; init++) {
 
@@ -797,20 +799,22 @@ Rcpp::List mini_batch_kmeans(arma::mat& data, int clusters, int batch_size, int 
     if (verbose) { Rcpp::Rcout << " " << std::endl; Rcpp::Rcout << "===================== end of initialization " << init + 1 << " =====================" << std::endl; Rcpp::Rcout << " " << std::endl; }
   }
   
-  int exc = flag_exception(end_init - 1);                        // print warning OR stop function only if duplicates OR NA's are present in relevant output centroids [ end_init - 1 ]
+  int exc = arma::as_scalar(flag_exception(end_init - 1));                        // print warning OR stop function only if duplicates OR NA's are present in relevant output centroids [ end_init - 1 ]
   
-  if (exc > 0 && initializer == "quantile_init") {
+  if (exc > 0) {
     
-    std::string message = "the centroid matrix using 'quantile_init' as initializer contains duplicates for number of clusters equal to : " + std::to_string(clusters);
+    if (initializer == "quantile_init") {
+      
+      std::string message = "the centroid matrix using 'quantile_init' as initializer contains duplicates for number of clusters equal to : " + std::to_string(clusters);
+      
+      Rcpp::warning(message);}
     
-    Rcpp::warning(message);
-  }
-  
-  if (exc > 0 && initializer == "optimal_init") {
-    
-    std::string message = "The centroid matrix using 'optimal_init' as initializer contains NA's. Thus, the 'tol_optimal_init' parameter should be (probably) decreased for number of clusters equal to : " + std::to_string(clusters);
-    
-    Rcpp::stop(message);
+    if (initializer == "optimal_init") {
+      
+      std::string message = "The centroid matrix using 'optimal_init' as initializer contains NA's. Thus, the 'tol_optimal_init' parameter should be (probably) decreased for number of clusters equal to : " + std::to_string(clusters);
+      
+      Rcpp::stop(message);
+    }
   }
 
   return Rcpp::List::create(Rcpp::Named("centroids") = centers_out, Rcpp::Named("WCSS_per_cluster") = bst_WCSS,
