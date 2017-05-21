@@ -1,4 +1,5 @@
 
+
 utils::globalVariables(c("x", "y"))           # to avoid the following NOTE when package checking takes place --> plot_2d: no visible binding for global variables 'x', 'y'
 
 
@@ -1800,7 +1801,7 @@ external_validation = function(true_labels, clusters, method = "adjusted_rand_in
     
     VAR_INFO = (entr_cluster + entr_class) - 2.0 * mutual_information
     
-    NVI = 1 - (mutual_information / joint_entropy)
+    NVI = 1.0 - (mutual_information / joint_entropy)
   }
   
   if (summary_stats) {
@@ -1971,4 +1972,3 @@ distance_matrix = function(data, method = 'euclidean', upper = FALSE, diagonal =
   
   return(res)
 }
-

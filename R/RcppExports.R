@@ -157,12 +157,16 @@ quantile_value <- function(x, clusters) {
     .Call('ClusterR_quantile_value', PACKAGE = 'ClusterR', x, clusters)
 }
 
-quantile_init_rcpp <- function(data, sample_rows, clusters, medoids = FALSE) {
-    .Call('ClusterR_quantile_init_rcpp', PACKAGE = 'ClusterR', data, sample_rows, clusters, medoids)
+duplicated_flag <- function(x) {
+    .Call('ClusterR_duplicated_flag', PACKAGE = 'ClusterR', x)
 }
 
-check_medoids <- function(data, clust, tol = 0.5, medoids = TRUE) {
-    .Call('ClusterR_check_medoids', PACKAGE = 'ClusterR', data, clust, tol, medoids)
+quantile_init_rcpp <- function(data, sample_rows, clusters) {
+    .Call('ClusterR_quantile_init_rcpp', PACKAGE = 'ClusterR', data, sample_rows, clusters)
+}
+
+check_medoids <- function(data, clust, tol = 0.5) {
+    .Call('ClusterR_check_medoids', PACKAGE = 'ClusterR', data, clust, tol)
 }
 
 SCALE <- function(data, mean_center = TRUE, sd_scale = TRUE) {

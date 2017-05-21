@@ -48,6 +48,7 @@ context('dissimilarity - matrices')
 
 # complete data ------------
 
+
 testthat::test_that("in case that the data is binary it returns the correct output for the binary methods", {
 
   binary_methods = c("simple_matching_coefficient", "hamming", "jaccard_coefficient", "Rao_coefficient")
@@ -258,3 +259,5 @@ testthat::test_that("in case that the data includes missing values (NA) the func
   testthat::expect_true( is.matrix(out) && nrow(out) == nrow(continuous_data) && ncol(out) == nrow(MEDOIDS_continuous) && sum(as.vector(colSums(is.na(out)))) == 0  )
 })
 
+
+  

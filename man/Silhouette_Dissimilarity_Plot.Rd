@@ -18,7 +18,7 @@ TRUE if either the silhouette widths or the dissimilarities are plotted successf
 Plot of silhouette widths or dissimilarities
 }
 \details{
-This function takes the result-object of the \emph{Cluster_Medoids} or \emph{Clara_Medoids} function and depending on the argument \emph{silhouette} it plots either the dissimilarities or 
+This function takes the result-object of the \emph{Cluster_Medoids} or \emph{Clara_Medoids} function and depending on the argument \emph{silhouette} it plots either the dissimilarities or
 the silhouette widths of the observations belonging to each cluster.
 }
 \examples{

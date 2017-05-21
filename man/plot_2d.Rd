@@ -11,7 +11,7 @@ plot_2d(data, clusters, centroids_medoids)
 
 \item{clusters}{numeric vector of length equal to the number of rows of the data, which is the result of a clustering method}
 
-\item{centroids_medoids}{a matrix of centroids or medoids. The rows of the centroids_medoids should be equal to the length of the unique values of the clusters and 
+\item{centroids_medoids}{a matrix of centroids or medoids. The rows of the centroids_medoids should be equal to the length of the unique values of the clusters and
 the columns should be equal to the columns of the data.}
 }
 \value{

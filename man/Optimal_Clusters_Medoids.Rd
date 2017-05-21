@@ -41,8 +41,8 @@ a list of length equal to the max_clusters parameter (the first sublist equals N
 Optimal number of Clusters for the partitioning around Medoids functions
 }
 \details{
-In case of plot_clusters = TRUE, the first plot will be either a plot of dissimilarities or both dissimilarities and silhouette widths giving an indication of the optimal number 
-of the clusters. Then, the user will be asked to give an optimal value for the number of the clusters and after that the second plot will appear with either the dissimilarities or the 
+In case of plot_clusters = TRUE, the first plot will be either a plot of dissimilarities or both dissimilarities and silhouette widths giving an indication of the optimal number
+of the clusters. Then, the user will be asked to give an optimal value for the number of the clusters and after that the second plot will appear with either the dissimilarities or the
 silhouette widths belonging to each cluster.
 }
 \examples{
