@@ -47,14 +47,14 @@ silhouette widths belonging to each cluster.
 }
 \examples{
 
+\dontrun{
 data(soybean)
 
 dat = soybean[, -ncol(soybean)]
 
 opt_md = Optimal_Clusters_Medoids(dat, 10, 'jaccard_coefficient', plot_clusters = FALSE)
-
+}
 }
 \author{
 Lampros Mouselimis
 }
-

@@ -76,4 +76,3 @@ km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer =
 \author{
 Lampros Mouselimis
 }
-

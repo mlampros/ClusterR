@@ -87,4 +87,3 @@ opt = Optimal_Clusters_KMeans(dat, max_clusters = 10, plot_clusters = FALSE)
 \author{
 Lampros Mouselimis
 }
-

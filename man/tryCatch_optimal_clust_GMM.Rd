@@ -11,4 +11,3 @@ tryCatch_optimal_clust_GMM(data, max_clusters, dist_mode, seed_mode, km_iter,
 tryCatch function to prevent armadillo errors in GMM_arma_AIC_BIC
 }
 \keyword{internal}
-

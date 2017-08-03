@@ -41,4 +41,3 @@ pm = predict_Medoids(dat, MEDOIDS = cm$medoids, 'euclidean', fuzzy = TRUE)
 \author{
 Lampros Mouselimis
 }
-

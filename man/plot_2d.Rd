@@ -41,4 +41,3 @@ This function plots the clusters using 2-dimensional data and medoids or centroi
 \author{
 Lampros Mouselimis
 }
-

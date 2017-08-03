@@ -1169,12 +1169,13 @@ function_interactive = function(evaluation_objects, max_clusters, silhouette = F
 #' @export
 #' @examples
 #'
+#' \dontrun{
 #' data(soybean)
 #'
 #' dat = soybean[, -ncol(soybean)]
 #'
 #' opt_md = Optimal_Clusters_Medoids(dat, 10, 'jaccard_coefficient', plot_clusters = FALSE)
-#'
+#' }
 
 
 Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criterion = "dissimilarity", clara_samples = 0, clara_sample_size = 0.0,
@@ -1690,7 +1691,7 @@ entropy_formula = function(x_vec) {
 #'
 #' @param true_labels a numeric vector of length equal to the length of the clusters vector
 #' @param clusters a numeric vector ( the result of a clustering method ) of length equal to the length of the true_labels
-#' @param method one of \emph{rand_index},  \emph{adjusted_rand_index},  \emph{jaccard_index},  \emph{fowlkes_Mallows_index},  \emph{mirkin_metric},  \emph{purity},  \emph{entropy},  \emph{nmi} (normalized mutual information) and  \emph{var_info} (variation of information)
+#' @param method one of \emph{rand_index},  \emph{adjusted_rand_index},  \emph{jaccard_index},  \emph{fowlkes_Mallows_index},  \emph{mirkin_metric},  \emph{purity},  \emph{entropy},  \emph{nmi} (normalized mutual information), \emph{var_info} (variation of information), and \emph{nvi} (normalized variation of information)
 #' @param summary_stats besides the available methods the summary_stats parameter prints also the specificity, sensitivity, precision, recall and F-measure of the clusters
 #' @return if summary_stats is FALSE the function returns a float number, otherwise it returns also a summary statistics table
 #' @author Lampros Mouselimis
@@ -1711,7 +1712,6 @@ entropy_formula = function(x_vec) {
 #'
 
 
-
 external_validation = function(true_labels, clusters, method = "adjusted_rand_index", summary_stats = FALSE) {
 
   if (is.integer(true_labels)) true_labels = as.numeric(true_labels)
@@ -1719,8 +1719,8 @@ external_validation = function(true_labels, clusters, method = "adjusted_rand_in
   if (!is.vector(true_labels) || !is.numeric(true_labels)) stop('true_labels should be a numeric vector')
   if (!is.vector(clusters) || !is.numeric(clusters)) stop('clusters should be a numeric vector')
   if (length(true_labels) != length(clusters)) stop('the length of the true_labels vector should equal the length of the clusters vector')
-  if (!method %in% c('rand_index', 'adjusted_rand_index', 'jaccard_index', 'fowlkes_mallows_index', 'mirkin_metric', 'purity', 'entropy', 'nmi', 'var_info'))
-    stop("supported methods are 'rand_index', 'adjusted_rand_index', 'jaccard_index', 'fowlkes_mallows_index', 'mirkin_metric', 'purity', 'entropy', 'nmi', 'var_info'")
+  if (!method %in% c('rand_index', 'adjusted_rand_index', 'jaccard_index', 'fowlkes_mallows_index', 'mirkin_metric', 'purity', 'entropy', 'nmi', 'var_info', 'nvi'))
+    stop("supported methods are 'rand_index', 'adjusted_rand_index', 'jaccard_index', 'fowlkes_mallows_index', 'mirkin_metric', 'purity', 'entropy', 'nmi', 'var_info', 'nvi'")
 
   tbl = table(clusters, true_labels)
 
@@ -1773,15 +1773,19 @@ external_validation = function(true_labels, clusters, method = "adjusted_rand_in
     res_entropy = -(1/(sum(tbl) * log2(length(unique(true_labels))))) * tmp_entropy
   }
 
-  if (summary_stats || method == 'nmi' || method == 'var_info') {
+  if (summary_stats || method == 'nmi' || method == 'var_info' || method == 'nvi') {
 
     mutual_information = 0.0
+
+    joint_entropy = 0.0
 
     for (i in 1:nrow(conv_df)) {
 
       for (j in 1:ncol(conv_df)) {
 
         if (conv_df[i,j] > 0.0) {
+
+          joint_entropy = joint_entropy + (-((conv_df[i,j] / sum(tbl)) * log2(conv_df[i,j] / sum(tbl))))
 
           mutual_information = mutual_information + ((conv_df[i,j] / sum(tbl)) * log2((sum(tbl) * conv_df[i,j]) / (sum(conv_df[i,]) * sum(conv_df[,j]))))
         }
@@ -1795,6 +1799,8 @@ external_validation = function(true_labels, clusters, method = "adjusted_rand_in
     NMI = (mutual_information / ((entr_cluster + entr_class) / 2.0))
 
     VAR_INFO = (entr_cluster + entr_class) - 2.0 * mutual_information
+
+    NVI = 1.0 - (mutual_information / joint_entropy)
   }
 
   if (summary_stats) {
@@ -1808,6 +1814,7 @@ external_validation = function(true_labels, clusters, method = "adjusted_rand_in
     cat('entropy                        :', round(res_entropy, 4), '\n')
     cat('normalized mutual information  :', round(NMI, 4), '\n')                      # between 0.0 and 1.0
     cat('variation of information       :', round(VAR_INFO, 4), '\n')                 # the lower the better [ non-negative ]
+    cat('normalized var. of information :', round(NVI, 4), '\n')                      # between 0.0 and 1.0; the lower the better
     cat('----------------------------------------', '\n')
     cat('specificity                    :', round(tn / (tn + fp), 4), '\n')
     cat('sensitivity                    :', round(tp / (tp + fn), 4), '\n')
@@ -1873,7 +1880,13 @@ external_validation = function(true_labels, clusters, method = "adjusted_rand_in
 
     return(VAR_INFO)
   }
+
+  if (method == 'nvi') {                                       # http://jmlr.csail.mit.edu/papers/volume11/vinh10a/vinh10a.pdf
+
+    return(NVI)
+  }
 }
+
 
 
 

@@ -35,4 +35,3 @@ pr = predict_KMeans(dat, km$centroids)
 \author{
 Lampros Mouselimis
 }
-

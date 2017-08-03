@@ -56,4 +56,3 @@ gmm = GMM(dat, 2, "maha_dist", "random_subset", 10, 10)
 \references{
 http://arma.sourceforge.net/docs.html
 }
-

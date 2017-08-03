@@ -35,4 +35,3 @@ dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]
 dat = distance_matrix(dat, method = 'euclidean', upper = TRUE, diagonal = TRUE)
 
 }
-

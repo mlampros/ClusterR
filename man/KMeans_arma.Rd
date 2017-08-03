@@ -49,4 +49,3 @@ km = KMeans_arma(dat, clusters = 2, n_iter = 10, "random_subset")
 \references{
 http://arma.sourceforge.net/docs.html
 }
-

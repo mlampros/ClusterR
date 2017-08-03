@@ -40,4 +40,3 @@ gmm = GMM(dat, 2, "maha_dist", "random_subset", 10, 10)
 \author{
 Lampros Mouselimis
 }
-

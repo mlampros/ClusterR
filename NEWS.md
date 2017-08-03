@@ -1,4 +1,9 @@
 
+## ClusterR 1.0.6
+
+The *normalized variation of information* was added in the *external_validation* function (https://github.com/mlampros/ClusterR/pull/1)
+
+
 ## ClusterR 1.0.5
 
 I fixed the valgrind memory errors

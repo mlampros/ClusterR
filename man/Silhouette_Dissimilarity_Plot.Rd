@@ -35,4 +35,3 @@ the silhouette widths of the observations belonging to each cluster.
 \author{
 Lampros Mouselimis
 }
-

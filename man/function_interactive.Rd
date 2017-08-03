@@ -10,4 +10,3 @@ function_interactive(evaluation_objects, max_clusters, silhouette = FALSE)
 Interactive function for consecutive plots ( using dissimilarities or the silhouette widths of the observations )
 }
 \keyword{internal}
-

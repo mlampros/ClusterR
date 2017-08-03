@@ -11,4 +11,3 @@ tryCatch_KMEANS_arma(data, clusters, n_iter, verbose, seed_mode, CENTROIDS,
 tryCatch function to prevent armadillo errors in KMEANS_arma
 }
 \keyword{internal}
-

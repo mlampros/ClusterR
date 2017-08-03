@@ -66,10 +66,9 @@ dat = center_scale(dat)
 MbatchKm = MiniBatchKmeans(dat, clusters = 2, batch_size = 20, num_init = 5, early_stop_iter = 10)
 
 }
-\author{
-Lampros Mouselimis
-}
 \references{
 http://www.eecs.tufts.edu/~dsculley/papers/fastkmeans.pdf
 }
-
+\author{
+Lampros Mouselimis
+}

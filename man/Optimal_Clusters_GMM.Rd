@@ -57,4 +57,3 @@ opt_gmm = Optimal_Clusters_GMM(dat, 10, criterion = "AIC", plot_data = FALSE)
 \author{
 Lampros Mouselimis
 }
-

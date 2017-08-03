@@ -10,4 +10,3 @@ entropy_formula(x_vec)
 entropy formula (used in external_validation function)
 }
 \keyword{internal}
-

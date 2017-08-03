@@ -12,7 +12,7 @@ external_validation(true_labels, clusters, method = "adjusted_rand_index",
 
 \item{clusters}{a numeric vector ( the result of a clustering method ) of length equal to the length of the true_labels}
 
-\item{method}{one of \emph{rand_index},  \emph{adjusted_rand_index},  \emph{jaccard_index},  \emph{fowlkes_Mallows_index},  \emph{mirkin_metric},  \emph{purity},  \emph{entropy},  \emph{nmi} (normalized mutual information) and  \emph{var_info} (variation of information)}
+\item{method}{one of \emph{rand_index},  \emph{adjusted_rand_index},  \emph{jaccard_index},  \emph{fowlkes_Mallows_index},  \emph{mirkin_metric},  \emph{purity},  \emph{entropy},  \emph{nmi} (normalized mutual information), \emph{var_info} (variation of information), and \emph{nvi} (normalized variation of information)}
 
 \item{summary_stats}{besides the available methods the summary_stats parameter prints also the specificity, sensitivity, precision, recall and F-measure of the clusters}
 }
@@ -41,4 +41,3 @@ res = external_validation(dietary_survey_IBS$class, km$clusters, method = "adjus
 \author{
 Lampros Mouselimis
 }
-

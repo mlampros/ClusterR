@@ -38,4 +38,3 @@ pr = predict_MBatchKMeans(dat, MbatchKm$centroids, fuzzy = FALSE)
 \author{
 Lampros Mouselimis
 }
-

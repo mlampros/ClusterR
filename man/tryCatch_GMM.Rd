@@ -11,4 +11,3 @@ tryCatch_GMM(data, gaussian_comps, dist_mode, seed_mode, km_iter, em_iter,
 tryCatch function to prevent armadillo errors
 }
 \keyword{internal}
-

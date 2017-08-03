@@ -52,10 +52,9 @@ dat = center_scale(dat)
 clm = Clara_Medoids(dat, clusters = 3, samples = 5, sample_size = 0.2, swap_phase = TRUE)
 
 }
-\author{
-Lampros Mouselimis
-}
 \references{
 Anja Struyf, Mia Hubert, Peter J. Rousseeuw, (Feb. 1997), Clustering in an Object-Oriented Environment, Journal of Statistical Software, Vol 1, Issue 4
 }
-
+\author{
+Lampros Mouselimis
+}
