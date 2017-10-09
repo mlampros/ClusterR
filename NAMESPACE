@@ -1,4 +1,4 @@
-useDynLib(ClusterR)
+useDynLib(ClusterR, .registration = TRUE)
 importFrom(Rcpp, evalCpp)
 import(OpenImageR)
 import(graphics)

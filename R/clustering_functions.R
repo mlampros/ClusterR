@@ -397,9 +397,9 @@ KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset",
 #'
 #' ---------------initializers----------------------
 #'
-#' \strong{optimal_init}   : this initializer adds rows of the data incrementally, while checking that they do not already exist in the centroid-matrix
+#' \strong{optimal_init}   : this initializer adds rows of the data incrementally, while checking that they do not already exist in the centroid-matrix [ experimental ]
 #'
-#' \strong{quantile_init}  : initialization of centroids by using the cummulative distance between observations and by removing potential duplicates
+#' \strong{quantile_init}  : initialization of centroids by using the cummulative distance between observations and by removing potential duplicates [ experimental ]
 #'
 #' \strong{kmeans++}       : kmeans++ initialization. Reference : http://theory.stanford.edu/~sergei/papers/kMeansPP-soda.pdf AND http://stackoverflow.com/questions/5466323/how-exactly-does-k-means-work
 #'
@@ -545,9 +545,9 @@ predict_KMeans = function(data, CENTROIDS) {
 #'
 #' ---------------initializers----------------------
 #'
-#' \strong{optimal_init}   : this initializer adds rows of the data incrementally, while checking that they do not already exist in the centroid-matrix
+#' \strong{optimal_init}   : this initializer adds rows of the data incrementally, while checking that they do not already exist in the centroid-matrix  [ experimental ]
 #'
-#' \strong{quantile_init}  : initialization of centroids by using the cummulative distance between observations and by removing potential duplicates
+#' \strong{quantile_init}  : initialization of centroids by using the cummulative distance between observations and by removing potential duplicates   [ experimental ]
 #'
 #' \strong{kmeans++}       : kmeans++ initialization. Reference : http://theory.stanford.edu/~sergei/papers/kMeansPP-soda.pdf AND http://stackoverflow.com/questions/5466323/how-exactly-does-k-means-work
 #'
@@ -794,9 +794,9 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 #'
 #' ---------------initializers----------------------
 #'
-#' \strong{optimal_init}   : this initializer adds rows of the data incrementally, while checking that they do not already exist in the centroid-matrix
+#' \strong{optimal_init}   : this initializer adds rows of the data incrementally, while checking that they do not already exist in the centroid-matrix   [ experimental ]
 #'
-#' \strong{quantile_init}  : initialization of centroids by using the cummulative distance between observations and by removing potential duplicates
+#' \strong{quantile_init}  : initialization of centroids by using the cummulative distance between observations and by removing potential duplicates  [ experimental ]
 #'
 #' \strong{kmeans++}       : kmeans++ initialization. Reference : http://theory.stanford.edu/~sergei/papers/kMeansPP-soda.pdf AND http://stackoverflow.com/questions/5466323/how-exactly-does-k-means-work
 #'

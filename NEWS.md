@@ -1,4 +1,20 @@
 
+## ClusterR 1.0.7
+
+I modified the *kmeans_miniBatchKmeans_GMM_Medoids.cpp* file in the following lines in order to fix the clang-ASAN errors (without loss in performance):
+
+* lines 1156-1160 : I commented the second OpenMp parallel-loop and I replaced the *k* variable with the *i* variable in the second for-loop [in the *dissim_mat()* function]
+* lines 1739-1741 : I commented the second OpenMp parallel-loop [in the *silhouette_matrix()* function]
+* I replaced (all) the *silhouette_matrix* (arma::mat) variable names with *Silhouette_matrix*, because the name overlapped with the name of the Rcpp function [in the *silhouette_matrix* function]
+* I replaced all *sorted_medoids.n_elem* with the variable *unsigned int sorted_medoids_elem* [in the *silhouette_matrix* function]
+
+I modified the following *functions* in the *clustering_functions.R* file:
+
+* *KMeans_rcpp()* : I added an *experimental* note in the details for the *optimal_init* and *quantile_init* initializers.
+* *Optimal_Clusters_KMeans()* : I added an *experimental* note in the details for the *optimal_init* and *quantile_init* initializers.
+* *MiniBatchKmeans()* : I added an *experimental* note in the details for the *optimal_init* and *quantile_init* initializers.
+
+
 ## ClusterR 1.0.6
 
 The *normalized variation of information* was added in the *external_validation* function (https://github.com/mlampros/ClusterR/pull/1)

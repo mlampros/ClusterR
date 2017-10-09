@@ -1153,12 +1153,12 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
   #endif
   for (unsigned int i = 0; i < data.n_rows - 1; i++) {
 
-    int k = i;
-
-    #ifdef _OPENMP
-    #pragma omp parallel for schedule(static)
-    #endif
-    for (unsigned int j = k + 1; j < data.n_rows; j++) {
+    // int k = i;
+    // 
+    // #ifdef _OPENMP
+    // #pragma omp parallel for schedule(static)
+    // #endif
+    for (unsigned int j = i + 1; j < data.n_rows; j++) {
 
       double tmp_idx;
 
@@ -1721,24 +1721,26 @@ Rcpp::List silhouette_matrix(arma::mat data, arma::rowvec end_indices_vec, arma:
 
   arma::rowvec sorted_medoids = arma::unique(end_indices_vec);
 
-  arma::rowvec sorted_medoids_increment = arma::regspace<arma::rowvec> (1, 1, sorted_medoids.n_elem);
+  unsigned int sorted_medoids_elem = sorted_medoids.n_elem;
 
-  arma::mat silhouette_matrix(end_indices_vec.n_elem, 7, arma::fill::zeros);
+  arma::rowvec sorted_medoids_increment = arma::regspace<arma::rowvec> (1, 1, sorted_medoids_elem);
+
+  arma::mat Silhouette_matrix(end_indices_vec.n_elem, 7, arma::fill::zeros);
 
   #ifdef _OPENMP
   #pragma omp parallel for schedule(static)
   #endif
   for (unsigned int f = 0; f < end_indices_vec.n_elem; f++) {
 
-    double intra_clust_diss = 0.0, diameter = 0.0, separation = arma::datum::inf;
+    double intra_clust_diss = 0.0, diameter = 0.0, separation = arma::datum::inf;       // openmp with reduction() clause for incremented variables (+)
 
     int intra_count_obs = 0;
 
-    arma::mat outer_clust_diss(3, sorted_medoids.n_elem, arma::fill::zeros);              // temporary-outer-dissimilarities-matrix
+    arma::mat outer_clust_diss(3, sorted_medoids_elem, arma::fill::zeros);              // temporary-outer-dissimilarities-matrix   [ openmp with reduction() clause ]
 
-    #ifdef _OPENMP
-    #pragma omp parallel for schedule(static)
-    #endif
+    // #ifdef _OPENMP
+    // #pragma omp parallel for schedule(static)
+    // #endif
     for (unsigned int t = 0; t < end_indices_vec.n_elem; t++) {
 
       if (f != t) {
@@ -1754,7 +1756,7 @@ Rcpp::List silhouette_matrix(arma::mat data, arma::rowvec end_indices_vec, arma:
 
         if (end_indices_vec(f) != end_indices_vec(t)) {
 
-          for (unsigned int k = 0; k < sorted_medoids.n_elem; k++) {
+          for (unsigned int k = 0; k < sorted_medoids_elem; k++) {
 
             if (end_indices_vec(t) == sorted_medoids(k)) {
 
@@ -1775,34 +1777,34 @@ Rcpp::List silhouette_matrix(arma::mat data, arma::rowvec end_indices_vec, arma:
 
     arma::uvec opt_idx = arma::find(outer_clust_diss.row(1) == arma::min(outer_clust_diss.row(1)));
 
-    silhouette_matrix(f, 0) = end_indices_vec(f);                                                      // 1st column clusters
+    Silhouette_matrix(f, 0) = end_indices_vec(f);                                                      // 1st column clusters
 
-    silhouette_matrix(f, 1) = outer_clust_diss(0,opt_idx(0));                                          // 2nd column neighboring clusters [ using outer-cluster-dissimilarities ]
+    Silhouette_matrix(f, 1) = outer_clust_diss(0,opt_idx(0));                                          // 2nd column neighboring clusters [ using outer-cluster-dissimilarities ]
 
-    silhouette_matrix(f, 2) = intra_clust_diss / intra_count_obs;                                      // 3rd column intra-cluster-dissimilarities
+    Silhouette_matrix(f, 2) = intra_clust_diss / intra_count_obs;                                      // 3rd column intra-cluster-dissimilarities
 
-    silhouette_matrix(f, 3) = outer_clust_diss(1,opt_idx(0));                                          // 4th column outer-cluster-dissimilarities
+    Silhouette_matrix(f, 3) = outer_clust_diss(1,opt_idx(0));                                          // 4th column outer-cluster-dissimilarities
 
-    silhouette_matrix(f, 4) = calc_silhouette(silhouette_matrix(f,2), silhouette_matrix(f,3));         // 5th column silhouette widths
+    Silhouette_matrix(f, 4) = calc_silhouette(Silhouette_matrix(f,2), Silhouette_matrix(f,3));         // 5th column silhouette widths
 
-    silhouette_matrix(f, 5) = diameter;                                                                // diameter (maximal dissimilarity between two obs. of the same cluster)
+    Silhouette_matrix(f, 5) = diameter;                                                                // diameter (maximal dissimilarity between two obs. of the same cluster)
 
-    silhouette_matrix(f, 6) = separation;                                                              // separation (minimal dissimilarity between two obs. of different clusters)
+    Silhouette_matrix(f, 6) = separation;                                                              // separation (minimal dissimilarity between two obs. of different clusters)
 
   }
 
-  arma::mat clustering_stats(6, sorted_medoids.n_elem, arma::fill::zeros);
+  arma::mat clustering_stats(6, sorted_medoids_elem, arma::fill::zeros);
 
   clustering_stats.row(5).fill(arma::datum::inf);
 
   #ifdef _OPENMP
   #pragma omp parallel for collapse(2)
   #endif
-  for (unsigned int s = 0; s < silhouette_matrix.n_rows; s++) {
+  for (unsigned int s = 0; s < Silhouette_matrix.n_rows; s++) {
 
-    for (unsigned int g = 0; g < sorted_medoids.n_elem; g++) {
+    for (unsigned int g = 0; g < sorted_medoids_elem; g++) {
 
-      if (sorted_medoids(g) == silhouette_matrix(s, 0)) {
+      if (sorted_medoids(g) == Silhouette_matrix(s, 0)) {
 
         clustering_stats(0, g) = sorted_medoids(g);                                                                       // clustering labels
 
@@ -1812,16 +1814,16 @@ Rcpp::List silhouette_matrix(arma::mat data, arma::rowvec end_indices_vec, arma:
 
         clustering_stats(3, g) += end_cost_vec(s);                                                                        // first sum dissimilarities, so that I can get the average cluster dissimilarity
 
-        if (clustering_stats(4, g) < silhouette_matrix(s, 5)) { clustering_stats(4, g) = silhouette_matrix(s, 5); }       // diameter of cluster
+        if (clustering_stats(4, g) < Silhouette_matrix(s, 5)) { clustering_stats(4, g) = Silhouette_matrix(s, 5); }       // diameter of cluster
 
-        if (clustering_stats(5, g) > silhouette_matrix(s, 6)) { clustering_stats(5, g) = silhouette_matrix(s, 6); }       // separation of cluster
+        if (clustering_stats(5, g) > Silhouette_matrix(s, 6)) { clustering_stats(5, g) = Silhouette_matrix(s, 6); }       // separation of cluster
       }
     }
   }
 
   clustering_stats.row(3) /= clustering_stats.row(1);                                                                     // average intra cluster dissimilarity
 
-  return Rcpp::List::create(Rcpp::Named("silhouette_matrix") = silhouette_matrix, Rcpp::Named("clustering_stats") = clustering_stats.t());
+  return Rcpp::List::create(Rcpp::Named("silhouette_matrix") = Silhouette_matrix, Rcpp::Named("clustering_stats") = clustering_stats.t());
 }
 
 
