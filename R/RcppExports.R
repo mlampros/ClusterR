@@ -2,174 +2,190 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 tot_ss_data <- function(x) {
-    .Call('ClusterR_tot_ss_data', PACKAGE = 'ClusterR', x)
+    .Call(`_ClusterR_tot_ss_data`, x)
 }
 
-KMEANS_rcpp <- function(data, clusters, num_init = 1L, max_iters = 200L, initializer = "kmeans++", fuzzy = FALSE, threads = 1L, verbose = FALSE, CENTROIDS = NULL, tol = 1e-4, eps = 1.0e-6, tol_optimal_init = 0.5, seed = 1L) {
-    .Call('ClusterR_KMEANS_rcpp', PACKAGE = 'ClusterR', data, clusters, num_init, max_iters, initializer, fuzzy, threads, verbose, CENTROIDS, tol, eps, tol_optimal_init, seed)
+KMEANS_rcpp <- function(data, clusters, num_init = 1L, max_iters = 200L, initializer = "kmeans++", fuzzy = FALSE, verbose = FALSE, CENTROIDS = NULL, tol = 1e-4, eps = 1.0e-6, tol_optimal_init = 0.5, seed = 1L) {
+    .Call(`_ClusterR_KMEANS_rcpp`, data, clusters, num_init, max_iters, initializer, fuzzy, verbose, CENTROIDS, tol, eps, tol_optimal_init, seed)
 }
 
 KMEANS_arma <- function(data, clusters, n_iter, verbose, seed_mode = "random_subset", CENTROIDS = NULL, seed = 1L) {
-    .Call('ClusterR_KMEANS_arma', PACKAGE = 'ClusterR', data, clusters, n_iter, verbose, seed_mode, CENTROIDS, seed)
+    .Call(`_ClusterR_KMEANS_arma`, data, clusters, n_iter, verbose, seed_mode, CENTROIDS, seed)
 }
 
 opt_clust_fK <- function(sum_distortion, data_num_cols, threshold = 0.85) {
-    .Call('ClusterR_opt_clust_fK', PACKAGE = 'ClusterR', sum_distortion, data_num_cols, threshold)
+    .Call(`_ClusterR_opt_clust_fK`, sum_distortion, data_num_cols, threshold)
 }
 
 INTRA_CLUSTER_DISS <- function(data, CLUSTERS) {
-    .Call('ClusterR_INTRA_CLUSTER_DISS', PACKAGE = 'ClusterR', data, CLUSTERS)
+    .Call(`_ClusterR_INTRA_CLUSTER_DISS`, data, CLUSTERS)
 }
 
 Rcpp_2arma_mat <- function(x) {
-    .Call('ClusterR_Rcpp_2arma_mat', PACKAGE = 'ClusterR', x)
+    .Call(`_ClusterR_Rcpp_2arma_mat`, x)
 }
 
 SILHOUETTE_metric <- function(data, CLUSTER, tmp_clust, in_cluster_dist) {
-    .Call('ClusterR_SILHOUETTE_metric', PACKAGE = 'ClusterR', data, CLUSTER, tmp_clust, in_cluster_dist)
+    .Call(`_ClusterR_SILHOUETTE_metric`, data, CLUSTER, tmp_clust, in_cluster_dist)
 }
 
 evaluation_rcpp <- function(data, CLUSTER, silhouette = FALSE) {
-    .Call('ClusterR_evaluation_rcpp', PACKAGE = 'ClusterR', data, CLUSTER, silhouette)
+    .Call(`_ClusterR_evaluation_rcpp`, data, CLUSTER, silhouette)
 }
 
 mini_batch_kmeans <- function(data, clusters, batch_size, max_iters, num_init = 1L, init_fraction = 1.0, initializer = "kmeans++", early_stop_iter = 10L, verbose = FALSE, CENTROIDS = NULL, tol = 1e-4, tol_optimal_init = 0.5, seed = 1L) {
-    .Call('ClusterR_mini_batch_kmeans', PACKAGE = 'ClusterR', data, clusters, batch_size, max_iters, num_init, init_fraction, initializer, early_stop_iter, verbose, CENTROIDS, tol, tol_optimal_init, seed)
+    .Call(`_ClusterR_mini_batch_kmeans`, data, clusters, batch_size, max_iters, num_init, init_fraction, initializer, early_stop_iter, verbose, CENTROIDS, tol, tol_optimal_init, seed)
 }
 
 Predict_mini_batch_kmeans <- function(data, CENTROIDS = NULL, fuzzy = FALSE, eps = 1.0e-6) {
-    .Call('ClusterR_Predict_mini_batch_kmeans', PACKAGE = 'ClusterR', data, CENTROIDS, fuzzy, eps)
+    .Call(`_ClusterR_Predict_mini_batch_kmeans`, data, CENTROIDS, fuzzy, eps)
 }
 
 GMM_arma <- function(data, gaussian_comps, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor = 1e-10, seed = 1L) {
-    .Call('ClusterR_GMM_arma', PACKAGE = 'ClusterR', data, gaussian_comps, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, seed)
+    .Call(`_ClusterR_GMM_arma`, data, gaussian_comps, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, seed)
 }
 
 INV_COV <- function(COV_VEC) {
-    .Call('ClusterR_INV_COV', PACKAGE = 'ClusterR', COV_VEC)
+    .Call(`_ClusterR_INV_COV`, COV_VEC)
 }
 
 predict_MGausDPDF <- function(data, CENTROIDS, COVARIANCE, WEIGHTS, eps = 1.0e-8) {
-    .Call('ClusterR_predict_MGausDPDF', PACKAGE = 'ClusterR', data, CENTROIDS, COVARIANCE, WEIGHTS, eps)
+    .Call(`_ClusterR_predict_MGausDPDF`, data, CENTROIDS, COVARIANCE, WEIGHTS, eps)
 }
 
 GMM_arma_AIC_BIC <- function(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor = 1e-10, criterion = "AIC", seed = 1L) {
-    .Call('ClusterR_GMM_arma_AIC_BIC', PACKAGE = 'ClusterR', data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed)
+    .Call(`_ClusterR_GMM_arma_AIC_BIC`, data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed)
+}
+
+METHODS <- function(data, data1, method, i, j, flag_isfinite, cov_mat, minkowski_p = 1.0, eps = 1.0e-6, exception_nan = TRUE) {
+    .Call(`_ClusterR_METHODS`, data, data1, method, i, j, flag_isfinite, cov_mat, minkowski_p, eps, exception_nan)
+}
+
+SWITCH <- function(method) {
+    .Call(`_ClusterR_SWITCH`, method)
 }
 
 dissim_mat <- function(data, method, minkowski_p = 1.0, upper = TRUE, diagonal = TRUE, threads = 1L, eps = 1.0e-6) {
-    .Call('ClusterR_dissim_mat', PACKAGE = 'ClusterR', data, method, minkowski_p, upper, diagonal, threads, eps)
+    .Call(`_ClusterR_dissim_mat`, data, method, minkowski_p, upper, diagonal, threads, eps)
 }
 
 boolean_function <- function(x, y) {
-    .Call('ClusterR_boolean_function', PACKAGE = 'ClusterR', x, y)
+    .Call(`_ClusterR_boolean_function`, x, y)
+}
+
+inner_field_func <- function(f, sorted_medoids_elem, END_IDX_nelem, end_indices_vec, data, sorted_medoids, sorted_medoids_increment) {
+    .Call(`_ClusterR_inner_field_func`, f, sorted_medoids_elem, END_IDX_nelem, end_indices_vec, data, sorted_medoids, sorted_medoids_increment)
 }
 
 silhouette_matrix <- function(data, end_indices_vec, end_cost_vec, threads = 1L) {
-    .Call('ClusterR_silhouette_matrix', PACKAGE = 'ClusterR', data, end_indices_vec, end_cost_vec, threads)
+    .Call(`_ClusterR_silhouette_matrix`, data, end_indices_vec, end_cost_vec, threads)
 }
 
 subset_vec <- function(x, y) {
-    .Call('ClusterR_subset_vec', PACKAGE = 'ClusterR', x, y)
+    .Call(`_ClusterR_subset_vec`, x, y)
+}
+
+field_cm_inner <- function(copy_medoids, non_medoids, data, i, j) {
+    .Call(`_ClusterR_field_cm_inner`, copy_medoids, non_medoids, data, i, j)
 }
 
 ClusterMedoids <- function(data, clusters, method, minkowski_p = 1.0, threads = 1L, verbose = FALSE, swap_phase = FALSE, fuzzy = FALSE, seed = 1L) {
-    .Call('ClusterR_ClusterMedoids', PACKAGE = 'ClusterR', data, clusters, method, minkowski_p, threads, verbose, swap_phase, fuzzy, seed)
+    .Call(`_ClusterR_ClusterMedoids`, data, clusters, method, minkowski_p, threads, verbose, swap_phase, fuzzy, seed)
 }
 
 dissim_MEDOIDS <- function(data, method, MEDOIDS, minkowski_p = 1.0, threads = 1L, eps = 1.0e-6) {
-    .Call('ClusterR_dissim_MEDOIDS', PACKAGE = 'ClusterR', data, method, MEDOIDS, minkowski_p, threads, eps)
+    .Call(`_ClusterR_dissim_MEDOIDS`, data, method, MEDOIDS, minkowski_p, threads, eps)
 }
 
-fuzzy_and_stats <- function(data, threads = 1L, eps = 1.0e-6, fuzzy = FALSE) {
-    .Call('ClusterR_fuzzy_and_stats', PACKAGE = 'ClusterR', data, threads, eps, fuzzy)
+fuzzy_and_stats <- function(data, eps = 1.0e-6, fuzzy = FALSE) {
+    .Call(`_ClusterR_fuzzy_and_stats`, data, eps, fuzzy)
 }
 
 isolation <- function(dissim_mat_subset, x) {
-    .Call('ClusterR_isolation', PACKAGE = 'ClusterR', dissim_mat_subset, x)
+    .Call(`_ClusterR_isolation`, dissim_mat_subset, x)
 }
 
 ClaraMedoids <- function(data, clusters, method, samples, sample_size, minkowski_p = 1.0, threads = 1L, verbose = FALSE, swap_phase = FALSE, fuzzy = FALSE, seed = 1L) {
-    .Call('ClusterR_ClaraMedoids', PACKAGE = 'ClusterR', data, clusters, method, samples, sample_size, minkowski_p, threads, verbose, swap_phase, fuzzy, seed)
+    .Call(`_ClusterR_ClaraMedoids`, data, clusters, method, samples, sample_size, minkowski_p, threads, verbose, swap_phase, fuzzy, seed)
 }
 
 predict_medoids <- function(data, method, MEDOIDS, minkowski_p = 1.0, threads = 1L, fuzzy = FALSE, eps = 1.0e-6) {
-    .Call('ClusterR_predict_medoids', PACKAGE = 'ClusterR', data, method, MEDOIDS, minkowski_p, threads, fuzzy, eps)
+    .Call(`_ClusterR_predict_medoids`, data, method, MEDOIDS, minkowski_p, threads, fuzzy, eps)
 }
 
 split_rcpp_lst <- function(lst) {
-    .Call('ClusterR_split_rcpp_lst', PACKAGE = 'ClusterR', lst)
+    .Call(`_ClusterR_split_rcpp_lst`, lst)
 }
 
 OptClust <- function(data, iter_clust, method, clara = FALSE, samples = 5L, sample_size = 0.001, minkowski_p = 1.0, criterion = "dissimilarity", threads = 1L, swap_phase = FALSE, verbose = FALSE, seed = 1L) {
-    .Call('ClusterR_OptClust', PACKAGE = 'ClusterR', data, iter_clust, method, clara, samples, sample_size, minkowski_p, criterion, threads, swap_phase, verbose, seed)
+    .Call(`_ClusterR_OptClust`, data, iter_clust, method, clara, samples, sample_size, minkowski_p, criterion, threads, swap_phase, verbose, seed)
 }
 
 set_seed <- function(seed) {
-    invisible(.Call('ClusterR_set_seed', PACKAGE = 'ClusterR', seed))
+    invisible(.Call(`_ClusterR_set_seed`, seed))
 }
 
 cluster_indices <- function(CLUSTER) {
-    .Call('ClusterR_cluster_indices', PACKAGE = 'ClusterR', CLUSTER)
+    .Call(`_ClusterR_cluster_indices`, CLUSTER)
 }
 
 check_NaN_Inf <- function(x) {
-    .Call('ClusterR_check_NaN_Inf', PACKAGE = 'ClusterR', x)
+    .Call(`_ClusterR_check_NaN_Inf`, x)
 }
 
 calc_silhouette <- function(intra, outer) {
-    .Call('ClusterR_calc_silhouette', PACKAGE = 'ClusterR', intra, outer)
+    .Call(`_ClusterR_calc_silhouette`, intra, outer)
 }
 
 sample_vec <- function(num_elem, start, end, replace) {
-    .Call('ClusterR_sample_vec', PACKAGE = 'ClusterR', num_elem, start, end, replace)
+    .Call(`_ClusterR_sample_vec`, num_elem, start, end, replace)
 }
 
 squared_norm <- function(x) {
-    .Call('ClusterR_squared_norm', PACKAGE = 'ClusterR', x)
+    .Call(`_ClusterR_squared_norm`, x)
 }
 
 MinMat <- function(x) {
-    .Call('ClusterR_MinMat', PACKAGE = 'ClusterR', x)
+    .Call(`_ClusterR_MinMat`, x)
 }
 
 WCSS <- function(vec, centroids) {
-    .Call('ClusterR_WCSS', PACKAGE = 'ClusterR', vec, centroids)
+    .Call(`_ClusterR_WCSS`, vec, centroids)
 }
 
 validate_centroids <- function(data, init_centroids) {
-    .Call('ClusterR_validate_centroids', PACKAGE = 'ClusterR', data, init_centroids)
+    .Call(`_ClusterR_validate_centroids`, data, init_centroids)
 }
 
 kmeans_pp_dist <- function(vec, centroid) {
-    .Call('ClusterR_kmeans_pp_dist', PACKAGE = 'ClusterR', vec, centroid)
+    .Call(`_ClusterR_kmeans_pp_dist`, vec, centroid)
 }
 
 kmeans_pp_init <- function(data, clusters, medoids = FALSE) {
-    .Call('ClusterR_kmeans_pp_init', PACKAGE = 'ClusterR', data, clusters, medoids)
+    .Call(`_ClusterR_kmeans_pp_init`, data, clusters, medoids)
 }
 
 norm_fuzzy <- function(vec, eps) {
-    .Call('ClusterR_norm_fuzzy', PACKAGE = 'ClusterR', vec, eps)
+    .Call(`_ClusterR_norm_fuzzy`, vec, eps)
 }
 
 quantile_value <- function(x, clusters) {
-    .Call('ClusterR_quantile_value', PACKAGE = 'ClusterR', x, clusters)
+    .Call(`_ClusterR_quantile_value`, x, clusters)
 }
 
 duplicated_flag <- function(x) {
-    .Call('ClusterR_duplicated_flag', PACKAGE = 'ClusterR', x)
+    .Call(`_ClusterR_duplicated_flag`, x)
 }
 
 quantile_init_rcpp <- function(data, sample_rows, clusters) {
-    .Call('ClusterR_quantile_init_rcpp', PACKAGE = 'ClusterR', data, sample_rows, clusters)
+    .Call(`_ClusterR_quantile_init_rcpp`, data, sample_rows, clusters)
 }
 
 check_medoids <- function(data, clust, tol = 0.5) {
-    .Call('ClusterR_check_medoids', PACKAGE = 'ClusterR', data, clust, tol)
+    .Call(`_ClusterR_check_medoids`, data, clust, tol)
 }
 
 SCALE <- function(data, mean_center = TRUE, sd_scale = TRUE) {
-    .Call('ClusterR_SCALE', PACKAGE = 'ClusterR', data, mean_center, sd_scale)
+    .Call(`_ClusterR_SCALE`, data, mean_center, sd_scale)
 }
 

@@ -5,9 +5,8 @@
 \title{k-means using RcppArmadillo}
 \usage{
 KMeans_rcpp(data, clusters, num_init = 1, max_iters = 100,
-  initializer = "optimal_init", fuzzy = FALSE, threads = 1,
-  verbose = FALSE, CENTROIDS = NULL, tol = 1e-04,
-  tol_optimal_init = 0.3, seed = 1)
+  initializer = "optimal_init", fuzzy = FALSE, verbose = FALSE,
+  CENTROIDS = NULL, tol = 1e-04, tol_optimal_init = 0.3, seed = 1)
 }
 \arguments{
 \item{data}{matrix or data frame}
@@ -22,9 +21,7 @@ KMeans_rcpp(data, clusters, num_init = 1, max_iters = 100,
 
 \item{fuzzy}{either TRUE or FALSE. If TRUE, then prediction probabilities will be calculated using the distance between observations and centroids}
 
-\item{threads}{an integer specifying the number of cores to run in parallel. Openmp will be utilized to parallelize the number of initializations (num_init)}
-
-\item{verbose}{either TRUE or FALSE, indicating whether progress is printed during clustering. If threads > 1 THEN verbose = FALSE (by default)}
+\item{verbose}{either TRUE or FALSE, indicating whether progress is printed during clustering.}
 
 \item{CENTROIDS}{a matrix of initial cluster centroids. The rows of the CENTROIDS matrix should be equal to the number of clusters and the columns should be equal to the columns of the data.}
 

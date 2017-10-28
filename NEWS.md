@@ -1,4 +1,11 @@
 
+
+## ClusterR 1.0.8
+
+* I modified the *OpenMP* clauses of the .cpp files to address the ASAN errors.
+* I removed the *threads* parameter from the *KMeans_rcpp* function, to address the ASAN errors ( negligible performance difference between threaded and non-threaded version especially if the *num_init* parameter is less than 10 ). The *threads* parameter was removed also from the *Optimal_Clusters_KMeans* function as it utilizes the *KMeans_rcpp* function to find the optimal clusters for the various methods.
+
+
 ## ClusterR 1.0.7
 
 I modified the *kmeans_miniBatchKmeans_GMM_Medoids.cpp* file in the following lines in order to fix the clang-ASAN errors (without loss in performance):

@@ -220,12 +220,6 @@ testthat::test_that("in case that the fuzzy parameter is not logical, it returns
 })
 
 
-testthat::test_that("in case that the threads parameter is less than 1, it returns an error", {
-  
-  testthat::expect_error( KMeans_rcpp(X, clusters = 2, num_init = 1, max_iters = 1, threads = 0) )
-})
-
-
 testthat::test_that("in case that the verbose parameter is not logical, it returns an error", {
   
   testthat::expect_error( KMeans_rcpp(X, clusters = 2, num_init = 1, max_iters = 1, initializer = 'optimal_init', verbose = 'invalid') )

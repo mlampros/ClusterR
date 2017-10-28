@@ -6,9 +6,8 @@
 \usage{
 Optimal_Clusters_KMeans(data, max_clusters, criterion = "variance_explained",
   fK_threshold = 0.85, num_init = 1, max_iters = 200,
-  initializer = "optimal_init", threads = 1, tol = 1e-04,
-  plot_clusters = TRUE, verbose = FALSE, tol_optimal_init = 0.3,
-  seed = 1)
+  initializer = "optimal_init", tol = 1e-04, plot_clusters = TRUE,
+  verbose = FALSE, tol_optimal_init = 0.3, seed = 1)
 }
 \arguments{
 \item{data}{matrix or data frame}
@@ -24,8 +23,6 @@ Optimal_Clusters_KMeans(data, max_clusters, criterion = "variance_explained",
 \item{max_iters}{the maximum number of clustering iterations}
 
 \item{initializer}{the method of initialization. One of, \emph{optimal_init}, \emph{quantile_init}, \emph{kmeans++} and \emph{random}. See details for more information}
-
-\item{threads}{an integer specifying the number of cores to run in parallel. OpenMP will be utilized to parallelize the number of initializations (num_init)}
 
 \item{tol}{a float number. If, in case of an iteration (iteration > 1 and iteration < max_iters) 'tol' is greater than the squared norm of the centroids, then kmeans has converged}
 

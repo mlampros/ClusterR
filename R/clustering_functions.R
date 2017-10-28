@@ -375,8 +375,7 @@ KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset",
 #' @param max_iters the maximum number of clustering iterations
 #' @param initializer the method of initialization. One of, \emph{optimal_init}, \emph{quantile_init}, \emph{kmeans++} and \emph{random}. See details for more information
 #' @param fuzzy either TRUE or FALSE. If TRUE, then prediction probabilities will be calculated using the distance between observations and centroids
-#' @param threads an integer specifying the number of cores to run in parallel. Openmp will be utilized to parallelize the number of initializations (num_init)
-#' @param verbose either TRUE or FALSE, indicating whether progress is printed during clustering. If threads > 1 THEN verbose = FALSE (by default)
+#' @param verbose either TRUE or FALSE, indicating whether progress is printed during clustering.
 #' @param CENTROIDS a matrix of initial cluster centroids. The rows of the CENTROIDS matrix should be equal to the number of clusters and the columns should be equal to the columns of the data.
 #' @param tol a float number. If, in case of an iteration (iteration > 1 and iteration < max_iters) 'tol' is greater than the squared norm of the centroids, then kmeans has converged
 #' @param tol_optimal_init tolerance value for the 'optimal_init' initializer. The higher this value is, the far appart from each other the centroids are.
@@ -418,7 +417,7 @@ KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset",
 #'
 
 
-KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initializer = 'optimal_init', fuzzy = FALSE, threads = 1,
+KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initializer = 'optimal_init', fuzzy = FALSE,
 
                        verbose = FALSE, CENTROIDS = NULL, tol = 1e-4, tol_optimal_init = 0.3, seed = 1) {
 
@@ -429,7 +428,6 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
   if (max_iters < 1) stop('the max_iters parameter should be greater than 0')
   if (!initializer %in% c('kmeans++', 'random', 'optimal_init', 'quantile_init')) stop("available initializer methods are 'kmeans++', 'random', 'optimal_init' and 'quantile_init'")
   if (!is.logical(fuzzy)) stop('the fuzzy parameter should be either TRUE or FALSE')
-  if (threads < 1) stop('threads should be an integer greater than 0')
   if (!is.logical(verbose)) stop('the verbose parameter should be either TRUE or FALSE')
   if (!is.null(CENTROIDS) && (class(CENTROIDS) != 'matrix' || nrow(CENTROIDS) != clusters || ncol(CENTROIDS) != ncol(data)))
     stop('CENTROIDS should be a matrix with number of rows equal to the number of clusters and number of columns equal to the number of columns of the data')
@@ -440,7 +438,7 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
 
   if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values")
 
-  res = KMEANS_rcpp(data, clusters, num_init, max_iters, initializer, fuzzy, threads, verbose, CENTROIDS, tol, eps = 1.0e-6, tol_optimal_init, seed)
+  res = KMEANS_rcpp(data, clusters, num_init, max_iters, initializer, fuzzy, verbose, CENTROIDS, tol, eps = 1.0e-6, tol_optimal_init, seed)
 
   if (fuzzy) {
 
@@ -515,7 +513,6 @@ predict_KMeans = function(data, CENTROIDS) {
 #' @param num_init number of times the algorithm will be run with different centroid seeds
 #' @param max_iters the maximum number of clustering iterations
 #' @param initializer the method of initialization. One of, \emph{optimal_init}, \emph{quantile_init}, \emph{kmeans++} and \emph{random}. See details for more information
-#' @param threads an integer specifying the number of cores to run in parallel. OpenMP will be utilized to parallelize the number of initializations (num_init)
 #' @param tol a float number. If, in case of an iteration (iteration > 1 and iteration < max_iters) 'tol' is greater than the squared norm of the centroids, then kmeans has converged
 #' @param plot_clusters either TRUE or FALSE, indicating whether the results of the \emph{Optimal_Clusters_KMeans} function should be plotted
 #' @param verbose either TRUE or FALSE, indicating whether progress is printed during clustering
@@ -568,7 +565,7 @@ predict_KMeans = function(data, CENTROIDS) {
 
 Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_explained", fK_threshold = 0.85, num_init = 1, max_iters = 200,
 
-                                   initializer = 'optimal_init', threads = 1, tol = 1e-4, plot_clusters = TRUE, verbose = FALSE, tol_optimal_init = 0.3, seed = 1) {
+                                   initializer = 'optimal_init', tol = 1e-4, plot_clusters = TRUE, verbose = FALSE, tol_optimal_init = 0.3, seed = 1) {
 
   if (class(data) == 'data.frame') data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
@@ -579,7 +576,6 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
   if (max_iters < 1) stop('the max_iters parameter should be greater than 0')
   if (!initializer %in% c('kmeans++', 'random', 'optimal_init', 'quantile_init'))
     stop("available initializer methods are 'kmeans++', 'random', 'quantile_init' and 'optimal_init'")
-  if (threads < 1) stop('threads should be an integer greater than 0')
   if (tol <= 0.0) stop('tol should be a float number greater than 0.0')
   if (!is.logical(plot_clusters)) stop('the plot_clusters parameter should be either TRUE or FALSE')
   if (!is.logical(verbose)) stop('the verbose parameter should be either TRUE or FALSE')
@@ -595,7 +591,7 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 
   for (i in 1:max_clusters) {
 
-    km = KMEANS_rcpp(data, i, num_init, max_iters, initializer, FALSE, threads, FALSE, NULL, tol, 1.0e-6, tol_optimal_init, seed)
+    km = KMEANS_rcpp(data, i, num_init, max_iters, initializer, FALSE, FALSE, NULL, tol, 1.0e-6, tol_optimal_init, seed)
 
     if (criterion == "variance_explained") {
 
