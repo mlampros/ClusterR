@@ -556,9 +556,7 @@ testthat::test_that("Optimal_Clusters_KMeans returns the correct output if the i
 
 
 
-testthat::test_that("Optimal_Clusters_KMeans returns the correct output for different criteria [except for the 'distortion_fK' criterion,
-                    
-                    which returns the WCSSE ] ", {
+testthat::test_that("Optimal_Clusters_KMeans returns the correct output for different criteria", {
   
   vec = c('variance_explained', 'WCSSE', 'dissimilarity', 'silhouette', 'AIC', 'BIC', 'distortion_fK', 'Adjusted_Rsquared')
   

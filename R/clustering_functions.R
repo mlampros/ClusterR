@@ -518,7 +518,7 @@ predict_KMeans = function(data, CENTROIDS) {
 #' @param verbose either TRUE or FALSE, indicating whether progress is printed during clustering
 #' @param tol_optimal_init tolerance value for the 'optimal_init' initializer. The higher this value is, the far appart from each other the centroids are.
 #' @param seed integer value for random number generator (RNG)
-#' @return a vector with the results for the specified criterion (except for the 'distortion_fK' which returns the WCSS). If plot_clusters is TRUE the it plots also the results.
+#' @return a vector with the results for the specified criterion. If plot_clusters is TRUE then it plots also the results.
 #' @author Lampros Mouselimis
 #' @details
 #' ---------------criteria--------------------------
@@ -670,99 +670,111 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 
     vec_out = 1.0 - (vec_out * (nrow(data) - 1)) / (vec_out[1] * (nrow(data) - seq(1, max_clusters)))
   }
+  
+  if (criterion %in% c('variance_explained', 'WCSSE', 'dissimilarity', 'silhouette', 'AIC', 'BIC', 'Adjusted_Rsquared')) {
 
-  if (plot_clusters) {
-
-    tmp_VAL = as.vector(na.omit(vec_out))
-
-    if (length(which(is.na(vec_out))) > 0) {
-
-      x_dis = (1:length(vec_out))[-which(is.na(vec_out))]
-
-      y_dis = vec_out[-which(is.na(vec_out))]}
-
-    else {
-
-      x_dis = 1:length(vec_out)
-
-      y_dis = vec_out
-    }
-
-    y_MAX = max(tmp_VAL)
-
-    if (criterion %in% c('variance_explained', 'WCSSE', 'dissimilarity', 'silhouette', 'AIC', 'BIC', 'Adjusted_Rsquared')) {
-
-      plot(x = x_dis, y = y_dis, type = 'l', xlab = 'clusters', ylab = criterion, col = 'blue', lty = 3, axes = FALSE)
-
-      axis(1, at = seq(1, length(vec_out) , by = 1))
-
-      if (criterion == 'silhouette') {
-
-        axis(2, at = seq(0, y_MAX + 0.05, by = 0.05 ), las = 1, cex.axis = 0.8)
-
-        abline(h = seq(0.0, max(as.vector(na.omit(vec_out))), 0.05), v = seq(1, length(vec_out) , by = 1), col = "gray", lty = 3)}
-
+    if (plot_clusters) {
+  
+      tmp_VAL = as.vector(na.omit(vec_out))
+  
+      if (length(which(is.na(vec_out))) > 0) {
+  
+        x_dis = (1:length(vec_out))[-which(is.na(vec_out))]
+  
+        y_dis = vec_out[-which(is.na(vec_out))]}
+  
       else {
-
+  
+        x_dis = 1:length(vec_out)
+  
+        y_dis = vec_out
+      }
+  
+      y_MAX = max(tmp_VAL)
+      
+      plot(x = x_dis, y = y_dis, type = 'l', xlab = 'clusters', ylab = criterion, col = 'blue', lty = 3, axes = FALSE)
+  
+      axis(1, at = seq(1, length(vec_out) , by = 1))
+  
+      if (criterion == 'silhouette') {
+  
+        axis(2, at = seq(0, y_MAX + 0.05, by = 0.05 ), las = 1, cex.axis = 0.8)
+  
+        abline(h = seq(0.0, max(as.vector(na.omit(vec_out))), 0.05), v = seq(1, length(vec_out) , by = 1), col = "gray", lty = 3)}
+  
+      else {
+  
         tmp_summary = round(summary(y_MAX)[['Max.']])
-
+  
         out_max_summary = ifelse(tmp_summary == 0, 1, tmp_summary)
-
+  
         axis(2, at = seq(0, y_MAX + out_max_summary / 10, by = out_max_summary / 10), las = 1, cex.axis = 0.8)
-
+  
         abline(h = seq(0.0, max(as.vector(na.omit(vec_out))), out_max_summary / 10), v = seq(1, length(vec_out) , by = 1), col = "gray", lty = 3)
       }
-
+  
       if (criterion %in% c("variance_explained", "Adjusted_Rsquared", "dissimilarity", "silhouette")) {
-
+  
         text(x = 1:length(vec_out), y = vec_out, labels = round(vec_out, 2), cex = 0.8, font = 2) }
-
+  
       else {
-
+  
         text(x = 1:length(vec_out), y = vec_out, labels = round(vec_out, 1), cex = 0.8, font = 2)
       }
     }
+  }
+  
+  else {                                                              # "distortion_fK"
+    
+    f_K = opt_clust_fK(vec_out, ncol(data), fK_threshold)
+    
+    fK_vec = as.vector(f_K$fK_evaluation)
 
-    if (criterion == "distortion_fK") {
-
-      f_K = opt_clust_fK(vec_out, ncol(data), fK_threshold)
-
-      fK_vec = as.vector(f_K$fK_evaluation)
-
+    if (plot_clusters) {
+      
       if (length(which(is.na(fK_vec))) > 0) {
-
+        
         x_fk = (1:length(fK_vec))[-which(is.na(fK_vec))]
-
+        
         y_fk = fK_vec[-which(is.na(fK_vec))]}
-
+      
       else {
-
+        
         x_fk = 1:length(fK_vec)
-
+        
         y_fk = fK_vec
       }
-
+      
       par(oma = c(0, 2, 0, 0))
-
+      
       plot(y_fk, type = 'l', xlab = 'clusters', ylab = 'f(K)', col = 'green', axes = FALSE)
-
+      
       axis(1, at = x_fk)
-
+      
       axis(2, at = seq(0, max(y_fk) + 0.1, by = round(summary(y_fk)[['Max.']]) / 10), las = 1, cex.axis = 0.8)
-
+      
       abline(h = seq(0.0, max(y_fk), round(summary(y_fk)[['Max.']]) / 10), v = seq(1, length(y_fk) , by = 1), col = "gray", lty = 3)
-
+      
       abline(h = fK_threshold, col = 'blue', lty = 3)
-
+      
       mtext("threshold", side = 2, line = 2, at = fK_threshold, las = 1, cex = 0.9)
-
+      
       text(x = x_fk, y = y_fk, labels = round(y_fk,2), cex = 0.8, font = 2)
     }
   }
-
-  class(vec_out) = "k-means clustering"
-
-  return(vec_out)
+  
+  if (criterion %in% c('variance_explained', 'WCSSE', 'dissimilarity', 'silhouette', 'AIC', 'BIC', 'Adjusted_Rsquared')) {
+    
+    class(vec_out) = "k-means clustering"
+    
+    return(vec_out)}
+  
+  else {
+    
+    class(fK_vec) = "k-means clustering"
+    
+    return(fK_vec)                                # "distortion_fK"
+  }
 }
 
 

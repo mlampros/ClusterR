@@ -1,4 +1,8 @@
 
+## ClusterR 1.0.9
+
+* I modified the *Optimal_Clusters_KMeans* function to return a vector with the *distortion_fK* values if criterion is *distortion_fK* (instead of the *WCSSE* values).
+
 
 ## ClusterR 1.0.8
 

@@ -35,7 +35,7 @@ Optimal_Clusters_KMeans(data, max_clusters, criterion = "variance_explained",
 \item{seed}{integer value for random number generator (RNG)}
 }
 \value{
-a vector with the results for the specified criterion (except for the 'distortion_fK' which returns the WCSS). If plot_clusters is TRUE the it plots also the results.
+a vector with the results for the specified criterion. If plot_clusters is TRUE then it plots also the results.
 }
 \description{
 Optimal number of Clusters for k-means
