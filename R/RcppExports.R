@@ -61,10 +61,6 @@ METHODS <- function(data, data1, method, i, j, flag_isfinite, cov_mat, minkowski
     .Call(`_ClusterR_METHODS`, data, data1, method, i, j, flag_isfinite, cov_mat, minkowski_p, eps, exception_nan)
 }
 
-SWITCH <- function(method) {
-    .Call(`_ClusterR_SWITCH`, method)
-}
-
 dissim_mat <- function(data, method, minkowski_p = 1.0, upper = TRUE, diagonal = TRUE, threads = 1L, eps = 1.0e-6) {
     .Call(`_ClusterR_dissim_mat`, data, method, minkowski_p, upper, diagonal, threads, eps)
 }

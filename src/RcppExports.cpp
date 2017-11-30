@@ -222,14 +222,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // METHODS
-double METHODS(arma::mat& data, arma::mat& data1, int method, unsigned int i, unsigned int j, bool flag_isfinite, arma::mat& cov_mat, double minkowski_p, double eps, bool exception_nan);
+double METHODS(arma::mat& data, arma::mat& data1, std::string& method, unsigned int i, unsigned int j, bool flag_isfinite, arma::mat& cov_mat, double minkowski_p, double eps, bool exception_nan);
 RcppExport SEXP _ClusterR_METHODS(SEXP dataSEXP, SEXP data1SEXP, SEXP methodSEXP, SEXP iSEXP, SEXP jSEXP, SEXP flag_isfiniteSEXP, SEXP cov_matSEXP, SEXP minkowski_pSEXP, SEXP epsSEXP, SEXP exception_nanSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
     Rcpp::traits::input_parameter< arma::mat& >::type data1(data1SEXP);
-    Rcpp::traits::input_parameter< int >::type method(methodSEXP);
+    Rcpp::traits::input_parameter< std::string& >::type method(methodSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type i(iSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type j(jSEXP);
     Rcpp::traits::input_parameter< bool >::type flag_isfinite(flag_isfiniteSEXP);
@@ -241,25 +241,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// SWITCH
-int SWITCH(std::string method);
-RcppExport SEXP _ClusterR_SWITCH(SEXP methodSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
-    rcpp_result_gen = Rcpp::wrap(SWITCH(method));
-    return rcpp_result_gen;
-END_RCPP
-}
 // dissim_mat
-arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p, bool upper, bool diagonal, int threads, double eps);
+arma::mat dissim_mat(arma::mat& data, std::string& method, double minkowski_p, bool upper, bool diagonal, int threads, double eps);
 RcppExport SEXP _ClusterR_dissim_mat(SEXP dataSEXP, SEXP methodSEXP, SEXP minkowski_pSEXP, SEXP upperSEXP, SEXP diagonalSEXP, SEXP threadsSEXP, SEXP epsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
+    Rcpp::traits::input_parameter< std::string& >::type method(methodSEXP);
     Rcpp::traits::input_parameter< double >::type minkowski_p(minkowski_pSEXP);
     Rcpp::traits::input_parameter< bool >::type upper(upperSEXP);
     Rcpp::traits::input_parameter< bool >::type diagonal(diagonalSEXP);
@@ -359,13 +348,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // dissim_MEDOIDS
-arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS, double minkowski_p, int threads, double eps);
+arma::mat dissim_MEDOIDS(arma::mat& data, std::string& method, arma::mat MEDOIDS, double minkowski_p, int threads, double eps);
 RcppExport SEXP _ClusterR_dissim_MEDOIDS(SEXP dataSEXP, SEXP methodSEXP, SEXP MEDOIDSSEXP, SEXP minkowski_pSEXP, SEXP threadsSEXP, SEXP epsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
+    Rcpp::traits::input_parameter< std::string& >::type method(methodSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type MEDOIDS(MEDOIDSSEXP);
     Rcpp::traits::input_parameter< double >::type minkowski_p(minkowski_pSEXP);
     Rcpp::traits::input_parameter< int >::type threads(threadsSEXP);

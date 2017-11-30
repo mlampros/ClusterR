@@ -2,6 +2,7 @@
 ## ClusterR 1.0.9
 
 * I modified the *Optimal_Clusters_KMeans* function to return a vector with the *distortion_fK* values if criterion is *distortion_fK* (instead of the *WCSSE* values).
+* I added the 'Moore-Penrose pseudo-inverse' for the case of the 'mahalanobis' distance calculation.
 
 
 ## ClusterR 1.0.8

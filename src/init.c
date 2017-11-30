@@ -51,7 +51,6 @@ extern SEXP _ClusterR_SILHOUETTE_metric(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_split_rcpp_lst(SEXP);
 extern SEXP _ClusterR_squared_norm(SEXP);
 extern SEXP _ClusterR_subset_vec(SEXP, SEXP);
-extern SEXP _ClusterR_SWITCH(SEXP);
 extern SEXP _ClusterR_tot_ss_data(SEXP);
 extern SEXP _ClusterR_validate_centroids(SEXP, SEXP);
 extern SEXP _ClusterR_WCSS(SEXP, SEXP);
@@ -100,7 +99,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_ClusterR_split_rcpp_lst",            (DL_FUNC) &_ClusterR_split_rcpp_lst,             1},
     {"_ClusterR_squared_norm",              (DL_FUNC) &_ClusterR_squared_norm,               1},
     {"_ClusterR_subset_vec",                (DL_FUNC) &_ClusterR_subset_vec,                 2},
-    {"_ClusterR_SWITCH",                    (DL_FUNC) &_ClusterR_SWITCH,                     1},
     {"_ClusterR_tot_ss_data",               (DL_FUNC) &_ClusterR_tot_ss_data,                1},
     {"_ClusterR_validate_centroids",        (DL_FUNC) &_ClusterR_validate_centroids,         2},
     {"_ClusterR_WCSS",                      (DL_FUNC) &_ClusterR_WCSS,                       2},

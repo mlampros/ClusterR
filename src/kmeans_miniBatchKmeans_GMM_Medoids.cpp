@@ -1114,17 +1114,17 @@ arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, int max_clusters, std::string dis
 
 
 
-// dissimilarity matrix using various distance metric methods [ the function can handle missing values by using pair-wise deletion ]
+// the various distance metric methods for the 'dissim_mat' function
 //
 
 // [[Rcpp::export]]
-double METHODS(arma::mat& data, arma::mat& data1, int method, unsigned int i, unsigned int j, bool flag_isfinite, arma::mat& cov_mat, double minkowski_p = 1.0, 
+double METHODS(arma::mat& data, arma::mat& data1, std::string& method, unsigned int i, unsigned int j, bool flag_isfinite, arma::mat& cov_mat, double minkowski_p = 1.0, 
                
                double eps = 1.0e-6, bool exception_nan = true) {
   
   double tmp_idx;
   
-  if (method == 1) {
+  if (method == "euclidean") {
     
     if (flag_isfinite) {
       
@@ -1152,7 +1152,7 @@ double METHODS(arma::mat& data, arma::mat& data1, int method, unsigned int i, un
     }
   }
   
-  else if (method == 2) {
+  else if (method == "manhattan") {
     
     if (flag_isfinite) {
       
@@ -1180,7 +1180,7 @@ double METHODS(arma::mat& data, arma::mat& data1, int method, unsigned int i, un
     }
   }
   
-  else if (method == 3) {
+  else if (method == "chebyshev") {
     
     if (flag_isfinite) {
       
@@ -1208,7 +1208,7 @@ double METHODS(arma::mat& data, arma::mat& data1, int method, unsigned int i, un
     }
   }
   
-  else if (method == 4) {
+  else if (method == "canberra") {
     
     if (flag_isfinite) {
       
@@ -1247,7 +1247,7 @@ double METHODS(arma::mat& data, arma::mat& data1, int method, unsigned int i, un
     }
   }
   
-  else if (method == 5) {
+  else if (method == "braycurtis") {
     
     if (flag_isfinite) {
       
@@ -1286,7 +1286,7 @@ double METHODS(arma::mat& data, arma::mat& data1, int method, unsigned int i, un
     }
   }
   
-  else if (method == 6) {
+  else if (method == "pearson_correlation") {
     
     if (flag_isfinite) {
       
@@ -1325,7 +1325,7 @@ double METHODS(arma::mat& data, arma::mat& data1, int method, unsigned int i, un
     }
   }
   
-  else if (method == 7) {                                                    // for binary data
+  else if (method == "simple_matching_coefficient") {                                                    // for binary data
     
     if (flag_isfinite) {
       
@@ -1396,7 +1396,7 @@ double METHODS(arma::mat& data, arma::mat& data1, int method, unsigned int i, un
     }
   }
   
-  else if (method == 8) {                                                                                     // by default the order of the minkowski parameter equals k
+  else if (method == "minkowski") {                                                                                     // by default the order of the minkowski parameter equals k
     
     if (flag_isfinite) {
       
@@ -1436,7 +1436,7 @@ double METHODS(arma::mat& data, arma::mat& data1, int method, unsigned int i, un
     }
   }
   
-  else if (method == 9) {                                                                                     // for binary data
+  else if (method == "hamming") {                                                                                     // for binary data
     
     if (flag_isfinite) {
       
@@ -1476,12 +1476,12 @@ double METHODS(arma::mat& data, arma::mat& data1, int method, unsigned int i, un
     }
   }
   
-  else if (method == 10) {                                                                                     // first create covariance matrix from data
+  else if (method == "mahalanobis") {                                                                                     // first create covariance matrix from data
     
     tmp_idx = arma::as_scalar(std::sqrt(arma::as_scalar(((data.row(i) - data1.row(j)) * cov_mat) * (data.row(i) - data1.row(j)).t())));
   }
   
-  else if (method == 11) {                                                                                     // for binary data
+  else if (method == "jaccard_coefficient") {                                                                                     // for binary data
     
     if (flag_isfinite) {
       
@@ -1562,7 +1562,7 @@ double METHODS(arma::mat& data, arma::mat& data1, int method, unsigned int i, un
     }
   }
   
-  else if (method == 12) {                                                                                     // for binary data
+  else if (method == "Rao_coefficient") {                                                                                     // for binary data
     
     if (flag_isfinite) {
       
@@ -1639,35 +1639,40 @@ double METHODS(arma::mat& data, arma::mat& data1, int method, unsigned int i, un
 }
 
 
-// returns an integer for the corresponding distance metric
+
+// calculate the 'inverse' AND in case of exception the 'Moore-Penrose pseudo-inverse' of the covariance matrix FOR the 'mahalanobis' distance
+// https://github.com/mlampros/KernelKnn/issues/1
 //
 
-// [[Rcpp::export]]
-int SWITCH(std::string method) {
+arma::mat INV_EXC(arma::mat cov_data) {
   
-  std::vector<std::string> methods = {"euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", 
-                                      "simple_matching_coefficient", "minkowski", "hamming", "mahalanobis", "jaccard_coefficient", "Rao_coefficient"};
+  arma::mat inv_tmp;
   
-  std::vector<int> indices = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-  
-  std::map<std::string, int> map_method_idx;
-  
-  for (unsigned int i = 0; i < methods.size(); i++) {
+  try {
     
-    map_method_idx[methods[i]] = indices[i];
+    inv_tmp = arma::inv(arma::cov(cov_data));
   }
   
-  return map_method_idx[method];
+  catch(...) {
+    
+    Rcpp::warning("the input matrix seems singular. The Moore-Penrose pseudo-inverse of the covariance matrix will be calculated");
+  }
+  
+  if (inv_tmp.empty()) {
+    
+    inv_tmp = arma::pinv(arma::cov(cov_data));
+  }
+  
+  return inv_tmp;
 }
 
 
 
-
-// dissimilarity matrix
+// dissimilarity matrix using various distance metric methods [ the function can handle missing values by using pair-wise deletion ]
 //
 
 // [[Rcpp::export]]
-arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1.0, bool upper = true, bool diagonal = true, int threads = 1, double eps = 1.0e-6) {
+arma::mat dissim_mat(arma::mat& data, std::string& method, double minkowski_p = 1.0, bool upper = true, bool diagonal = true, int threads = 1, double eps = 1.0e-6) {
   
   #ifdef _OPENMP
   omp_set_num_threads(threads);
@@ -1686,10 +1691,8 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
   
   if (method == "mahalanobis") {
     
-    cov_mat = arma::inv(arma::cov(data));
+    cov_mat = INV_EXC(data);
   }
-  
-  int method_INT = SWITCH(method);                          // switch between std::string and int for the openmp clause
   
   unsigned int ITERS = data.n_rows;
   
@@ -1700,13 +1703,13 @@ arma::mat dissim_mat(arma::mat& data, std::string method, double minkowski_p = 1
   unsigned int i,j;
   
   #ifdef _OPENMP
-  #pragma omp parallel for schedule(static) shared(ITERS, method_INT, mt, data, upper, flag_isfinite, cov_mat, minkowski_p, eps) private(i,j)
+  #pragma omp parallel for schedule(static) shared(ITERS, method, mt, data, upper, flag_isfinite, cov_mat, minkowski_p, eps) private(i,j)
   #endif
   for (i = 0; i < ITERS - 1; i++) {                                                                                   // rows
     
     for (j = i + 1; j < ITERS; j++) {                                                                                 // rows
       
-      double val = METHODS(data, data, method_INT, i, j, flag_isfinite, cov_mat, minkowski_p, eps, true);             // various methods (of type integer)
+      double val = METHODS(data, data, method, i, j, flag_isfinite, cov_mat, minkowski_p, eps, true);                 // various methods
       
       #ifdef _OPENMP
       #pragma omp atomic write
@@ -2299,8 +2302,8 @@ Rcpp::List ClusterMedoids(arma::mat& data, int clusters, std::string method, dou
 //
 
 // [[Rcpp::export]]
-arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS, double minkowski_p = 1.0, int threads = 1, double eps = 1.0e-6) {
-
+arma::mat dissim_MEDOIDS(arma::mat& data, std::string& method, arma::mat MEDOIDS, double minkowski_p = 1.0, int threads = 1, double eps = 1.0e-6) {
+  
   #ifdef _OPENMP
   omp_set_num_threads(threads);
   #endif
@@ -2318,33 +2321,31 @@ arma::mat dissim_MEDOIDS(arma::mat& data, std::string method, arma::mat MEDOIDS,
   
   if (method == "mahalanobis") {
     
-    cov_mat = arma::inv(arma::cov(data));
+    cov_mat = INV_EXC(data);
   }
-  
-  int method_INT = SWITCH(method);                          // switch between std::string and int for the openmp clause
   
   unsigned int ITERS = data.n_rows;
   
   arma::mat mt(ITERS, MEDOIDS.n_rows);
-
+  
   unsigned int i,j;
   
   #ifdef _OPENMP
-  #pragma omp parallel for schedule(static) shared(ITERS, MEDOIDS, eps, minkowski_p, cov_mat, flag_isfinite, method_INT, data, mt) private(i,j)
+  #pragma omp parallel for schedule(static) shared(ITERS, MEDOIDS, eps, minkowski_p, cov_mat, flag_isfinite, method, data, mt) private(i,j)
   #endif
   for (i = 0; i < ITERS; i++) {
     
     for (j = 0; j < MEDOIDS.n_rows; j++) {
       
-      double val = METHODS(data, MEDOIDS, method_INT, i, j, flag_isfinite, cov_mat, minkowski_p, eps, false);             // various methods (of type integer)
-
+      double val = METHODS(data, MEDOIDS, method, i, j, flag_isfinite, cov_mat, minkowski_p, eps, false);             // various methods (of type integer)
+      
       #ifdef _OPENMP
       #pragma omp atomic write
       #endif
       mt(i,j) = val;
     }
   }
-
+  
   return mt;
 }
 
