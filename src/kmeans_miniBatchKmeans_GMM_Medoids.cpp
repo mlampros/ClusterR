@@ -546,8 +546,10 @@ Rcpp::List evaluation_rcpp(arma::mat& data, arma::vec CLUSTER, bool silhouette =
   Rcpp::List in_cluster_dist = INTRA_CLUSTER_DISS(data, tmp_clust);
 
   if (!silhouette) {
+    
+    arma::rowvec befout_CLUSTER = arma::conv_to< arma::rowvec >::from(CLUSTER);
 
-    return(Rcpp::List::create(Rcpp::Named("clusters") = arma::conv_to< arma::rowvec >::from(CLUSTER),
+    return(Rcpp::List::create(Rcpp::Named("clusters") = befout_CLUSTER,
 
                               Rcpp::Named("cluster_indices") = tmp_clust,                                    // use the data indices, otherwise difficult to match clusters with silhouette or dissimilarity coefficients
 
@@ -557,8 +559,10 @@ Rcpp::List evaluation_rcpp(arma::mat& data, arma::vec CLUSTER, bool silhouette =
   else {
 
     Rcpp::List silhouet_out = SILHOUETTE_metric(data, CLUSTER, tmp_clust, in_cluster_dist);
+    
+    arma::rowvec befout_CLUSTER = arma::conv_to< arma::rowvec >::from(CLUSTER);
 
-    return(Rcpp::List::create(Rcpp::Named("clusters") = arma::conv_to< arma::rowvec >::from(CLUSTER),
+    return(Rcpp::List::create(Rcpp::Named("clusters") = befout_CLUSTER,
 
                               Rcpp::Named("cluster_indices") = tmp_clust,                                       // use the data indices, otherwise difficult to match clusters with silhouette or dissimilarity coefficients
 
@@ -949,12 +953,20 @@ Rcpp::List GMM_arma(arma::mat& data, int gaussian_comps, std::string dist_mode, 
   double n = timer.toc();
 
   if (verbose) { Rcpp::Rcout << "\ntime to complete : " << n << "\n" << std::endl; }
+  
+  arma::mat model_means = model.means.t();
+  
+  arma::mat model_dcovs = model.dcovs.t();
+  
+  arma::rowvec model_hefts = arma::conv_to< arma::rowvec >::from(model.hefts.t());
+  
+  double model_avg_log_p = model.avg_log_p(data.t(), gaussian_comps - 1);
 
-  return Rcpp::List::create( Rcpp::Named("centroids") = model.means.t(), Rcpp::Named("covariance_matrices") = model.dcovs.t(),           // each row of the 'covariance_matrices' is a different covariance matrix, use diag() to build each square diagonal matrix
+  return Rcpp::List::create( Rcpp::Named("centroids") = model_means, Rcpp::Named("covariance_matrices") = model_dcovs,           // each row of the 'covariance_matrices' is a different covariance matrix, use diag() to build each square diagonal matrix
 
-                             Rcpp::Named("weights") = model.hefts.t(), Rcpp::Named("Log_likelihood_raw") = loglik,
+                             Rcpp::Named("weights") = model_hefts, Rcpp::Named("Log_likelihood_raw") = loglik,
 
-                             Rcpp::Named("avg_Log_likelihood_DATA") = model.avg_log_p(data.t(), gaussian_comps - 1) );
+                             Rcpp::Named("avg_Log_likelihood_DATA") = model_avg_log_p );
 }
 
 
@@ -2261,7 +2273,18 @@ Rcpp::List ClusterMedoids(arma::mat& data, int clusters, std::string method, dou
     }
   }
   
-  if (clusters > 1) { silh_lst = silhouette_matrix(data, end_indices_vec + 1, end_cost_vec, threads); }
+  arma::mat befout_silhouette_matrix;
+  
+  arma::mat befout_clustering_stats;
+  
+  if (clusters > 1) { 
+    
+    silh_lst = silhouette_matrix(data, end_indices_vec + 1, end_cost_vec, threads);
+    
+    befout_silhouette_matrix = Rcpp::as<arma::mat> (silh_lst[0]);
+    
+    befout_clustering_stats = Rcpp::as<arma::mat> (silh_lst[1]);
+  }
   
   arma::mat fuz_out;
   
@@ -2287,11 +2310,13 @@ Rcpp::List ClusterMedoids(arma::mat& data, int clusters, std::string method, dou
     }
   }
   
-  return Rcpp::List::create(Rcpp::Named("medoids") = end_idxs, Rcpp::Named("cost") = arma::accu(end_cost_vec), Rcpp::Named("dissimilarity_matrix") = data,
+  double end_cost_vec_scalar = arma::accu(end_cost_vec);
+
+  return Rcpp::List::create(Rcpp::Named("medoids") = end_idxs, Rcpp::Named("cost") = end_cost_vec_scalar, Rcpp::Named("dissimilarity_matrix") = data,
                             
-                            Rcpp::Named("clusters") = end_indices_vec, Rcpp::Named("end_cost_vec") = end_cost_vec, Rcpp::Named("silhouette_matrix") = silh_lst[0],
+                            Rcpp::Named("clusters") = end_indices_vec, Rcpp::Named("end_cost_vec") = end_cost_vec, Rcpp::Named("silhouette_matrix") = befout_silhouette_matrix,
                                         
-                                        Rcpp::Named("fuzzy_probs") = fuz_out, Rcpp::Named("clustering_stats") = silh_lst[1], Rcpp::Named("flag_dissim_mat") = flag_dissim_mat);
+                                        Rcpp::Named("fuzzy_probs") = fuz_out, Rcpp::Named("clustering_stats") = befout_clustering_stats, Rcpp::Named("flag_dissim_mat") = flag_dissim_mat);
 }
 
 
@@ -2550,14 +2575,20 @@ Rcpp::List ClaraMedoids(arma::mat& data, int clusters, std::string method, int s
 
     bst_sample_silh_mat = Rcpp::as<arma::mat> (bst_lst[5]);
   }
+  
+  arma::rowvec clr_split_out_rowvec = arma::conv_to< arma::rowvec >::from(clr_split_out);
+  
+  arma::mat fuz_and_stats_mt = Rcpp::as<arma::mat> (fuz_and_stats[1]);
+  
+  fuz_st_mat = fuz_st_mat.t();
 
   return Rcpp::List::create(Rcpp::Named("medoids") = subs_meds, Rcpp::Named("bst_dissimilarity") = dism, Rcpp::Named("medoid_indices") = out_medoid,
 
-                                        Rcpp::Named("sample_indices") = arma::conv_to< arma::rowvec >::from(clr_split_out), Rcpp::Named("clusters") = hard_clust,
+                                        Rcpp::Named("sample_indices") = clr_split_out_rowvec, Rcpp::Named("clusters") = hard_clust,
 
-                                        Rcpp::Named("bst_sample_silhouette_matrix") = bst_sample_silh_mat, Rcpp::Named("fuzzy_probs") = fuz_and_stats[1],
-
-                                                                                                                                                     Rcpp::Named("clustering_stats") = fuz_st_mat.t(), Rcpp::Named("bst_sample_dissimilarity_matrix") = bst_sample_dissm_mat);
+                                        Rcpp::Named("bst_sample_silhouette_matrix") = bst_sample_silh_mat, Rcpp::Named("fuzzy_probs") = fuz_and_stats_mt,
+                                        
+                                        Rcpp::Named("clustering_stats") = fuz_st_mat, Rcpp::Named("bst_sample_dissimilarity_matrix") = bst_sample_dissm_mat);
 }
 
 
@@ -2645,18 +2676,22 @@ Rcpp::List split_rcpp_lst(Rcpp::List lst) {
   }
 
   double avg_intr_dis = arma::accu(intra_clust_disml);
+  
+  double intra_clust_disml_scalar = avg_intr_dis;            // return this value
 
-  double avg_width_silh = arma::accu(silhouet);
+  double avg_width_silh = arma::accu(silhouet);    
 
-  avg_intr_dis /= silh_mat.n_rows;
+  avg_intr_dis /= silh_mat.n_rows;                           // modify this value
 
   avg_width_silh /= silh_mat.n_rows;
+  
+  bool silh_plot_boolean = true;
 
   return Rcpp::List::create(Rcpp::Named("avg_intra_clust_dissimilarity") = avg_intr_dis,
 
-                            Rcpp::Named("sum_intra_dissim") = arma::accu(intra_clust_disml), Rcpp::Named("avg_width_silhouette") = avg_width_silh,
+                            Rcpp::Named("sum_intra_dissim") = intra_clust_disml_scalar, Rcpp::Named("avg_width_silhouette") = avg_width_silh,
 
-                            Rcpp::Named("list_intra_dissm") = intra_dissm, Rcpp::Named("list_silhouette") = silhouet_lst, Rcpp::Named("silhouette_plot") = true);
+                            Rcpp::Named("list_intra_dissm") = intra_dissm, Rcpp::Named("list_silhouette") = silhouet_lst, Rcpp::Named("silhouette_plot") = silh_plot_boolean);
 }
 
 

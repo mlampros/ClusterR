@@ -67,7 +67,7 @@ MbatchKm = MiniBatchKmeans(dat, clusters = 2, batch_size = 20, num_init = 5, ear
 
 }
 \references{
-http://www.eecs.tufts.edu/~dsculley/papers/fastkmeans.pdf
+http://www.eecs.tufts.edu/~dsculley/papers/fastkmeans.pdf, https://github.com/siddharth-agrawal/Mini-Batch-K-Means
 }
 \author{
 Lampros Mouselimis

@@ -811,7 +811,7 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 #' \strong{random}         : random selection of data rows as initial centroids
 #'
 #' @references
-#' http://www.eecs.tufts.edu/~dsculley/papers/fastkmeans.pdf
+#' http://www.eecs.tufts.edu/~dsculley/papers/fastkmeans.pdf, https://github.com/siddharth-agrawal/Mini-Batch-K-Means
 #' @export
 #' @examples
 #'

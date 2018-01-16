@@ -2,6 +2,7 @@
 ## ClusterR 1.1.0
 
 * I added the *DARMA_64BIT_WORD* flag in the Makevars file to allow the package processing big datasets
+* I modified the *kmeans_miniBatchKmeans_GMM_Medoids.cpp* file and especially all *Rcpp::List::create()* objects to addrress the clang-ASAN errors.
 
 
 ## ClusterR 1.0.9
