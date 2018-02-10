@@ -1272,9 +1272,20 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
 
       legend("topright", legend = 'avg. dissimilarity', col = "red", lty = 1, text.font = 1)
 
-      # consecutive plots
 
-      function_interactive(opt_cl, max_clusters, inter_bool)
+      # consecutive plots [ the 'tryCatch' function is necessary otherwise it raises an error of the type : "Error in plot.new() : figure margins too large" ]
+      
+      try_c = tryCatch(function_interactive(opt_cl, max_clusters, inter_bool), error = function(e) e)
+      
+      if (inherits(try_c, "error")) {
+        
+        warning("The plot can not be created for the specified number of clusters. This means the output data do not fit in the figure (plot) margins.", call. = F)
+      }
+      
+      else {
+        
+        try_c
+      }
     }
 
     if (criterion == "silhouette") {
@@ -1343,9 +1354,20 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
 
       legend("topright", legend = c('avg. dissimilarity', 'avg. silhouette width'), col = c("red","blue"), lty = 1, text.font = 1)
 
-      # consecutive plots
-
-      function_interactive(opt_cl, max_clusters, inter_bool)
+      
+      # consecutive plots [ the 'tryCatch' function is necessary otherwise it raises an error of the type : "Error in plot.new() : figure margins too large" ]
+      
+      try_c = tryCatch(function_interactive(opt_cl, max_clusters, inter_bool), error = function(e) e)
+      
+      if (inherits(try_c, "error")) {
+        
+        warning("The plot can not be created for the specified number of clusters. This means the output data do not fit in the figure (plot) margins.", call. = F)
+      }
+      
+      else {
+        
+        try_c
+      }
     }
   }
 

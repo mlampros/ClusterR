@@ -1,4 +1,9 @@
 
+## ClusterR 1.1.1
+
+* I added a *tryCatch* function to account for the error described in [Error in Optimal_Clusters_Medoids function#5](https://github.com/mlampros/ClusterR/issues/5) issue
+
+
 ## ClusterR 1.1.0
 
 * I added the *DARMA_64BIT_WORD* flag in the Makevars file to allow the package processing big datasets
