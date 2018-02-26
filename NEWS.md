@@ -1,7 +1,7 @@
 
 ## ClusterR 1.1.1
 
-* I added a *tryCatch* function to account for the error described in [Error in Optimal_Clusters_Medoids function#5](https://github.com/mlampros/ClusterR/issues/5) issue
+* I added a *tryCatch* in *Optimal_Clusters_Medoids()* function to account for the error described in [Error in Optimal_Clusters_Medoids function#5](https://github.com/mlampros/ClusterR/issues/5) issue
 
 
 ## ClusterR 1.1.0
