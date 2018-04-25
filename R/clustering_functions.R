@@ -1838,7 +1838,7 @@ external_validation = function(true_labels, clusters, method = "adjusted_rand_in
     
     entr_class = sum(apply(conv_df, 2, function(x) -(sum(x) / sum(tbl)) * log2(sum(x) / sum(tbl))))
     
-    if (method == 'nmi' || method == 'nvi') {
+    if (summary_stats || method == 'nmi' || method == 'nvi') {
       
       unq_true = unique(true_labels)
       
