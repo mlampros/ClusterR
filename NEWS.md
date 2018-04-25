@@ -1,4 +1,9 @@
 
+## ClusterR 1.1.2
+
+* I fixed an [Issue](https://github.com/mlampros/ClusterR/issues/8) related to *NAs produced by integer overflow* of the *external_validation* function. See, the commented line of the *Clustering_functions.R* file (line 1818).
+
+
 ## ClusterR 1.1.1
 
 * I added a *tryCatch* in *Optimal_Clusters_Medoids()* function to account for the error described in [Error in Optimal_Clusters_Medoids function#5](https://github.com/mlampros/ClusterR/issues/5) issue

@@ -1768,8 +1768,6 @@ external_validation = function(true_labels, clusters, method = "adjusted_rand_in
   #   }
   # }
 
-  conv_df = as.data.frame.matrix(tbl)
-
   tp_plus_fp = sum(gmp::asNumeric(gmp::chooseZ(rowSums(conv_df), 2)))
 
   tp_plus_fn = sum(gmp::asNumeric(gmp::chooseZ(colSums(conv_df), 2)))
@@ -1817,7 +1815,9 @@ external_validation = function(true_labels, clusters, method = "adjusted_rand_in
 
           joint_entropy = joint_entropy + (-((conv_df[i,j] / sum(tbl)) * log2(conv_df[i,j] / sum(tbl))))
 
-          mutual_information = mutual_information + ((conv_df[i,j] / sum(tbl)) * log2((sum(tbl) * conv_df[i,j]) / (sum(conv_df[i,]) * sum(conv_df[,j]))))
+          # mutual_information = mutual_information + ((conv_df[i,j] / sum(tbl)) * log2((sum(tbl) * conv_df[i,j]) / (sum(conv_df[i,]) * sum(conv_df[,j]))))       # SEE the comments of issue https://github.com/mlampros/ClusterR/issues/8 
+          
+          mutual_information = mutual_information + ((conv_df[i,j] / sum(tbl)) * log2(as.numeric(gmp::as.bigz(as.numeric(sum(tbl)) * as.numeric(conv_df[i,j])) / gmp::as.bigz(as.numeric(sum(conv_df[i,])) * as.numeric(sum(conv_df[,j]))))))
         }
       }
     }
