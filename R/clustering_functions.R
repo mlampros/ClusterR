@@ -1802,35 +1802,47 @@ external_validation = function(true_labels, clusters, method = "adjusted_rand_in
   }
 
   if (summary_stats || method == 'nmi' || method == 'var_info' || method == 'nvi') {
+    
+    unq_true = unique(true_labels)
+    
+    unq_clust = unique(clusters)
+    
+    if ((method == 'nmi' || method == 'nvi') && (length(unq_true) == 1 && length(unq_clust) == 1)) {                # account for the case where true-labels and clusters perfectly match, SEE comments of issue https://github.com/mlampros/ClusterR/issues/8, https://github.com/scikit-learn/scikit-learn/blob/a24c8b46/sklearn/metrics/cluster/supervised.py#L772
+      
+      return(1.0)
+    }
+    
+    else {
+      
+      mutual_information = 0.0
 
-    mutual_information = 0.0
-
-    joint_entropy = 0.0
-
-    for (i in 1:nrow(conv_df)) {
-
-      for (j in 1:ncol(conv_df)) {
-
-        if (conv_df[i,j] > 0.0) {
-
-          joint_entropy = joint_entropy + (-((conv_df[i,j] / sum(tbl)) * log2(conv_df[i,j] / sum(tbl))))
-
-          # mutual_information = mutual_information + ((conv_df[i,j] / sum(tbl)) * log2((sum(tbl) * conv_df[i,j]) / (sum(conv_df[i,]) * sum(conv_df[,j]))))       # SEE the comments of issue https://github.com/mlampros/ClusterR/issues/8 
-          
-          mutual_information = mutual_information + ((conv_df[i,j] / sum(tbl)) * log2(as.numeric(gmp::as.bigz(as.numeric(sum(tbl)) * as.numeric(conv_df[i,j])) / gmp::as.bigz(as.numeric(sum(conv_df[i,])) * as.numeric(sum(conv_df[,j]))))))
+      joint_entropy = 0.0
+  
+      for (i in 1:nrow(conv_df)) {
+  
+        for (j in 1:ncol(conv_df)) {
+  
+          if (conv_df[i,j] > 0.0) {
+  
+            joint_entropy = joint_entropy + (-((conv_df[i,j] / sum(tbl)) * log2(conv_df[i,j] / sum(tbl))))
+  
+            # mutual_information = mutual_information + ((conv_df[i,j] / sum(tbl)) * log2((sum(tbl) * conv_df[i,j]) / (sum(conv_df[i,]) * sum(conv_df[,j]))))       # SEE the comments of issue https://github.com/mlampros/ClusterR/issues/8 
+            
+            mutual_information = mutual_information + ((conv_df[i,j] / sum(tbl)) * log2(as.numeric(gmp::as.bigz(as.numeric(sum(tbl)) * as.numeric(conv_df[i,j])) / gmp::as.bigz(as.numeric(sum(conv_df[i,])) * as.numeric(sum(conv_df[,j]))))))
+          }
         }
       }
+  
+      entr_cluster = sum(apply(conv_df, 1, function(x) -(sum(x) / sum(tbl)) * log2(sum(x) / sum(tbl))))
+  
+      entr_class = sum(apply(conv_df, 2, function(x) -(sum(x) / sum(tbl)) * log2(sum(x) / sum(tbl))))
+  
+      NMI = (mutual_information / ((entr_cluster + entr_class) / 2.0))
+  
+      VAR_INFO = (entr_cluster + entr_class) - 2.0 * mutual_information
+  
+      NVI = 1.0 - (mutual_information / joint_entropy)
     }
-
-    entr_cluster = sum(apply(conv_df, 1, function(x) -(sum(x) / sum(tbl)) * log2(sum(x) / sum(tbl))))
-
-    entr_class = sum(apply(conv_df, 2, function(x) -(sum(x) / sum(tbl)) * log2(sum(x) / sum(tbl))))
-
-    NMI = (mutual_information / ((entr_cluster + entr_class) / 2.0))
-
-    VAR_INFO = (entr_cluster + entr_class) - 2.0 * mutual_information
-
-    NVI = 1.0 - (mutual_information / joint_entropy)
   }
 
   if (summary_stats) {
