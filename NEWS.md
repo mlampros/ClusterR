@@ -1,7 +1,7 @@
 
 ## ClusterR 1.1.2
 
-* I fixed an [Issue](https://github.com/mlampros/ClusterR/issues/8) related to *NAs produced by integer overflow* of the *external_validation* function. See, the commented line of the *Clustering_functions.R* file (line 1818).
+* I fixed an [Issue](https://github.com/mlampros/ClusterR/issues/8) related to *NAs produced by integer overflow* of the *external_validation* function. See, the commented line of the *Clustering_functions.R* file (line 1830).
 
 
 ## ClusterR 1.1.1
