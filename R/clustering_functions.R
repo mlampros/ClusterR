@@ -413,11 +413,11 @@ KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset",
 #'
 #' dat = center_scale(dat)
 #'
-#' km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'optimal_init')
+#' km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'kmeans++')
 #'
 
 
-KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initializer = 'optimal_init', fuzzy = FALSE,
+KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initializer = 'kmeans++', fuzzy = FALSE,
 
                        verbose = FALSE, CENTROIDS = NULL, tol = 1e-4, tol_optimal_init = 0.3, seed = 1) {
 
@@ -477,7 +477,7 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
 #'
 #' dat = center_scale(dat)
 #'
-#' km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'optimal_init')
+#' km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'kmeans++')
 #'
 #' pr = predict_KMeans(dat, km$centroids)
 #
@@ -565,7 +565,7 @@ predict_KMeans = function(data, CENTROIDS) {
 
 Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_explained", fK_threshold = 0.85, num_init = 1, max_iters = 200,
 
-                                   initializer = 'optimal_init', tol = 1e-4, plot_clusters = TRUE, verbose = FALSE, tol_optimal_init = 0.3, seed = 1) {
+                                   initializer = 'kmeans++', tol = 1e-4, plot_clusters = TRUE, verbose = FALSE, tol_optimal_init = 0.3, seed = 1) {
 
   if (class(data) == 'data.frame') data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
@@ -825,7 +825,7 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 #'
 
 
-MiniBatchKmeans = function(data, clusters, batch_size = 10, num_init = 1, max_iters = 100, init_fraction = 1.0, initializer = 'optimal_init',
+MiniBatchKmeans = function(data, clusters, batch_size = 10, num_init = 1, max_iters = 100, init_fraction = 1.0, initializer = 'kmeans++',
 
                            early_stop_iter = 10, verbose = FALSE, CENTROIDS = NULL, tol = 1e-4, tol_optimal_init = 0.3, seed = 1) {
 
@@ -1736,7 +1736,7 @@ entropy_formula = function(x_vec) {
 #'
 #' X = center_scale(dat)
 #'
-#' km = KMeans_rcpp(X, clusters = 2, num_init = 5, max_iters = 100, initializer = 'optimal_init')
+#' km = KMeans_rcpp(X, clusters = 2, num_init = 5, max_iters = 100, initializer = 'kmeans++')
 #'
 #' res = external_validation(dietary_survey_IBS$class, km$clusters, method = "adjusted_rand_index")
 #'

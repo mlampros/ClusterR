@@ -1,4 +1,9 @@
 
+## ClusterR 1.1.3
+
+I updated the example section of the documentation by replacing the *optimal_init* with the *kmeans++* initializer
+
+
 ## ClusterR 1.1.2
 
 * I fixed an [Issue](https://github.com/mlampros/ClusterR/issues/8) related to *NAs produced by integer overflow* of the *external_validation* function. See, the commented line of the *Clustering_functions.R* file (line 1830).

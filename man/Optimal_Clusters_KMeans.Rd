@@ -6,7 +6,7 @@
 \usage{
 Optimal_Clusters_KMeans(data, max_clusters, criterion = "variance_explained",
   fK_threshold = 0.85, num_init = 1, max_iters = 200,
-  initializer = "optimal_init", tol = 1e-04, plot_clusters = TRUE,
+  initializer = "kmeans++", tol = 1e-04, plot_clusters = TRUE,
   verbose = FALSE, tol_optimal_init = 0.3, seed = 1)
 }
 \arguments{

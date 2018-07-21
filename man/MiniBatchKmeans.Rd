@@ -5,7 +5,7 @@
 \title{Mini-batch-k-means using RcppArmadillo}
 \usage{
 MiniBatchKmeans(data, clusters, batch_size = 10, num_init = 1,
-  max_iters = 100, init_fraction = 1, initializer = "optimal_init",
+  max_iters = 100, init_fraction = 1, initializer = "kmeans++",
   early_stop_iter = 10, verbose = FALSE, CENTROIDS = NULL, tol = 1e-04,
   tol_optimal_init = 0.3, seed = 1)
 }

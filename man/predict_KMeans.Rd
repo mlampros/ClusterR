@@ -28,7 +28,7 @@ dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]
 
 dat = center_scale(dat)
 
-km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'optimal_init')
+km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'kmeans++')
 
 pr = predict_KMeans(dat, km$centroids)
 }

@@ -5,7 +5,7 @@
 \title{k-means using RcppArmadillo}
 \usage{
 KMeans_rcpp(data, clusters, num_init = 1, max_iters = 100,
-  initializer = "optimal_init", fuzzy = FALSE, verbose = FALSE,
+  initializer = "kmeans++", fuzzy = FALSE, verbose = FALSE,
   CENTROIDS = NULL, tol = 1e-04, tol_optimal_init = 0.3, seed = 1)
 }
 \arguments{
@@ -67,7 +67,7 @@ dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]
 
 dat = center_scale(dat)
 
-km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'optimal_init')
+km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'kmeans++')
 
 }
 \author{
