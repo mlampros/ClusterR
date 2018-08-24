@@ -1,4 +1,5 @@
 
+
 language: r
 warnings_are_errors: false
 sudo: required
@@ -19,7 +20,6 @@ env:
 
 before_install:
 
-  # LINUX
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get -qq update
   - sudo apt-get -qq install gcc-4.8

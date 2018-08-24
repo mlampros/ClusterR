@@ -3,7 +3,7 @@ Type: Package
 Title: Gaussian Mixture Models, K-Means, Mini-Batch-Kmeans and K-Medoids
     Clustering
 Version: 1.1.4
-Date: 2018-08-16
+Date: 2018-08-21
 Author: Lampros Mouselimis <mouselimislampros@gmail.com>
 Maintainer: Lampros Mouselimis <mouselimislampros@gmail.com>
 BugReports: https://github.com/mlampros/ClusterR/issues

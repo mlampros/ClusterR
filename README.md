@@ -1,4 +1,3 @@
-
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ClusterR)](http://cran.r-project.org/package=ClusterR)
 [![Travis-CI Build Status](https://travis-ci.org/mlampros/ClusterR.svg?branch=master)](https://travis-ci.org/mlampros/ClusterR)
 [![codecov.io](https://codecov.io/github/mlampros/ClusterR/coverage.svg?branch=master)](https://codecov.io/github/mlampros/ClusterR?branch=master)
@@ -22,25 +21,27 @@ Assumming that an R package ('PackageA') calls one of the *ClusterR* Rcpp functi
 
 <br>
 
-* **1st.** install the *ClusterR* package (either from *CRAN* or using the *devtools* package),
+* **1st.** install the *ClusterR* package to take advantage of the new functionality either from CRAN using,
 
 <br>
 
+
 ```R
 
-install.packages("ClusterR")        # from CRAN
-
+install.packages("ClusterR")
+ 
 
 ```
+
 <br>
 
-OR
+or download the latest version from Github using the *devtools* package,
 
 <br>
 
 ```R
 
-devtools::install_github('mlampros/ClusterR')          # download the latest version using the 'devtools' package
+devtools::install_github('mlampros/ClusterR')
  
 
 ```
@@ -75,7 +76,7 @@ import(ClusterR)
 
 <br>
 
-* **4th.** open a **new C++ file** (for instance in Rstudio) and at the top of the file add the following 'headers' and 'depends',
+* **4th.** open a **new C++ file** (for instance in Rstudio) and at the top of the file add the following 'headers', 'depends' and 'plugins',
 
 <br>
 
@@ -85,12 +86,13 @@ import(ClusterR)
 #include <ClusterRHeader.h>
 // [[Rcpp::depends("RcppArmadillo")]]
 // [[Rcpp::depends(ClusterR)]]
+// [[Rcpp::plugins(cpp11)]]
 
 
 ```
 <br>
 
-The available functions can be found in the [ClusterRHeader.h]() file.
+The available functions can be found in the [ClusterRHeader.h](https://github.com/mlampros/ClusterR/blob/master/inst/include/ClusterRHeader.h) file.
 
 <br>
 
@@ -103,6 +105,7 @@ A *complete minimal example* would be :
 #include <ClusterRHeader.h>
 // [[Rcpp::depends("RcppArmadillo")]]
 // [[Rcpp::depends(ClusterR)]]
+// [[Rcpp::plugins(cpp11)]]
 
 
 using namespace clustR;
