@@ -8,6 +8,8 @@ dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]
 
 X = center_scale(dat)
 
+# tbl = tibble::as.tibble(X)             # see line 356 [ it works, however I didn't add this test case because tibble has many dependencies -- I guess not sensible for a single test case ]
+
 
 #=============================================================
 
@@ -348,6 +350,25 @@ testthat::test_that("KMeans_rcpp returns the correct output if CENTROIDS is user
                            
                            is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && class(km) == "k-means clustering"  )
 })
+
+
+
+# testthat::test_that("in case that the data is of type 'tibble' the result is a list and the class is 'k-means clustering' ", {
+# 
+#   clust = 2
+# 
+#   km = KMeans_rcpp(tbl, clusters = clust, num_init = 5, max_iters = 100, initializer = 'optimal_init', fuzzy = TRUE)
+# 
+#   testthat::expect_true( names(km) %in% c("clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS")  && is.matrix(km$fuzzy_clusters) &&
+# 
+#                            is.vector(km$clusters) && length(km$clusters) == nrow(tbl) && is.numeric(km$between.SS_DIV_total.SS) && length(km$between.SS_DIV_total.SS) == 1 && ncol(km$fuzzy_clusters) == clust &&
+# 
+#                            nrow(km$centroids) == clust && ncol(km$centroids) == ncol(tbl) && length(km$total_SSE) == 1 && is.numeric(km$total_SSE) && length(km$best_initialization) == 1 &&
+# 
+#                            is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && class(km) == "k-means clustering"  )
+# })
+
+
 
 
 ################################

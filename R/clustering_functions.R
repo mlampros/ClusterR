@@ -60,7 +60,7 @@ tryCatch_GMM <- function(data, gaussian_comps, dist_mode, seed_mode, km_iter, em
 
 GMM = function(data, gaussian_comps = 1, dist_mode = 'eucl_dist', seed_mode = 'random_subset', km_iter = 10, em_iter = 5, verbose = FALSE, var_floor = 1e-10, seed = 1) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
   if (gaussian_comps < 1) stop('the number of gaussian mixture components should be greater than 0')
   if (!dist_mode %in% c('eucl_dist', 'maha_dist')) stop("available distance modes are 'eucl_dist' and 'maha_dist'")
@@ -117,11 +117,11 @@ GMM = function(data, gaussian_comps = 1, dist_mode = 'eucl_dist', seed_mode = 'r
 
 predict_GMM = function(data, CENTROIDS, COVARIANCE, WEIGHTS) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
-  if (class(CENTROIDS) == 'data.frame') CENTROIDS = as.matrix(CENTROIDS)
+  if ('data.frame' %in% class(CENTROIDS)) CENTROIDS = as.matrix(CENTROIDS)
   if (class(CENTROIDS) != 'matrix') stop('CENTROIDS should be either a matrix or a data frame')
-  if (class(COVARIANCE) == 'data.frame') COVARIANCE = as.matrix(COVARIANCE)
+  if ('data.frame' %in% class(COVARIANCE)) COVARIANCE = as.matrix(COVARIANCE)
   if (class(COVARIANCE) != 'matrix') stop('COVARIANCE should be either a matrix or a data frame')
   if (ncol(data) != ncol(CENTROIDS) || ncol(data) != ncol(COVARIANCE) || length(WEIGHTS) != nrow(CENTROIDS) || length(WEIGHTS) != nrow(COVARIANCE))
     stop('the number of columns of the data, CENTROIDS and COVARIANCE should match and the number of rows of the CENTROIDS AND COVARIANCE should be equal to the length of the WEIGHTS vector')
@@ -199,7 +199,7 @@ Optimal_Clusters_GMM = function(data, max_clusters, criterion = "AIC", dist_mode
 
                                 km_iter = 10, em_iter = 5, verbose = FALSE, var_floor = 1e-10, plot_data = TRUE, seed = 1) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
   if (plot_data && max_clusters < 2) stop('if plot_data is TRUE the max_clusters parameter should be at least 2')
   if (!is.numeric(max_clusters)|| length(max_clusters) != 1 || max_clusters < 1) stop('max_clusters should be numeric and greater than 0')
@@ -335,7 +335,7 @@ tryCatch_KMEANS_arma <- function(data, clusters, n_iter, verbose, seed_mode, CEN
 
 KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset", verbose = FALSE, CENTROIDS = NULL, seed = 1) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
   if (!is.numeric(clusters) || length(clusters) != 1 || clusters < 1) stop('clusters should be numeric and greater than 0')
   if (n_iter < 0) stop('the n_iter parameter can not be negative')
@@ -421,7 +421,7 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
 
                        verbose = FALSE, CENTROIDS = NULL, tol = 1e-4, tol_optimal_init = 0.3, seed = 1) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
   if (!is.numeric(clusters) || length(clusters) != 1 || clusters < 1) stop('clusters should be numeric and greater than 0')
   if (num_init < 1) stop('the num_init parameter should be greater than 0')
@@ -485,7 +485,7 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
 
 predict_KMeans = function(data, CENTROIDS) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
   if (!is.matrix(CENTROIDS)) stop("CENTROIDS should be a matrix")
   if (ncol(data) != ncol(CENTROIDS))
@@ -567,7 +567,7 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 
                                    initializer = 'kmeans++', tol = 1e-4, plot_clusters = TRUE, verbose = FALSE, tol_optimal_init = 0.3, seed = 1) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
   if (!is.numeric(max_clusters) || length(max_clusters) != 1 || max_clusters < 1) stop('max_clusters should be numeric and greater than 0')
   if (!criterion %in% c('variance_explained', 'WCSSE', 'dissimilarity', 'silhouette', 'distortion_fK', 'AIC', 'BIC', 'Adjusted_Rsquared'))
@@ -829,7 +829,7 @@ MiniBatchKmeans = function(data, clusters, batch_size = 10, num_init = 1, max_it
 
                            early_stop_iter = 10, verbose = FALSE, CENTROIDS = NULL, tol = 1e-4, tol_optimal_init = 0.3, seed = 1) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
   if (!is.numeric(clusters) || length(clusters) != 1 || clusters < 1) stop('clusters should be numeric and greater than 0')
   if (batch_size < 1) stop('batch_size should be greater than 0')
@@ -884,7 +884,7 @@ MiniBatchKmeans = function(data, clusters, batch_size = 10, num_init = 1, max_it
 
 predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
   if (class(CENTROIDS) != 'matrix') stop('CENTROIDS should be a matrix')
   if (!(ncol(data) == ncol(CENTROIDS)))
@@ -946,7 +946,7 @@ predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
 
 Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkowski_p = 1.0, threads = 1, swap_phase = TRUE, fuzzy = FALSE, verbose = FALSE, seed = 1) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame or a dissimilarity matrix with equal number of rows and columns and a diagonal equal to 0.0')
   if (!is.numeric(clusters) || length(clusters) != 1 || clusters < 1) stop('clusters should be numeric and greater than 0')
   if (!distance_metric %in% c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "simple_matching_coefficient", "minkowski",
@@ -1035,7 +1035,7 @@ Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkow
 
 Clara_Medoids = function(data, clusters, samples, sample_size, distance_metric = "euclidean", minkowski_p = 1.0, threads = 1, swap_phase = TRUE, fuzzy = FALSE, verbose = FALSE, seed = 1) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
   if (!is.numeric(clusters) || length(clusters) != 1 || clusters < 1) stop('clusters should be numeric and greater than 0')
   if (!is.numeric(samples) || length(samples) != 1 || samples < 1) stop("samples should be a numeric value greater than 0")
@@ -1109,9 +1109,9 @@ Clara_Medoids = function(data, clusters, samples, sample_size, distance_metric =
 
 predict_Medoids = function(data, MEDOIDS = NULL, distance_metric = 'euclidean', fuzzy = FALSE, minkowski_p = 1.0, threads = 1) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
-  if (class(MEDOIDS) == 'data.frame') MEDOIDS = as.matrix(MEDOIDS)
+  if ('data.frame' %in% class(MEDOIDS)) MEDOIDS = as.matrix(MEDOIDS)
   if (is.null(MEDOIDS)) stop('the MEDOIDS should be a non-empty matrix or data frame')
   if (ncol(MEDOIDS) != ncol(data)) stop('the MEDOIDS columns should be equal to the number of columns of the data')
   if (!distance_metric %in% c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "simple_matching_coefficient", "minkowski",
@@ -1190,7 +1190,7 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
 
                                     minkowski_p = 1.0, swap_phase = TRUE, threads = 1, verbose = FALSE, plot_clusters = TRUE, seed = 1) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
   if (!is.numeric(max_clusters) || length(max_clusters) != 1 || max_clusters < 1) stop('max_clusters should be numeric and greater than 0')
   if (!distance_metric %in% c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "simple_matching_coefficient", "minkowski",
@@ -1640,8 +1640,8 @@ plot_2d = function(data, clusters, centroids_medoids) {
     dev.off()                          # reset par()
   }
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
-  if (class(centroids_medoids) == 'data.frame') centroids_medoids = as.matrix(centroids_medoids)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
+  if ('data.frame' %in% class(centroids_medoids)) centroids_medoids = as.matrix(centroids_medoids)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
   if (is.integer(clusters)) clusters = as.numeric(clusters)
   if (!is.vector(clusters) || class(clusters) != "numeric") stop('CLUSTER should be a numeric vector')
@@ -1973,7 +1973,7 @@ external_validation = function(true_labels, clusters, method = "adjusted_rand_in
 
 center_scale = function(data, mean_center = TRUE, sd_scale = TRUE) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
   if (!is.logical(mean_center)) stop('the mean_center parameter should be either TRUE or FALSE')
   if (!is.logical(sd_scale)) stop('the sd_scale parameter should be either TRUE or FALSE')
@@ -2012,7 +2012,7 @@ center_scale = function(data, mean_center = TRUE, sd_scale = TRUE) {
 
 distance_matrix = function(data, method = 'euclidean', upper = FALSE, diagonal = FALSE, minkowski_p = 1.0, threads = 1) {
 
-  if (class(data) == 'data.frame') data = as.matrix(data)
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (class(data) != 'matrix') stop('data should be either a matrix or a data frame')
   if (!method %in% c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "simple_matching_coefficient", "minkowski",
                      "hamming", "jaccard_coefficient", "Rao_coefficient", "mahalanobis"))
