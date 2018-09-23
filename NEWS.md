@@ -1,7 +1,7 @@
 
 ## ClusterR 1.1.5
 
-As of version 1.1.5 the ClusterR functions can take input data of type [tibble](https://tibble.tidyverse.org/) as well.
+As of version 1.1.5 the ClusterR functions can take [tibble](https://tibble.tidyverse.org/) objects as input too.
 
 
 ## ClusterR 1.1.4
