@@ -33,7 +33,7 @@ mini_batch_kmeans <- function(data, clusters, batch_size, max_iters, num_init = 
     .Call(`_ClusterR_mini_batch_kmeans`, data, clusters, batch_size, max_iters, num_init, init_fraction, initializer, early_stop_iter, verbose, CENTROIDS, tol, tol_optimal_init, seed)
 }
 
-Predict_mini_batch_kmeans <- function(data, CENTROIDS = NULL, fuzzy = FALSE, eps = 1.0e-6) {
+Predict_mini_batch_kmeans <- function(data, CENTROIDS, fuzzy = FALSE, eps = 1.0e-6) {
     .Call(`_ClusterR_Predict_mini_batch_kmeans`, data, CENTROIDS, fuzzy, eps)
 }
 
@@ -75,5 +75,13 @@ split_rcpp_lst <- function(lst) {
 
 OptClust <- function(data, iter_clust, method, clara = FALSE, samples = 5L, sample_size = 0.001, minkowski_p = 1.0, criterion = "dissimilarity", threads = 1L, swap_phase = FALSE, verbose = FALSE, seed = 1L) {
     .Call(`_ClusterR_OptClust`, data, iter_clust, method, clara, samples, sample_size, minkowski_p, criterion, threads, swap_phase, verbose, seed)
+}
+
+affinity_propagation <- function(s, p, maxits = 1000L, convits = 100L, dampfact = 0.9, details = FALSE, nonoise = 0.0, eps = 2.2204e-16, time = FALSE) {
+    .Call(`_ClusterR_affinity_propagation`, s, p, maxits, convits, dampfact, details, nonoise, eps, time)
+}
+
+preferenceRange <- function(s, method = "bound") {
+    .Call(`_ClusterR_preferenceRange`, s, method)
 }
 

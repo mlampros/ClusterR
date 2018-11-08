@@ -5,7 +5,8 @@
 // [[Rcpp::plugins(cpp11)]]
 
 
-#include <ClusterRHeader.h>
+# include "ClusterRHeader.h"
+# include "affinity_propagation.h"
 
 using namespace clustR;
 
@@ -164,7 +165,7 @@ Rcpp::List mini_batch_kmeans(arma::mat& data, int clusters, int batch_size, int 
 //
 
 // [[Rcpp::export]]
-Rcpp::List Predict_mini_batch_kmeans(arma::mat& data, Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS = R_NilValue, bool fuzzy = false, double eps = 1.0e-6) {
+Rcpp::List Predict_mini_batch_kmeans(arma::mat& data, arma::mat& CENTROIDS, bool fuzzy = false, double eps = 1.0e-6) {
 
   ClustHeader CRH;
 
@@ -352,3 +353,28 @@ Rcpp::List OptClust(arma::mat& data, int iter_clust, std::string method, bool cl
 }
 
 
+//============================================ affinity propagation ===================================================================================
+
+// affinity propagation algorithm
+//
+
+// [[Rcpp::export]]
+Rcpp::List affinity_propagation(arma::mat &s, std::vector<double> p, int maxits = 1000, int convits = 100, double dampfact = 0.9,
+                                bool details = false, double nonoise = 0.0, double eps = 2.2204e-16, bool time = false) {
+  
+  Affinity_Propagation AFN;
+  return AFN.affinity_propagation(s, p, maxits, convits, dampfact, details, nonoise, eps, time);
+}
+
+
+// preferenceRange function
+//
+
+// [[Rcpp::export]]
+std::vector<double> preferenceRange(arma::mat &s, std::string method = "bound") {
+
+  Affinity_Propagation AFN;
+  return AFN.preferenceRange(s, method);
+}
+
+//=====================================================================================================================================================

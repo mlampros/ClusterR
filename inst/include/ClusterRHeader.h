@@ -1369,26 +1369,19 @@ namespace clustR {
       // predict function for mini-batch-kmeans, which takes a matrix of centroids
       //
 
-      Rcpp::List Predict_mini_batch_kmeans(arma::mat& data, Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS = R_NilValue, bool fuzzy = false, double eps = 1.0e-6) {
-
-        arma::mat CENTROIDS1;
-
-        if (CENTROIDS.isNotNull()) {
-
-          CENTROIDS1 = Rcpp::as<arma::mat>(CENTROIDS);
-        }
+      Rcpp::List Predict_mini_batch_kmeans(arma::mat& data, arma::mat& CENTROIDS, bool fuzzy = false, double eps = 1.0e-6) {
 
         arma::rowvec CLUSTERS(data.n_rows);
 
-        arma::mat soft_CLUSTERS(data.n_rows, CENTROIDS1.n_rows);
+        arma::mat soft_CLUSTERS(data.n_rows, CENTROIDS.n_rows);
 
         for (unsigned int j = 0; j < data.n_rows; j++) {
 
-          arma::vec tmp_vec = WCSS(arma::conv_to< arma::rowvec >::from(data.row(j)), CENTROIDS1);                  // returns a rowvec with the SSE for each cluster
+          arma::vec tmp_vec = WCSS(arma::conv_to< arma::rowvec >::from(data.row(j)), CENTROIDS);                  // returns a rowvec with the SSE for each cluster
 
           soft_CLUSTERS.row(j) = arma::conv_to< arma::rowvec >::from(tmp_vec);
 
-          int tmp_idx = MinMat(tmp_vec);                                                                        // returns the index of the tmp_vec with the lowest SSE
+          int tmp_idx = MinMat(tmp_vec);                                                                          // returns the index of the tmp_vec with the lowest SSE
 
           CLUSTERS(j) = tmp_idx;
         }

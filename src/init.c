@@ -8,6 +8,7 @@
 */
 
 /* .Call calls */
+extern SEXP _ClusterR_affinity_propagation(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_check_NaN_Inf(SEXP);
 extern SEXP _ClusterR_ClaraMedoids(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_ClusterMedoids(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -24,11 +25,13 @@ extern SEXP _ClusterR_opt_clust_fK(SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_predict_medoids(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_predict_MGausDPDF(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_Predict_mini_batch_kmeans(SEXP, SEXP, SEXP, SEXP);
+extern SEXP _ClusterR_preferenceRange(SEXP, SEXP);
 extern SEXP _ClusterR_SCALE(SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_split_rcpp_lst(SEXP);
 extern SEXP _ClusterR_validate_centroids(SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_ClusterR_affinity_propagation",      (DL_FUNC) &_ClusterR_affinity_propagation,       9},
     {"_ClusterR_check_NaN_Inf",             (DL_FUNC) &_ClusterR_check_NaN_Inf,              1},
     {"_ClusterR_ClaraMedoids",              (DL_FUNC) &_ClusterR_ClaraMedoids,              11},
     {"_ClusterR_ClusterMedoids",            (DL_FUNC) &_ClusterR_ClusterMedoids,             9},
@@ -45,6 +48,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_ClusterR_predict_medoids",           (DL_FUNC) &_ClusterR_predict_medoids,            7},
     {"_ClusterR_predict_MGausDPDF",         (DL_FUNC) &_ClusterR_predict_MGausDPDF,          5},
     {"_ClusterR_Predict_mini_batch_kmeans", (DL_FUNC) &_ClusterR_Predict_mini_batch_kmeans,  4},
+    {"_ClusterR_preferenceRange",           (DL_FUNC) &_ClusterR_preferenceRange,            2},
     {"_ClusterR_SCALE",                     (DL_FUNC) &_ClusterR_SCALE,                      3},
     {"_ClusterR_split_rcpp_lst",            (DL_FUNC) &_ClusterR_split_rcpp_lst,             1},
     {"_ClusterR_validate_centroids",        (DL_FUNC) &_ClusterR_validate_centroids,         2},

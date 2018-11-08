@@ -1,4 +1,15 @@
 
+## ClusterR 1.1.6
+
+* I updated the README.md file (I removed unnecessary calls of ClusterR in DESCRIPTION and NAMESPACE files)
+* I renamed the *export_inst_header.cpp* file in the src folder to *export_inst_folder_headers.cpp*
+* I modified the *Predict_mini_batch_kmeans()* function to accept an armadillo matrix rather than an Rcpp Numeric matrix. The function appers both in *ClusterRHeader.h* file ( 'inst' folder ) and in *export_inst_folder_headers.cpp* file ( 'src' folder )
+* I added the *mini_batch_params* parameter to the *Optimal_Clusters_KMeans* function. Now, the optimal number of clusters can be found also based on the min-batch-kmeans algorithm (except for the *variance_explained* criterion)
+* I changed the license from MIT to GPL-3
+* I added the [affinity propagation algorithm](https://www.psi.toronto.edu/index.php?q=affinity%20propagation) (conversion of the matlab files *apcluster.m* and *referenceRange.m*).
+* I modified the minimum version of RcppArmadillo in the DESCRIPTION file to 0.9.1 because the Affinity Propagation algorithm requires the *.is_symmetric()* function, which was included in version 0.9.1
+
+
 ## ClusterR 1.1.5
 
 As of version 1.1.5 the ClusterR functions can take [tibble](https://tibble.tidyverse.org/) objects as input too.
@@ -6,7 +17,7 @@ As of version 1.1.5 the ClusterR functions can take [tibble](https://tibble.tidy
 
 ## ClusterR 1.1.4
 
-I modified the ClusterR package to a cpp-header-only package to allow linking of cpp code between Rcpp packages. See the update of the README.md file (16-08-2018) and [issue #11](https://github.com/mlampros/ClusterR/issues/11) for more information.
+I modified the ClusterR package to a cpp-header-only package to allow linking of cpp code between Rcpp packages. See the update of the README.md file (16-08-2018) for more information.
 
 
 ## ClusterR 1.1.3

@@ -5,9 +5,9 @@
 \title{Optimal number of Clusters for the partitioning around Medoids functions}
 \usage{
 Optimal_Clusters_Medoids(data, max_clusters, distance_metric,
-  criterion = "dissimilarity", clara_samples = 0, clara_sample_size = 0,
-  minkowski_p = 1, swap_phase = TRUE, threads = 1, verbose = FALSE,
-  plot_clusters = TRUE, seed = 1)
+  criterion = "dissimilarity", clara_samples = 0,
+  clara_sample_size = 0, minkowski_p = 1, swap_phase = TRUE,
+  threads = 1, verbose = FALSE, plot_clusters = TRUE, seed = 1)
 }
 \arguments{
 \item{data}{matrix or data.frame. If both clara_samples and clara_sample_size equal 0, then the data parameter can be also a dissimilarity matrix, where the main diagonal equals 0.0 and the number of rows equals the number of columns}

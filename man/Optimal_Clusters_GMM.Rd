@@ -6,8 +6,8 @@
 \usage{
 Optimal_Clusters_GMM(data, max_clusters, criterion = "AIC",
   dist_mode = "eucl_dist", seed_mode = "random_subset", km_iter = 10,
-  em_iter = 5, verbose = FALSE, var_floor = 1e-10, plot_data = TRUE,
-  seed = 1)
+  em_iter = 5, verbose = FALSE, var_floor = 1e-10,
+  plot_data = TRUE, seed = 1)
 }
 \arguments{
 \item{data}{matrix or data frame}

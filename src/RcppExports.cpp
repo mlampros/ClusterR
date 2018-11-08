@@ -131,13 +131,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // Predict_mini_batch_kmeans
-Rcpp::List Predict_mini_batch_kmeans(arma::mat& data, Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS, bool fuzzy, double eps);
+Rcpp::List Predict_mini_batch_kmeans(arma::mat& data, arma::mat& CENTROIDS, bool fuzzy, double eps);
 RcppExport SEXP _ClusterR_Predict_mini_batch_kmeans(SEXP dataSEXP, SEXP CENTROIDSSEXP, SEXP fuzzySEXP, SEXP epsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type CENTROIDS(CENTROIDSSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type CENTROIDS(CENTROIDSSEXP);
     Rcpp::traits::input_parameter< bool >::type fuzzy(fuzzySEXP);
     Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
     rcpp_result_gen = Rcpp::wrap(Predict_mini_batch_kmeans(data, CENTROIDS, fuzzy, eps));
@@ -318,6 +318,37 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
     Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
     rcpp_result_gen = Rcpp::wrap(OptClust(data, iter_clust, method, clara, samples, sample_size, minkowski_p, criterion, threads, swap_phase, verbose, seed));
+    return rcpp_result_gen;
+END_RCPP
+}
+// affinity_propagation
+Rcpp::List affinity_propagation(arma::mat& s, std::vector<double> p, int maxits, int convits, double dampfact, bool details, double nonoise, double eps, bool time);
+RcppExport SEXP _ClusterR_affinity_propagation(SEXP sSEXP, SEXP pSEXP, SEXP maxitsSEXP, SEXP convitsSEXP, SEXP dampfactSEXP, SEXP detailsSEXP, SEXP nonoiseSEXP, SEXP epsSEXP, SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type s(sSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type maxits(maxitsSEXP);
+    Rcpp::traits::input_parameter< int >::type convits(convitsSEXP);
+    Rcpp::traits::input_parameter< double >::type dampfact(dampfactSEXP);
+    Rcpp::traits::input_parameter< bool >::type details(detailsSEXP);
+    Rcpp::traits::input_parameter< double >::type nonoise(nonoiseSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< bool >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(affinity_propagation(s, p, maxits, convits, dampfact, details, nonoise, eps, time));
+    return rcpp_result_gen;
+END_RCPP
+}
+// preferenceRange
+std::vector<double> preferenceRange(arma::mat& s, std::string method);
+RcppExport SEXP _ClusterR_preferenceRange(SEXP sSEXP, SEXP methodSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type s(sSEXP);
+    Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
+    rcpp_result_gen = Rcpp::wrap(preferenceRange(s, method));
     return rcpp_result_gen;
 END_RCPP
 }

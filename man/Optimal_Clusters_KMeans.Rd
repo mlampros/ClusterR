@@ -2,12 +2,13 @@
 % Please edit documentation in R/clustering_functions.R
 \name{Optimal_Clusters_KMeans}
 \alias{Optimal_Clusters_KMeans}
-\title{Optimal number of Clusters for k-means}
+\title{Optimal number of Clusters for Kmeans or Mini-Batch-Kmeans}
 \usage{
-Optimal_Clusters_KMeans(data, max_clusters, criterion = "variance_explained",
-  fK_threshold = 0.85, num_init = 1, max_iters = 200,
-  initializer = "kmeans++", tol = 1e-04, plot_clusters = TRUE,
-  verbose = FALSE, tol_optimal_init = 0.3, seed = 1)
+Optimal_Clusters_KMeans(data, max_clusters,
+  criterion = "variance_explained", fK_threshold = 0.85,
+  num_init = 1, max_iters = 200, initializer = "kmeans++",
+  tol = 1e-04, plot_clusters = TRUE, verbose = FALSE,
+  tol_optimal_init = 0.3, seed = 1, mini_batch_params = NULL)
 }
 \arguments{
 \item{data}{matrix or data frame}
@@ -33,12 +34,14 @@ Optimal_Clusters_KMeans(data, max_clusters, criterion = "variance_explained",
 \item{tol_optimal_init}{tolerance value for the 'optimal_init' initializer. The higher this value is, the far appart from each other the centroids are.}
 
 \item{seed}{integer value for random number generator (RNG)}
+
+\item{mini_batch_params}{either NULL or a list of the following parameters : \emph{batch_size}, \emph{init_fraction}, \emph{early_stop_iter}. If not NULL then the optimal number of clusters will be found based on the Mini-Batch-Kmeans. See the details and examples sections for more information.}
 }
 \value{
 a vector with the results for the specified criterion. If plot_clusters is TRUE then it plots also the results.
 }
 \description{
-Optimal number of Clusters for k-means
+Optimal number of Clusters for Kmeans or Mini-Batch-Kmeans
 }
 \details{
 ---------------criteria--------------------------
@@ -69,6 +72,10 @@ Optimal number of Clusters for k-means
 \strong{kmeans++}       : kmeans++ initialization. Reference : http://theory.stanford.edu/~sergei/papers/kMeansPP-soda.pdf AND http://stackoverflow.com/questions/5466323/how-exactly-does-k-means-work
 
 \strong{random}         : random selection of data rows as initial centroids
+
+
+If the \emph{mini_batch_params} parameter is not NULL then the optimal number of clusters will be found based on the Mini-batch-Kmeans algorithm, otherwise based on the Kmeans. The higher the \emph{init_fraction} 
+parameter is the more close the results between Mini-Batch-Kmeans and Kmeans will be.
 }
 \examples{
 
@@ -78,8 +85,26 @@ dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]
 
 dat = center_scale(dat)
 
-opt = Optimal_Clusters_KMeans(dat, max_clusters = 10, plot_clusters = FALSE)
 
+#-------
+# kmeans
+#-------
+
+opt_km = Optimal_Clusters_KMeans(dat, max_clusters = 10, criterion = "distortion_fK",
+
+                                 plot_clusters = FALSE)
+#'
+#------------------
+# mini-batch-kmeans
+#------------------
+
+
+params_mbkm = list(batch_size = 10, init_fraction = 0.3, early_stop_iter = 10)
+
+opt_mbkm = Optimal_Clusters_KMeans(dat, max_clusters = 10, criterion = "distortion_fK",
+
+                                   plot_clusters = FALSE, mini_batch_params = params_mbkm)
+                                   
 }
 \author{
 Lampros Mouselimis

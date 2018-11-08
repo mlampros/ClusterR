@@ -55,7 +55,7 @@ testthat::test_that("in case that the clusters parameter is less than 1, it retu
 
 
 testthat::test_that("in case that the n_iter parameter is less than 0, it returns an error", {
-
+  
   testthat::expect_error( KMeans_arma(X, clusters = 2, n_iter = -1, "random_subset", verbose = F) )
 })
 
@@ -96,7 +96,7 @@ testthat::test_that("in case that the seed_mode parameter does not equal 'keep_e
 
 
 testthat::test_that("in case that the verbose parameter is not logical, it returns an error", {
-
+  
   testthat::expect_error( KMeans_arma(X, clusters = 2, n_iter = 5, "static_subset", verbose = 'invalid') )
 })
 
@@ -169,7 +169,7 @@ testthat::test_that("it returns a matrix of class 'k-means clustering' for diffe
 testthat::test_that("in case that the data is not a matrix or a data frame, it returns an error", {
   
   tmp_x = list(X)
-
+  
   testthat::expect_error( KMeans_rcpp(tmp_x, clusters = 2, num_init = 5, max_iters = 100, initializer = 'optimal_init') )
 })
 
@@ -199,7 +199,7 @@ testthat::test_that("in case that the clusters parameter is less than 1, it retu
 
 
 testthat::test_that("in case that the num_init parameter is less than 1, it returns an error", {
-
+  
   testthat::expect_error( KMeans_rcpp(X, clusters = 2, num_init = 0, max_iters = 100, initializer = 'optimal_init') )
 })
 
@@ -321,14 +321,14 @@ testthat::test_that("KMeans_rcpp returns the correct output for the initializers
     res[count] = (names(km) %in% c("clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS")  
                   
                   && is.vector(km$clusters) && length(km$clusters) == nrow(X) && is.numeric(km$between.SS_DIV_total.SS) && length(km$between.SS_DIV_total.SS) == 1 &&
-             
-             nrow(km$centroids) == clust && ncol(km$centroids) == ncol(X) && length(km$total_SSE) == 1 && is.numeric(km$total_SSE) && length(km$best_initialization) == 1 && 
-             
-             is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && class(km) == "k-means clustering")
+                    
+                    nrow(km$centroids) == clust && ncol(km$centroids) == ncol(X) && length(km$total_SSE) == 1 && is.numeric(km$total_SSE) && length(km$best_initialization) == 1 && 
+                    
+                    is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && class(km) == "k-means clustering")
     
     count = count + 1
   }
-
+  
   testthat::expect_true( sum(res) == 4 )
 })
 
@@ -337,7 +337,7 @@ testthat::test_that("KMeans_rcpp returns the correct output for the initializers
 testthat::test_that("KMeans_rcpp returns the correct output if CENTROIDS is user-defined ", {
   
   clust = 2
-
+  
   cntr = matrix(runif(2 * (ncol(X))), nrow = 2, ncol = ncol(X))
   
   km = KMeans_rcpp(X, clusters = clust, num_init = 5, max_iters = 100, CENTROIDS = cntr)
@@ -389,7 +389,7 @@ testthat::test_that("in case that the data is not a matrix or a data frame, it r
 testthat::test_that("in case that the CENTROIDS is not a matrix, it returns an error", {
   
   cntr = as.data.frame(matrix(runif(2 * (ncol(X))), nrow = 2, ncol = ncol(X)))
-
+  
   testthat::expect_error( predict_KMeans(X, CENTROIDS = cntr) )
 })
 
@@ -440,7 +440,7 @@ testthat::test_that("predict_KMeans returns the correct output if the input is a
 
 
 testthat::test_that("the predict_KMeans works using the CENTROIDS of the KMeans_rcpp function", {
-
+  
   km = KMeans_rcpp(X, clusters = 2, num_init = 5, max_iters = 100, initializer = 'optimal_init')
   
   km_preds = predict_KMeans(X, CENTROIDS = km$centroids)
@@ -466,7 +466,7 @@ testthat::test_that("the predict_KMeans works using the CENTROIDS of the KMeans_
 
 
 testthat::test_that("in case that the data is not a matrix or a data frame, it returns an error", {
-
+  
   tmp_x = list(X)
   
   testthat::expect_error( Optimal_Clusters_KMeans(tmp_x, max_clusters = 10, criterion = 'distortion_fK', plot_clusters = FALSE) )
@@ -498,13 +498,13 @@ testthat::test_that("in case that the max_clusters parameter is less than 1, it 
 
 
 testthat::test_that("if the criterion is not one of c('variance_explained', 'WCSSE', 'dissimilarity', 'silhouette', 'distortion_fK', 'AIC', 'BIC', 'Adjusted_Rsquared'), it returns an error", {
-
+  
   testthat::expect_error( Optimal_Clusters_KMeans(X, max_clusters = 5, criterion = 'invalid', plot_clusters = FALSE) )
 })
 
 
 testthat::test_that("in case that the num_init parameter is less than 1, it returns an error", {
-
+  
   testthat::expect_error( Optimal_Clusters_KMeans(X, max_clusters = 5, criterion = 'distortion_fK', num_init = 0, plot_clusters = FALSE) )
 })
 
@@ -556,9 +556,30 @@ testthat::test_that("in case that the data includes NaN or Inf values, it return
   tmp_dat = X
   
   tmp_dat[1,1] = -Inf
-
+  
   testthat::expect_error( Optimal_Clusters_KMeans(tmp_dat, max_clusters = 5, criterion = 'distortion_fK', plot_clusters = FALSE) )
 })
+
+
+testthat::test_that("in case that the 'mini_batch_params' is not NULL and the named list is not valid it returns an error", {
+  
+  params_mbkm = list(invalid = 10, init_fraction = 0.3, early_stop_iter = 10)
+
+  testthat::expect_error( Optimal_Clusters_KMeans(dat, max_clusters = 10, criterion = "distortion_fK",
+                                                  
+                                                  plot_clusters = FALSE, mini_batch_params = params_mbkm) )
+})
+
+
+testthat::test_that("in case that the 'mini_batch_params' is not NULL and the criterion is 'variance_explained' it returns an error", {
+  
+  params_mbkm = list(batch_size = 10, init_fraction = 0.3, early_stop_iter = 10)
+  
+  testthat::expect_error( Optimal_Clusters_KMeans(dat, max_clusters = 10, criterion = "variance_explained",
+                                                  
+                                                  plot_clusters = FALSE, mini_batch_params = params_mbkm) )
+})
+
 
 
 ###################################
@@ -569,7 +590,7 @@ testthat::test_that("in case that the data includes NaN or Inf values, it return
 testthat::test_that("Optimal_Clusters_KMeans returns the correct output if the input is a data frame ", {
   
   nr_clust = 10
-
+  
   res =  Optimal_Clusters_KMeans(dat, max_clusters = nr_clust, criterion = 'distortion_fK', plot_clusters = FALSE, tol_optimal_init = 0.2)
   
   testthat::expect_true( length(res) == nr_clust && class(res) == "k-means clustering"  )
@@ -582,21 +603,35 @@ testthat::test_that("Optimal_Clusters_KMeans returns the correct output for diff
   vec = c('variance_explained', 'WCSSE', 'dissimilarity', 'silhouette', 'AIC', 'BIC', 'distortion_fK', 'Adjusted_Rsquared')
   
   out = rep(NA, length(vec))
-                      
+  
   nr_clust = 5
   
   count = 1
   
   for (i in vec) {
-
+    
     res =  Optimal_Clusters_KMeans(dat, max_clusters = nr_clust, criterion = i, plot_clusters = T, tol_optimal_init = 0.2)
     
     out[count] = (length(res) == nr_clust && class(res) == "k-means clustering")
-      
+    
     count = count + 1
   }
   
   testthat::expect_true( sum(out) == length(vec) )
+})
+
+
+testthat::test_that("Optimal_Clusters_KMeans returns the correct output if the 'mini_batch_params' is not NULL", {
+  
+  nr_clust = 10
+  
+  params_mbkm = list(batch_size = 10, init_fraction = 0.3, early_stop_iter = 10)
+  
+  res = Optimal_Clusters_KMeans(dat, max_clusters = nr_clust, criterion = "distortion_fK",
+                                
+                                plot_clusters = FALSE, mini_batch_params = params_mbkm)
+  
+  testthat::expect_true( length(res) == nr_clust && class(res) == "k-means clustering"  )
 })
 
 
@@ -638,7 +673,7 @@ testthat::test_that("in case that the clusters parameter is less than 1, it retu
 
 
 testthat::test_that("in case that the batch_size parameter is less than 1, it returns an error", {
-
+  
   testthat::expect_error( MiniBatchKmeans(X, clusters = 2, batch_size = 0, num_init = 5, early_stop_iter = 10) )
 })
 
@@ -788,9 +823,9 @@ testthat::test_that("it returns the correct output if the CENTROIDS parameter is
   clust = 2
   
   cntr = matrix(runif(clust * (ncol(X))), nrow = clust, ncol = ncol(dat))
-
+  
   km = MiniBatchKmeans(dat, clusters = clust, batch_size = 20, early_stop_iter = 10, CENTROIDS = cntr, tol_optimal_init = 0.2)
-
+  
   testthat::expect_true( names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization")  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
                            
                            ncol(km$centroids) == ncol(X) && is.matrix(km$WCSS_per_cluster) && ncol(km$WCSS_per_cluster) == clust && is.numeric(km$best_initialization) && length(km$best_initialization) == 1 && 
@@ -889,14 +924,14 @@ testthat::test_that("in case that the fuzzy parameter is not logical, it returns
 
 
 testthat::test_that("in case that the data is a matrix (fuzzy = TRUE) the result is a list and the class is 'k-means clustering' ", {
-
+  
   MbatchKm = MiniBatchKmeans(X, clusters = 2, batch_size = 20, num_init = 5, early_stop_iter = 10)
   
   km = predict_MBatchKMeans(X, MbatchKm$centroids, fuzzy = TRUE)
   
   testthat::expect_true( names(km) %in% c("clusters", "fuzzy_clusters")  && is.matrix(km$fuzzy_clusters) && nrow(km$fuzzy_clusters) == nrow(X) && ncol(km$fuzzy_clusters) == 2 &&
-                         
-                         is.vector(km$clusters) && length(km$clusters) == nrow(X) && class(km) == "k-means clustering"  )
+                           
+                           is.vector(km$clusters) && length(km$clusters) == nrow(X) && class(km) == "k-means clustering"  )
 })
 
 
@@ -921,5 +956,4 @@ testthat::test_that("in case that the data is a matrix (fuzzy = FALSE) the resul
   
   testthat::expect_true( is.numeric(km) && length(km) == nrow(X) && class(km) == "k-means clustering"  )
 })
-
 
