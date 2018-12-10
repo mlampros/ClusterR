@@ -534,14 +534,6 @@ testthat::test_that("in case that the clara_samples parameter is not numeric, it
 })
 
 
-testthat::test_that("in case that the length of the clara_samples parameter is not 1, it returns an error", {
-  
-  tmp_s = c(0,1)
-  
-  testthat::expect_error( Optimal_Clusters_Medoids(X, max_clusters = 5, clara_samples = tmp_s, clara_sample_size = 0.2, 'euclidean', 'dissimilarity', plot_clusters = F) )
-})
-
-
 testthat::test_that("in case that the clara_samples parameter is not less than 1, it returns an error", {
   
   tmp_s = 0

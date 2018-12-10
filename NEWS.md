@@ -1,4 +1,9 @@
 
+## ClusterR 1.1.7
+
+* I fixed the *clang-UBSAN* errors
+
+
 ## ClusterR 1.1.6
 
 * I updated the README.md file (I removed unnecessary calls of ClusterR in DESCRIPTION and NAMESPACE files)

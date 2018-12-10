@@ -137,7 +137,7 @@ Rcpp::List Affinity_Propagation::affinity_propagation(arma::mat &s, std::vector<
   //-----------------------------------------------------
 
   unsigned int N;
-  unsigned int rows_3col = arma::datum::inf;                                                        // initialize the 'rows_3col' to Inf
+  unsigned int rows_3col = 0;                                                                       // initialize the 'rows_3col' to 0. By setting it to 'arma::datum::inf' it gives "runtime error: inf is outside the range of representable values of type 'unsigned int'" ( clang-UBSAN )
 
   if (s.n_cols == 3 && s.n_rows != 3) {                                                             // 3-column input matrix
     rows_3col = std::sqrt(s.n_rows);                                                                // rows should be equal to the square-root
@@ -262,7 +262,7 @@ Rcpp::List Affinity_Propagation::affinity_propagation(arma::mat &s, std::vector<
     ST = S.t();
   }
 
-  int tmpdpsim = arma::datum::nan;                                                 // initialize 'tmpdpsim' to 'nan' otherwise I receive "warning: 'tmpdpsim' may be used uninitialized in this function [-Wmaybe-uninitialized]"
+  int tmpdpsim = 0;                                                                // initialize 'tmpdpsim' to 0 . By setting this to 'arma::datum::nan' it gives "runtime error: nan is outside the range of representable values of type 'int'" ( clang-UBSAN )
   int tmpnetsim,tmpexpref;
   arma::uvec tmpidx;
   bool unconverged = true;                                                         // unconverged set initially to 'true' [ see line 478 ]
@@ -349,11 +349,11 @@ Rcpp::List Affinity_Propagation::affinity_propagation(arma::mat &s, std::vector<
     if (details) {
 
       if (K==0) {
-        tmpnetsim = arma::datum::nan;
-        tmpdpsim = arma::datum::nan;
-        tmpexpref = arma::datum::nan;
+        tmpnetsim = 0;                                               // initialize this to 0. By setting it to 'arma::datum::nan' it gives "runtime error: nan is outside the range of representable values of type 'int'" ( clang-UBSAN )
+        tmpdpsim = 0;                                                // same as line 352
+        tmpexpref = 0;                                               // same as line 352
         tmpidx.set_size(N);
-        tmpidx.fill(arma::datum::nan);
+        tmpidx.fill(arma::datum::nan);                               // 'tmpidx' can take 'arma::datum::nan' because it is initialized as 'arma::uvec' ( of type double )
       }
       else {
         arma::uvec I = arma::find(E == 1);                           // 'I' can be empty or having 1 or more items
@@ -441,9 +441,9 @@ Rcpp::List Affinity_Propagation::affinity_propagation(arma::mat &s, std::vector<
   }
   else {
     tmpidx.set_size(N);
-    tmpidx.fill(arma::datum::nan);
-    tmpnetsim = arma::datum::nan;
-    tmpexpref = arma::datum::nan;
+    tmpidx.fill(arma::datum::nan);                          // 'tmpidx' can take 'arma::datum::nan' because it is initialized as 'arma::uvec' ( of type double )        
+    tmpnetsim = 0;                                          // initialize this to 0. By setting it to 'arma::datum::nan' it gives "runtime error: nan is outside the range of representable values of type 'int'" ( clang-UBSAN )
+    tmpexpref = 0;                                          // same as line 445
   }
 
   if (details) {
@@ -566,13 +566,13 @@ std::vector<double> Affinity_Propagation::preferenceRange(arma::mat &s, std::str
   }
 
   double pmax = 0.0;
-  double pmin, tmp;                                 // initialize pmin, pmax, tmp
+  double pmin, tmp;                                       // initialize pmin, pmax, tmp
   arma::colvec m;
 
   arma::rowvec tmp_dpsim1 = arma::sum(S, 0);
   double dpsim1 = arma::max(tmp_dpsim1);
   if (dpsim1 == -arma::datum::inf) {
-    pmin = arma::datum::nan;
+    pmin = arma::datum::nan;                              // 'pmin' can be set to 'arma::datum::nan' as it is of type double
   }
   else if (method == "bound") {
     for (int k = 0; k < N; k++) {

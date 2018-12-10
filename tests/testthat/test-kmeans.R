@@ -278,7 +278,7 @@ testthat::test_that("in case that the data is a matrix the result is a list and 
   
   km = KMeans_rcpp(X, clusters = clust, num_init = 5, max_iters = 100, initializer = 'optimal_init', fuzzy = TRUE)
   
-  testthat::expect_true( names(km) %in% c("clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS")  && is.matrix(km$fuzzy_clusters) &&
+  testthat::expect_true( all(names(km) %in% c("clusters", "fuzzy_clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS"))  && is.matrix(km$fuzzy_clusters) &&
                            
                            is.vector(km$clusters) && length(km$clusters) == nrow(X) && is.numeric(km$between.SS_DIV_total.SS) && length(km$between.SS_DIV_total.SS) == 1 && ncol(km$fuzzy_clusters) == clust &&
                            
@@ -294,7 +294,7 @@ testthat::test_that("in case that the data is a data frame the result is a list 
   
   km = KMeans_rcpp(dat, clusters = clust, num_init = 5, max_iters = 100, initializer = 'optimal_init')
   
-  testthat::expect_true( names(km) %in% c("clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS")  
+  testthat::expect_true( all(names(km) %in% c("clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS"))  
                          
                          && is.vector(km$clusters) && length(km$clusters) == nrow(X) && is.numeric(km$between.SS_DIV_total.SS) && length(km$between.SS_DIV_total.SS) == 1 &&
                            
@@ -318,7 +318,7 @@ testthat::test_that("KMeans_rcpp returns the correct output for the initializers
     
     km = KMeans_rcpp(X, clusters = clust, num_init = 5, max_iters = 10, initializer = i, tol_optimal_init = 0.2)
     
-    res[count] = (names(km) %in% c("clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS")  
+    res[count] = ( all(names(km) %in% c("clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS"))  
                   
                   && is.vector(km$clusters) && length(km$clusters) == nrow(X) && is.numeric(km$between.SS_DIV_total.SS) && length(km$between.SS_DIV_total.SS) == 1 &&
                     
@@ -329,7 +329,7 @@ testthat::test_that("KMeans_rcpp returns the correct output for the initializers
     count = count + 1
   }
   
-  testthat::expect_true( sum(res) == 4 )
+  testthat::expect_true( all(res) )
 })
 
 
@@ -342,7 +342,7 @@ testthat::test_that("KMeans_rcpp returns the correct output if CENTROIDS is user
   
   km = KMeans_rcpp(X, clusters = clust, num_init = 5, max_iters = 100, CENTROIDS = cntr)
   
-  testthat::expect_true( names(km) %in% c("clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS")  
+  testthat::expect_true( all(names(km) %in% c("clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS"))
                          
                          && is.vector(km$clusters) && length(km$clusters) == nrow(X) && is.numeric(km$between.SS_DIV_total.SS) && length(km$between.SS_DIV_total.SS) == 1 &&
                            
@@ -767,7 +767,7 @@ testthat::test_that("in case that the data is a matrix the result is a list and 
   
   km = MiniBatchKmeans(X, clusters = clust, batch_size = 20, num_init = numinit, early_stop_iter = 10, tol_optimal_init = 0.2)
   
-  testthat::expect_true( names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization")  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
+  testthat::expect_true( all(names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization"))  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
                            
                            ncol(km$centroids) == ncol(X) && is.matrix(km$WCSS_per_cluster) && ncol(km$WCSS_per_cluster) == clust && is.numeric(km$best_initialization) && length(km$best_initialization) == 1 && 
                            
@@ -783,7 +783,7 @@ testthat::test_that("in case that the data is a matrix the result is a list and 
   
   km = MiniBatchKmeans(dat, clusters = clust, batch_size = 20, num_init = numinit, early_stop_iter = 10, tol_optimal_init = 0.2)
   
-  testthat::expect_true( names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization")  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
+  testthat::expect_true( all(names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization"))  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
                            
                            ncol(km$centroids) == ncol(X) && is.matrix(km$WCSS_per_cluster) && ncol(km$WCSS_per_cluster) == clust && is.numeric(km$best_initialization) && length(km$best_initialization) == 1 && 
                            
@@ -806,7 +806,7 @@ testthat::test_that("for different parameter settings it returns the correct out
     
     km = MiniBatchKmeans(dat, clusters = clust, batch_size = 20, num_init = numinit, initializer = inits[i], early_stop_iter = 10, tol_optimal_init = 0.2)
     
-    res[i] = (names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization")  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
+    res[i] = ( all(names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization"))  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
                 
                 ncol(km$centroids) == ncol(X) && is.matrix(km$WCSS_per_cluster) && ncol(km$WCSS_per_cluster) == clust && is.numeric(km$best_initialization) && length(km$best_initialization) == 1 && 
                 
@@ -826,7 +826,7 @@ testthat::test_that("it returns the correct output if the CENTROIDS parameter is
   
   km = MiniBatchKmeans(dat, clusters = clust, batch_size = 20, early_stop_iter = 10, CENTROIDS = cntr, tol_optimal_init = 0.2)
   
-  testthat::expect_true( names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization")  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
+  testthat::expect_true( all(names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization"))  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
                            
                            ncol(km$centroids) == ncol(X) && is.matrix(km$WCSS_per_cluster) && ncol(km$WCSS_per_cluster) == clust && is.numeric(km$best_initialization) && length(km$best_initialization) == 1 && 
                            
@@ -843,7 +843,7 @@ testthat::test_that("in case that the init_fraction is greater than 0.0 and the 
   
   km = MiniBatchKmeans(X, clusters = clust, batch_size = 20, num_init = numinit, early_stop_iter = 10, init_fraction = 0.4, initializer = 'kmeans++')
   
-  testthat::expect_true( names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization")  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
+  testthat::expect_true( all(names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization"))  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
                            
                            ncol(km$centroids) == ncol(X) && is.matrix(km$WCSS_per_cluster) && ncol(km$WCSS_per_cluster) == clust && is.numeric(km$best_initialization) && length(km$best_initialization) == 1 && 
                            
@@ -859,7 +859,7 @@ testthat::test_that("in case that the init_fraction is greater than 0.0 and the 
   
   km = MiniBatchKmeans(X, clusters = clust, batch_size = 20, num_init = numinit, early_stop_iter = 10, init_fraction = 0.4, initializer = "quantile_init", tol_optimal_init = 0.2)
   
-  testthat::expect_true( names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization")  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
+  testthat::expect_true( all(names(km) %in% c("centroids", "WCSS_per_cluster", "best_initialization", "iters_per_initialization"))  && is.matrix(km$centroids) && nrow(km$centroids) == clust &&
                            
                            ncol(km$centroids) == ncol(X) && is.matrix(km$WCSS_per_cluster) && ncol(km$WCSS_per_cluster) == clust && is.numeric(km$best_initialization) && length(km$best_initialization) == 1 && 
                            
@@ -929,7 +929,7 @@ testthat::test_that("in case that the data is a matrix (fuzzy = TRUE) the result
   
   km = predict_MBatchKMeans(X, MbatchKm$centroids, fuzzy = TRUE)
   
-  testthat::expect_true( names(km) %in% c("clusters", "fuzzy_clusters")  && is.matrix(km$fuzzy_clusters) && nrow(km$fuzzy_clusters) == nrow(X) && ncol(km$fuzzy_clusters) == 2 &&
+  testthat::expect_true( all(names(km) %in% c("clusters", "fuzzy_clusters"))  && is.matrix(km$fuzzy_clusters) && nrow(km$fuzzy_clusters) == nrow(X) && ncol(km$fuzzy_clusters) == 2 &&
                            
                            is.vector(km$clusters) && length(km$clusters) == nrow(X) && class(km) == "k-means clustering"  )
 })
@@ -942,7 +942,7 @@ testthat::test_that("in case that the data is a data frame (fuzzy = TRUE) the re
   
   km = predict_MBatchKMeans(dat, MbatchKm$centroids, fuzzy = TRUE)
   
-  testthat::expect_true( names(km) %in% c("clusters", "fuzzy_clusters")  && is.matrix(km$fuzzy_clusters) && nrow(km$fuzzy_clusters) == nrow(X) && ncol(km$fuzzy_clusters) == 2 &&
+  testthat::expect_true( all(names(km) %in% c("clusters", "fuzzy_clusters"))  && is.matrix(km$fuzzy_clusters) && nrow(km$fuzzy_clusters) == nrow(X) && ncol(km$fuzzy_clusters) == 2 &&
                            
                            is.vector(km$clusters) && length(km$clusters) == nrow(X) && class(km) == "k-means clustering"  )
 })
