@@ -1,6 +1,5 @@
 useDynLib(ClusterR, .registration = TRUE)
 importFrom(Rcpp, evalCpp)
-import(OpenImageR)
 import(graphics)
 import(grDevices)
 import(utils)

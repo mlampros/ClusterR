@@ -1,4 +1,9 @@
 
+## ClusterR 1.1.8
+
+* I moved the *OpenImageR* dependency in the DESCRIPTION file from 'Imports' to 'Suggests', as it appears only in the Vignette file.
+
+
 ## ClusterR 1.1.7
 
 * I fixed the *clang-UBSAN* errors

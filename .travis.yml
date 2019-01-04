@@ -47,12 +47,12 @@ r_packages:
   - rmarkdown
   - Rcpp
   - RcppArmadillo
-  - shiny
-  - jpeg
-  - png
-  - tiff
+  #- shiny
+  #- jpeg
+  #- png
+  #- tiff
   - covr
-  - OpenImageR
+  #- OpenImageR
   - gmp
   - FD
   - ggplot2
@@ -66,3 +66,4 @@ notifications:
   email:
     on_success: change
     on_failure: change
+

@@ -2,8 +2,8 @@ Package: ClusterR
 Type: Package
 Title: Gaussian Mixture Models, K-Means, Mini-Batch-Kmeans, K-Medoids and Affinity Propagation
     Clustering
-Version: 1.1.7
-Date: 2018-12-09
+Version: 1.1.8
+Date: 2019-01-04
 Authors@R: c( person("Lampros", "Mouselimis", email = "mouselimislampros@gmail.com", role = c("aut", "cre")), person("Conrad", "Sanderson", role = "cph", comment = "Author of the C++ Armadillo library"), person("Ryan", "Curtin", role = "cph", comment = "Author of the C++ Armadillo library"), person("Siddharth", "Agrawal", role = "cph", comment = "Author of the C code of the Mini-Batch-Kmeans algorithm (https://github.com/siddharth-agrawal/Mini-Batch-K-Means)"), person("Brendan", "Frey", email = "frey@psi.toronto.edu", role = "cph", comment = "Author of the matlab code of the Affinity propagation algorithm (for commercial use please contact the author)"), person("Delbert", "Dueck", role = "cph", comment = "Author of the matlab code of the Affinity propagation algorithm") )  
 Maintainer: Lampros Mouselimis <mouselimislampros@gmail.com>
 BugReports: https://github.com/mlampros/ClusterR/issues
@@ -15,7 +15,6 @@ Depends:
     R(>= 3.2), gtools
 Imports:
     Rcpp (>= 0.12.5),
-    OpenImageR,
     graphics,
     grDevices,
     utils,
@@ -25,6 +24,7 @@ Imports:
     ggplot2
 LinkingTo: Rcpp, RcppArmadillo (>= 0.9.1)
 Suggests:
+    OpenImageR,
     testthat,
     covr,
     knitr,
