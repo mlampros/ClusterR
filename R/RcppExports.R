@@ -81,7 +81,7 @@ affinity_propagation <- function(s, p, maxits = 1000L, convits = 100L, dampfact 
     .Call(`_ClusterR_affinity_propagation`, s, p, maxits, convits, dampfact, details, nonoise, eps, time)
 }
 
-preferenceRange <- function(s, method = "bound") {
-    .Call(`_ClusterR_preferenceRange`, s, method)
+preferenceRange <- function(s, method = "bound", threads = 1L) {
+    .Call(`_ClusterR_preferenceRange`, s, method, threads)
 }
 

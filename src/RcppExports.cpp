@@ -341,14 +341,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // preferenceRange
-std::vector<double> preferenceRange(arma::mat& s, std::string method);
-RcppExport SEXP _ClusterR_preferenceRange(SEXP sSEXP, SEXP methodSEXP) {
+std::vector<double> preferenceRange(arma::mat& s, std::string method, int threads);
+RcppExport SEXP _ClusterR_preferenceRange(SEXP sSEXP, SEXP methodSEXP, SEXP threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type s(sSEXP);
     Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
-    rcpp_result_gen = Rcpp::wrap(preferenceRange(s, method));
+    Rcpp::traits::input_parameter< int >::type threads(threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(preferenceRange(s, method, threads));
     return rcpp_result_gen;
 END_RCPP
 }

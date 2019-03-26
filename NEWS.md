@@ -1,4 +1,10 @@
 
+## ClusterR 1.1.9
+
+* I added parallelization for the *exact* method of the *AP_preferenceRange* function which is more computationally intensive as the *bound* method
+* I modified the *Optimal_Clusters_KMeans*, *Optimal_Clusters_GMM* and *Optimal_Clusters_Medoids* to accept besides single values as a *max_clusters* parameter also a contiguous or non-contiguous vector. However, the limitation currently is that the user won't be in place to plot the clusters but only to receive the ouput data ( this can be changed in future however the plotting function for the contiguous and non-contiguous vectors must be a separate plotting function outside of the existing one).  Moreover, the *distortion_fK* criterion can't be computed in the *Optimal_Clusters_KMeans* function if the *max_clusters* parameter is a contiguous or non-continguous vector ( the *distortion_fK* criterion requires consecutive clusters ). The same applies also to the *Adjusted_Rsquared* criterion which returns incorrect output. For this feature request see the following [Github issue](https://github.com/mlampros/ClusterR/issues/15).
+
+
 ## ClusterR 1.1.8
 
 * I moved the *OpenImageR* dependency in the DESCRIPTION file from 'Imports' to 'Suggests', as it appears only in the Vignette file.

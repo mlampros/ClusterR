@@ -371,10 +371,10 @@ Rcpp::List affinity_propagation(arma::mat &s, std::vector<double> p, int maxits 
 //
 
 // [[Rcpp::export]]
-std::vector<double> preferenceRange(arma::mat &s, std::string method = "bound") {
+std::vector<double> preferenceRange(arma::mat &s, std::string method = "bound", int threads = 1) {
 
   Affinity_Propagation AFN;
-  return AFN.preferenceRange(s, method);
+  return AFN.preferenceRange(s, method, threads);
 }
 
 //=====================================================================================================================================================

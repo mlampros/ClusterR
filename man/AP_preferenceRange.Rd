@@ -4,12 +4,14 @@
 \alias{AP_preferenceRange}
 \title{Affinity propagation preference range}
 \usage{
-AP_preferenceRange(data, method = "bound")
+AP_preferenceRange(data, method = "bound", threads = 1)
 }
 \arguments{
 \item{data}{a matrix. Either a similarity matrix (where number of rows equal to number of columns) or a 3-dimensional matrix where the 1st, 2nd and 3rd column correspond to (i-index, j-index, value) triplet of a similarity matrix.}
 
 \item{method}{a character string specifying the preference range method to use. One of 'exact', 'bound'. See the details section for more information.}
+
+\item{threads}{an integer specifying the number of cores to run in parallel ( applies only if \emph{method} is set to 'exact' which is more computationally intensive )}
 }
 \description{
 Affinity propagation preference range

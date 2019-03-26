@@ -15,6 +15,10 @@
 #ifndef __AffinityPropagation__
 #define __AffinityPropagation__
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 # include <limits>                                  // minimum, maximum values for double in c++
 # include <unordered_map>
 #include <iostream>
@@ -37,7 +41,7 @@ class Affinity_Propagation {
     arma::uvec matlab_setdiff(arma::uvec x, arma::uvec y);
     Rcpp::List affinity_propagation(arma::mat &s, std::vector<double> p, int maxits, int convits, double dampfact,
                                     bool details, double nonoise, double eps, bool time);
-    std::vector<double> preferenceRange(arma::mat &s, std::string method);
+    std::vector<double> preferenceRange(arma::mat &s, std::string method, int threads);
 
     ~Affinity_Propagation() {}
 };
@@ -533,16 +537,38 @@ Rcpp::List Affinity_Propagation::affinity_propagation(arma::mat &s, std::vector<
 
 
 
+//----------------------------------------------------------------------
+// inner function for the exact method of the 'preferenceRange' function
+//----------------------------------------------------------------------
+
+double inner_exact(int j21, int j22, arma::mat &S) {
+  
+  arma::uvec j_in(2);
+  j_in(0) = j21;
+  j_in(1) = j22;
+  arma::mat mt_in = S.cols(j_in);
+  arma::colvec tmp_j_in = arma::max(mt_in, 1);
+  return arma::accu(tmp_j_in);
+}
+
+
+
 //---------------------------
 // 'p' preference-range value
 //---------------------------
 
 
-std::vector<double> Affinity_Propagation::preferenceRange(arma::mat &s, std::string method = "bound") {
+std::vector<double> Affinity_Propagation::preferenceRange(arma::mat &s, 
+                                                          std::string method = "bound", 
+                                                          int threads = 1) {
 
+  #ifdef _OPENMP
+  omp_set_num_threads(threads);
+  #endif
+  
   int N;
   arma::mat S;
-
+  
   if (s.n_cols == 3 && s.n_rows != 3) {                                                             // 3-column input matrix
     N = std::sqrt(s.n_rows);                                                                        // rows should be equal to the square-root
   }
@@ -552,7 +578,7 @@ std::vector<double> Affinity_Propagation::preferenceRange(arma::mat &s, std::str
   else {
     Rcpp::stop("s must have 3 columns or be a square matrix!");
   }
-
+  
   if (s.n_cols == 3 && s.n_rows != 3) {                   // create the similarity matrix from (i, j, similarity) data
     S.set_size(N, N);
     S.diag().zeros();
@@ -564,11 +590,11 @@ std::vector<double> Affinity_Propagation::preferenceRange(arma::mat &s, std::str
   else {
     S = s;
   }
-
+  
   double pmax = 0.0;
   double pmin, tmp;                                       // initialize pmin, pmax, tmp
   arma::colvec m;
-
+  
   arma::rowvec tmp_dpsim1 = arma::sum(S, 0);
   double dpsim1 = arma::max(tmp_dpsim1);
   if (dpsim1 == -arma::datum::inf) {
@@ -597,16 +623,23 @@ std::vector<double> Affinity_Propagation::preferenceRange(arma::mat &s, std::str
     pmin = dpsim1 - tmp;
   }
   else {
+    
     double dpsim2 = -arma::datum::inf;
-    for (int j21 = 0; j21 < N-1; j21++) {
-      for (int j22 = j21+1; j22 < N; j22++) {
-        arma::uvec j_in(2);
-        j_in(0) = j21;
-        j_in(1) = j22;
-        arma::mat mt_in = S.cols(j_in);
-        arma::colvec tmp_j_in = arma::max(mt_in, 1);
-        tmp = arma::accu(tmp_j_in);
+    
+    int j21, j22;
+    
+    #ifdef _OPENMP
+    #pragma omp parallel for schedule(static) shared(S, dpsim2, N) private(j21, j22)
+    #endif
+    for (j21 = 0; j21 < N-1; j21++) {
+      for (j22 = j21+1; j22 < N; j22++) {
+        
+        double tmp = inner_exact(j21, j22, S);
         if (tmp > dpsim2) {
+          
+          #ifdef _OPENMP
+          #pragma omp atomic write
+          #endif
           dpsim2 = tmp;
         }
       }
@@ -618,11 +651,11 @@ std::vector<double> Affinity_Propagation::preferenceRange(arma::mat &s, std::str
   }
   
   pmax = S.max();
-
+  
   std::vector<double> min_max;
   min_max.push_back(pmin);
   min_max.push_back(pmax);
-
+  
   return min_max;
 }
 

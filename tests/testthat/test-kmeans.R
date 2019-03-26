@@ -481,14 +481,6 @@ testthat::test_that("in case that the max_clusters parameter is not numeric, it 
 })
 
 
-testthat::test_that("in case that the length of the max_clusters parameter is not 1, it returns an error", {
-  
-  tmp_m = c(1,2)
-  
-  testthat::expect_error( Optimal_Clusters_KMeans(X, max_clusters = tmp_m, criterion = 'distortion_fK', plot_clusters = FALSE) )
-})
-
-
 testthat::test_that("in case that the max_clusters parameter is less than 1, it returns an error", {
   
   tmp_m = 0
@@ -583,7 +575,7 @@ testthat::test_that("in case that the 'mini_batch_params' is not NULL and the cr
 
 
 ###################################
-# Optimal_Clusters_KMeans function
+# Optimal_Clusters_KMeans function   [ in case that the 'max_clusters' parameter is of length 1 ]
 ###################################
 
 
@@ -634,6 +626,76 @@ testthat::test_that("Optimal_Clusters_KMeans returns the correct output if the '
   testthat::expect_true( length(res) == nr_clust && class(res) == "k-means clustering"  )
 })
 
+
+###################################
+# Optimal_Clusters_KMeans function         [ in case that the 'max_clusters' parameter is a contiguous or non-contiguous vector ] [ here I tested only the 'KMeans_rcpp' function but the same applies to 'MiniBatchKmeans' ]
+###################################
+
+
+testthat::test_that("max_clusters-vector for 'variance_explained'", {
+
+  subs = 2:3
+  
+  res1 =  Optimal_Clusters_KMeans(dat, max_clusters = 1:3, criterion = 'variance_explained')
+  res2 =  Optimal_Clusters_KMeans(dat, max_clusters = subs, criterion = 'variance_explained')
+  
+  testthat::expect_true( all(res1[subs] == res2)  )
+})
+
+
+testthat::test_that("max_clusters-vector for 'WCSSE'", {
+  
+  subs = c(2,4)
+  
+  res1 =  Optimal_Clusters_KMeans(dat, max_clusters = 1:4, criterion = 'WCSSE')
+  res2 =  Optimal_Clusters_KMeans(dat, max_clusters = subs, criterion = 'WCSSE')
+  
+  testthat::expect_true( all(res1[subs] == res2)  )
+})
+
+
+testthat::test_that("max_clusters-vector for 'dissimilarity'", {
+  
+  subs = c(1,3)
+  
+  res1 =  Optimal_Clusters_KMeans(dat, max_clusters = 1:4, criterion = 'dissimilarity')
+  res2 =  Optimal_Clusters_KMeans(dat, max_clusters = subs, criterion = 'dissimilarity')
+  
+  testthat::expect_true( all(res1[subs] == res2)  )
+})
+
+
+testthat::test_that("max_clusters-vector for 'silhouette'", {
+  
+  subs = c(2,3)
+  
+  res1 =  Optimal_Clusters_KMeans(dat, max_clusters = 1:3, criterion = 'silhouette')
+  res2 =  Optimal_Clusters_KMeans(dat, max_clusters = subs, criterion = 'silhouette')
+  
+  testthat::expect_true( all(res1[subs] == res2)  )
+})
+
+
+testthat::test_that("max_clusters-vector for 'AIC'", {
+  
+  subs = c(2,4)
+  
+  res1 =  Optimal_Clusters_KMeans(dat, max_clusters = 1:4, criterion = 'AIC')
+  res2 =  Optimal_Clusters_KMeans(dat, max_clusters = subs, criterion = 'AIC')
+  
+  testthat::expect_true( all(res1[subs] == res2)  )
+})
+
+
+testthat::test_that("max_clusters-vector for 'BIC'", {
+  
+  subs = c(1,4)
+  
+  res1 =  Optimal_Clusters_KMeans(dat, max_clusters = 1:4, criterion = 'BIC')
+  res2 =  Optimal_Clusters_KMeans(dat, max_clusters = subs, criterion = 'BIC')
+  
+  testthat::expect_true( all(res1[subs] == res2)  )
+})
 
 
 ################################

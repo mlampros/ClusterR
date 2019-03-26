@@ -34,19 +34,19 @@ testthat::test_that("the AP function returns error-free", {
 # preference range value for affinity propagation (AP)
 #-----------------------------------------------------
 
-testthat::test_that("the AP function returns a error if the input data is not of type matrix", {
+testthat::test_that("the AP_preferenceRange function returns a error if the input data is not of type matrix", {
   
   testthat::expect_error( AP_preferenceRange(data = list(sm_mt), method = "bound") )
 })
 
 
-testthat::test_that("the AP function returns a error if method is not one of 'bound', 'exact'", {
+testthat::test_that("the AP_preferenceRange function returns a error if method is not one of 'bound', 'exact'", {
   
   testthat::expect_error( AP_preferenceRange(data = sm_mt, method = "invalid") )
 })
 
 
-testthat::test_that("the AP function returns the correct output if method is 'bound'", {
+testthat::test_that("the AP_preferenceRange function returns the correct output if method is 'bound'", {
   
   vec_ap = AP_preferenceRange(data = sm_mt, method = "bound")
   
@@ -54,9 +54,10 @@ testthat::test_that("the AP function returns the correct output if method is 'bo
 })
 
 
-testthat::test_that("the AP function returns the correct output if method is 'exact'", {
+testthat::test_that("the AP_preferenceRange function returns the correct output if method is 'exact' (both for single and multi-threaded version)", {
   
-  vec_ap = AP_preferenceRange(data = sm_mt, method = "exact")
+  vec_ap1 = AP_preferenceRange(data = sm_mt, method = "exact", threads = 1)
+  vec_ap2 = AP_preferenceRange(data = sm_mt, method = "exact", threads = 2)
   
-  testthat::expect_true( inherits(vec_ap, 'numeric') && length(vec_ap) == 2 )
+  testthat::expect_true( inherits(vec_ap1, 'numeric') && length(vec_ap1) == 2 && inherits(vec_ap2, 'numeric') && length(vec_ap2) == 2 && all(vec_ap1 == vec_ap2) )
 })
