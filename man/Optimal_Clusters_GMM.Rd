@@ -12,7 +12,7 @@ Optimal_Clusters_GMM(data, max_clusters, criterion = "AIC",
 \arguments{
 \item{data}{matrix or data frame}
 
-\item{max_clusters}{the maximum number of clusters}
+\item{max_clusters}{either a numeric value, a contiguous or non-continguous numeric vector specifying the cluster search space}
 
 \item{criterion}{one of 'AIC' or 'BIC'}
 
@@ -42,6 +42,8 @@ Optimal number of Clusters for the gaussian mixture models
 \strong{AIC}  : the Akaike information criterion
 
 \strong{BIC}  : the Bayesian information criterion
+
+In case that the \emph{max_clusters} parameter is a contiguous or non-contiguous vector then plotting is disabled. Therefore, plotting is enabled only if the \emph{max_clusters} parameter is of length 1.
 }
 \examples{
 
@@ -52,6 +54,15 @@ dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]
 dat = center_scale(dat)
 
 opt_gmm = Optimal_Clusters_GMM(dat, 10, criterion = "AIC", plot_data = FALSE)
+
+
+#----------------------------
+# non-contiguous search space
+#----------------------------
+ 
+search_space = c(2,5)
+
+opt_gmm = Optimal_Clusters_GMM(dat, search_space, criterion = "AIC", plot_data = FALSE)
 
 }
 \author{

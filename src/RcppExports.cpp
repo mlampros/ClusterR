@@ -179,13 +179,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // GMM_arma_AIC_BIC
-arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, int max_clusters, std::string dist_mode, std::string seed_mode, int km_iter, int em_iter, bool verbose, double var_floor, std::string criterion, int seed);
+arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, arma::rowvec max_clusters, std::string dist_mode, std::string seed_mode, int km_iter, int em_iter, bool verbose, double var_floor, std::string criterion, int seed);
 RcppExport SEXP _ClusterR_GMM_arma_AIC_BIC(SEXP dataSEXP, SEXP max_clustersSEXP, SEXP dist_modeSEXP, SEXP seed_modeSEXP, SEXP km_iterSEXP, SEXP em_iterSEXP, SEXP verboseSEXP, SEXP var_floorSEXP, SEXP criterionSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< int >::type max_clusters(max_clustersSEXP);
+    Rcpp::traits::input_parameter< arma::rowvec >::type max_clusters(max_clustersSEXP);
     Rcpp::traits::input_parameter< std::string >::type dist_mode(dist_modeSEXP);
     Rcpp::traits::input_parameter< std::string >::type seed_mode(seed_modeSEXP);
     Rcpp::traits::input_parameter< int >::type km_iter(km_iterSEXP);
@@ -300,13 +300,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // OptClust
-Rcpp::List OptClust(arma::mat& data, int iter_clust, std::string method, bool clara, int samples, double sample_size, double minkowski_p, std::string criterion, int threads, bool swap_phase, bool verbose, int seed);
+Rcpp::List OptClust(arma::mat& data, arma::rowvec iter_clust, std::string method, bool clara, int samples, double sample_size, double minkowski_p, std::string criterion, int threads, bool swap_phase, bool verbose, int seed);
 RcppExport SEXP _ClusterR_OptClust(SEXP dataSEXP, SEXP iter_clustSEXP, SEXP methodSEXP, SEXP claraSEXP, SEXP samplesSEXP, SEXP sample_sizeSEXP, SEXP minkowski_pSEXP, SEXP criterionSEXP, SEXP threadsSEXP, SEXP swap_phaseSEXP, SEXP verboseSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< int >::type iter_clust(iter_clustSEXP);
+    Rcpp::traits::input_parameter< arma::rowvec >::type iter_clust(iter_clustSEXP);
     Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
     Rcpp::traits::input_parameter< bool >::type clara(claraSEXP);
     Rcpp::traits::input_parameter< int >::type samples(samplesSEXP);

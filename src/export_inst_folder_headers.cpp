@@ -223,7 +223,7 @@ Rcpp::List predict_MGausDPDF(arma::mat data, arma::mat CENTROIDS, arma::mat COVA
 //
 
 // [[Rcpp::export]]
-arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, int max_clusters, std::string dist_mode, std::string seed_mode,
+arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, arma::rowvec max_clusters, std::string dist_mode, std::string seed_mode,
 
                               int km_iter, int em_iter, bool verbose, double var_floor = 1e-10, std::string criterion = "AIC", int seed = 1) {
 
@@ -343,7 +343,7 @@ Rcpp::List split_rcpp_lst(Rcpp::List lst) {
 //
 
 // [[Rcpp::export]]
-Rcpp::List OptClust(arma::mat& data, int iter_clust, std::string method, bool clara = false, int samples = 5, double sample_size = 0.001, double minkowski_p = 1.0,
+Rcpp::List OptClust(arma::mat& data, arma::rowvec iter_clust, std::string method, bool clara = false, int samples = 5, double sample_size = 0.001, double minkowski_p = 1.0,
 
                     std::string criterion = "dissimilarity", int threads = 1, bool swap_phase = false, bool verbose = false, int seed = 1) {
 

@@ -519,19 +519,19 @@ testthat::test_that("in case that the max_clusters parameter is not numeric, it 
 })
 
 
-testthat::test_that("in case that the length of the max_clusters parameter is not 1, it returns an error", {
+testthat::test_that("in case that the max_clusters parameter is not a numeric vector (of length 1 or greater), it returns an error", {
   
-  tmp_m = c(1,2)
+  tmp_m = list(1,2)
   
   testthat::expect_error( Optimal_Clusters_GMM(X, tmp_m, criterion = "BIC", plot_data = F) )
 })
 
 
-testthat::test_that("in case that the max_clusters parameter is less than 1, it returns an error", {
+testthat::test_that("in case that the max_clusters parameter is less than 2 AND plot_data is TRUE, it returns an error", {
   
-  tmp_m = 0
+  tmp_m = 1
   
-  testthat::expect_error( Optimal_Clusters_GMM(X, tmp_m, criterion = "BIC", plot_data = F) )
+  testthat::expect_error( Optimal_Clusters_GMM(X, tmp_m, criterion = "BIC", plot_data = T) )
 })
 
 
@@ -608,6 +608,13 @@ testthat::test_that("in case that the data includes NaN or Inf values, it return
 })
 
 
+testthat::test_that("in case that 0 is in the vector of clusters, it returns an error", {
+  
+  testthat::expect_error( Optimal_Clusters_GMM(X, 0:3, criterion = "BIC", plot_data = F) )
+})
+
+
+
 ################################
 # Optimal_Clusters_GMM function
 ################################
@@ -665,3 +672,38 @@ testthat::test_that("in case of different parameters the result is a vector and 
   }
 })
 
+
+
+testthat::test_that("in case of a contiguous-vector it returns the correct output ", {
+  
+  Nr_clusters = 2:6
+  
+  res = Optimal_Clusters_GMM(dat, Nr_clusters, criterion = "AIC", dist_mode = 'maha_dist', seed_mode = 'static_spread', plot_data = T)
+  
+  if ('Error' %in% names(res)) {
+    
+    testthat::expect_true( length(res) == 2)}
+  
+  else {
+    
+    testthat::expect_true( length(res) == length(Nr_clusters) && class(res) == "Gaussian Mixture Models" )
+  }
+})
+
+
+
+testthat::test_that("in case of a non-contiguous-vector it returns the correct output ", {
+  
+  Nr_clusters = c(2,4,6)
+  
+  res = Optimal_Clusters_GMM(dat, Nr_clusters, criterion = "AIC", dist_mode = 'maha_dist', seed_mode = 'static_spread', plot_data = T)
+  
+  if ('Error' %in% names(res)) {
+    
+    testthat::expect_true( length(res) == 2)}
+  
+  else {
+    
+    testthat::expect_true( length(res) == length(Nr_clusters) && class(res) == "Gaussian Mixture Models" )
+  }
+})

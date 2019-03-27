@@ -458,7 +458,7 @@ testthat::test_that("in case that the max_clusters parameter is not numeric, it 
 
 testthat::test_that("in case that the length of the max_clusters parameter is not 1, it returns an error", {
   
-  tmp_m = c(1,2)
+  tmp_m = list(1,2)
   
   testthat::expect_error( Optimal_Clusters_Medoids(X, max_clusters = tmp_m, 'euclidean', 'dissimilarity', plot_clusters = FALSE) )
 })
@@ -588,6 +588,13 @@ testthat::test_that("in case that the data includes NaN or Inf values, it return
 })
 
 
+testthat::test_that("in case that the max_clusters parameter includes a 0, it returns an error", {
+
+  testthat::expect_error( Optimal_Clusters_Medoids(X, max_clusters = c(0,3,5), clara_samples = 5, clara_sample_size = 0.5, 'euclidean', 'dissimilarity', plot_clusters = F) )
+})
+
+
+
 ####################################
 # Optimal_Clusters_Medoids function
 ####################################
@@ -598,6 +605,19 @@ testthat::test_that("in case that the data is a matrix, it returns the correct o
   opt_md = Optimal_Clusters_Medoids(X, max_clusters = 10, 'euclidean', 'dissimilarity', plot_clusters = F)
 
   testthat::expect_true( class(opt_md) == "cluster medoids silhouette" && mean(unlist(lapply(opt_md, length))[-1]) == 6 )
+})
+
+
+testthat::test_that("in case that the data is a matrix, it returns the correct output [ non-contiguous vector ]", {
+  
+  opt_md = Optimal_Clusters_Medoids(X, max_clusters = 6, 'euclidean', 'dissimilarity', plot_clusters = F)
+  opt_md1 = Optimal_Clusters_Medoids(X, max_clusters = c(2,4,6), 'euclidean', 'dissimilarity', plot_clusters = F)
+  
+  clust_two = opt_md[[2]]$avg_intra_clust_dissimilarity == opt_md1[[1]]$avg_intra_clust_dissimilarity
+  clust_four = opt_md[[4]]$sum_intra_dissim == opt_md1[[2]]$sum_intra_dissim
+  clust_six = opt_md[[6]]$avg_width_silhouette == opt_md1[[3]]$avg_width_silhouette
+  
+  testthat::expect_true( class(opt_md) == "cluster medoids silhouette" && mean(unlist(lapply(opt_md, length))[-1]) == 6 && all(clust_two, clust_four, clust_six) )
 })
 
 

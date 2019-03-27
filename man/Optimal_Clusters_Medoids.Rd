@@ -12,7 +12,7 @@ Optimal_Clusters_Medoids(data, max_clusters, distance_metric,
 \arguments{
 \item{data}{matrix or data.frame. If both clara_samples and clara_sample_size equal 0, then the data parameter can be also a dissimilarity matrix, where the main diagonal equals 0.0 and the number of rows equals the number of columns}
 
-\item{max_clusters}{the maximum number of clusters}
+\item{max_clusters}{either a numeric value, a contiguous or non-continguous numeric vector specifying the cluster search space}
 
 \item{distance_metric}{a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}}
 
@@ -44,6 +44,8 @@ Optimal number of Clusters for the partitioning around Medoids functions
 In case of plot_clusters = TRUE, the first plot will be either a plot of dissimilarities or both dissimilarities and silhouette widths giving an indication of the optimal number
 of the clusters. Then, the user will be asked to give an optimal value for the number of the clusters and after that the second plot will appear with either the dissimilarities or the
 silhouette widths belonging to each cluster.
+
+In case that the \emph{max_clusters} parameter is a contiguous or non-contiguous vector then plotting is disabled. Therefore, plotting is enabled only if the \emph{max_clusters} parameter is of length 1.
 }
 \examples{
 
@@ -53,6 +55,16 @@ data(soybean)
 dat = soybean[, -ncol(soybean)]
 
 opt_md = Optimal_Clusters_Medoids(dat, 10, 'jaccard_coefficient', plot_clusters = FALSE)
+
+
+#----------------------------
+# non-contiguous search space
+#----------------------------
+ 
+search_space = c(2,5)
+
+opt_md = Optimal_Clusters_Medoids(dat, search_space, 'jaccard_coefficient', plot_clusters = FALSE)
+
 }
 }
 \author{

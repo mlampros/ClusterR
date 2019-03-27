@@ -1596,19 +1596,21 @@ namespace clustR {
       // function to calculate bic-aic
       //
 
-      arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, int max_clusters, std::string dist_mode, std::string seed_mode,
+      arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, arma::rowvec max_clusters, std::string dist_mode, std::string seed_mode,
 
                                     int km_iter, int em_iter, bool verbose, double var_floor = 1e-10, std::string criterion = "AIC", int seed = 1) {
 
+        int LEN_max_clust = max_clusters.n_elem;
+        
         set_seed(seed);             // R's RNG
 
-        arma::rowvec evaluate_comps(max_clusters, arma::fill::zeros), aic_avg_weights(max_clusters, arma::fill::zeros);
+        arma::rowvec evaluate_comps(LEN_max_clust, arma::fill::zeros); //, aic_avg_weights(LEN_max_clust, arma::fill::zeros);
 
-        for (int i = 0; i < max_clusters; i++) {
+        for (int i = 0; i < LEN_max_clust; i++) {
 
-          if (verbose) { Rcpp::Rcout << "iteration: " << i + 1 << std::endl; }
+          if (verbose) { Rcpp::Rcout << "iteration: " << i + 1 << "  num-clusters: " << max_clusters(i) << std::endl; }
 
-          Rcpp::List gmm = GMM_arma(data, i + 1, dist_mode, seed_mode, km_iter, em_iter, false, var_floor = 1e-10);
+          Rcpp::List gmm = GMM_arma(data, max_clusters(i), dist_mode, seed_mode, km_iter, em_iter, false, var_floor = 1e-10);
 
           arma::mat loglik = Rcpp::as<arma::mat> (gmm[3]);
 
@@ -1616,9 +1618,9 @@ namespace clustR {
 
           arma::rowvec log_sum_exp(data.n_rows, arma::fill::zeros);
 
-          for (unsigned int i = 0; i < loglik.n_rows; i++) {
+          for (unsigned int j = 0; j < loglik.n_rows; j++) {
 
-            arma::rowvec tmp_vec = arma::conv_to< arma::rowvec >::from(loglik.row(i));
+            arma::rowvec tmp_vec = arma::conv_to< arma::rowvec >::from(loglik.row(j));
 
             tmp_vec += arma::log(weights);                                     // https://github.com/scikit-learn/scikit-learn/blob/51a765acfa4c5d1ec05fc4b406968ad233c75162/sklearn/utils/extmath.py
 
@@ -1628,7 +1630,7 @@ namespace clustR {
 
             double tmp_log = arma::sum(tmp_vec);
 
-            log_sum_exp(i) = max_row + std::log(tmp_log);
+            log_sum_exp(j) = max_row + std::log(tmp_log);
           }
 
           arma::mat centers = Rcpp::as<arma::mat> (gmm[0]);
@@ -3211,29 +3213,31 @@ namespace clustR {
       // optimal number of clusters for the k-medoids
       //
 
-      Rcpp::List OptClust(arma::mat& data, int iter_clust, std::string method, bool clara = false, int samples = 5, double sample_size = 0.001, double minkowski_p = 1.0,
+      Rcpp::List OptClust(arma::mat& data, arma::rowvec iter_clust, std::string method, bool clara = false, int samples = 5, double sample_size = 0.001, double minkowski_p = 1.0,
 
                           std::string criterion = "dissimilarity", int threads = 1, bool swap_phase = false, bool verbose = false, int seed = 1) {
 
         set_seed(seed);             // R's RNG
+        
+        int LEN_max_clust = iter_clust.n_elem;
 
-        Rcpp::List medoids_object(iter_clust);
+        Rcpp::List medoids_object(LEN_max_clust);
 
         if (verbose) { Rcpp::Rcout << " " << std::endl; }
 
-        for (int iter = 0; iter < iter_clust; iter++) {
+        for (int iter = 0; iter < LEN_max_clust; iter++) {
 
-          if (iter == 0) {
+          if (iter_clust(iter) == 1) {        // It could be the case that the user gives the cluster-vector unsorted ( for instances 1 might appear in index 2), thus check every time and pass inf to clusters = 1
 
             std::string tmp_c = criterion == "dissimilarity" ? "average dissimilarity" : "average silhouette";
 
-            if (verbose) { Rcpp::Rcout << "number of clusters: "<< iter + 1 << "  -->  " << tmp_c << ": " <<  arma::datum::inf << std::endl; }}
+            if (verbose) { Rcpp::Rcout << "number of clusters: "<< iter_clust(iter) << "  -->  " << tmp_c << ": " <<  arma::datum::inf << std::endl; }}
 
           else {
 
             if (!clara) {
 
-              Rcpp::List cm_out = ClusterMedoids(data, iter + 1, method, minkowski_p, threads, false, swap_phase, false);
+              Rcpp::List cm_out = ClusterMedoids(data, iter_clust(iter), method, minkowski_p, threads, false, swap_phase, false);
 
               Rcpp::List tmp_split = split_rcpp_lst(cm_out);
 
@@ -3245,20 +3249,20 @@ namespace clustR {
 
                 tmp_val =  Rcpp::as<double> (tmp_split[0]);
 
-                Rcpp::Rcout << "number of clusters: "<< iter + 1 << "  -->  " << "average dissimilarity: " << tmp_val << std::endl;
+                Rcpp::Rcout << "number of clusters: "<< iter_clust(iter) << "  -->  " << "average dissimilarity: " << tmp_val << std::endl;
               }
 
               if (criterion == "silhouette" && verbose) {
 
                 tmp_val =  Rcpp::as<double> (tmp_split[2]);
 
-                Rcpp::Rcout << "number of clusters: "<< iter + 1 << "  -->  " << "average silhouette: " << tmp_val << std::endl;
+                Rcpp::Rcout << "number of clusters: "<< iter_clust(iter) << "  -->  " << "average silhouette: " << tmp_val << std::endl;
               }
             }
 
             else {
 
-              Rcpp::List cl_out = ClaraMedoids(data, iter + 1, method, samples, sample_size, minkowski_p, threads, false, swap_phase,false);
+              Rcpp::List cl_out = ClaraMedoids(data, iter_clust(iter), method, samples, sample_size, minkowski_p, threads, false, swap_phase,false);
 
               Rcpp::List tmp_split = split_rcpp_lst(cl_out);
 
@@ -3270,14 +3274,14 @@ namespace clustR {
 
                 tmp_val =  Rcpp::as<double> (tmp_split[0]);
 
-                Rcpp::Rcout << "number of clusters: "<< iter + 1 << "  -->  " << "average dissimilarity: " << tmp_val << std::endl;
+                Rcpp::Rcout << "number of clusters: "<< iter_clust(iter) << "  -->  " << "average dissimilarity: " << tmp_val << std::endl;
               }
 
               if (criterion == "silhouette" && verbose) {
 
                 tmp_val =  Rcpp::as<double> (tmp_split[2]);
 
-                Rcpp::Rcout << "number of clusters: "<< iter + 1 << "  -->  " << "average silhouette: " << tmp_val << std::endl;
+                Rcpp::Rcout << "number of clusters: "<< iter_clust(iter) << "  -->  " << "average silhouette: " << tmp_val << std::endl;
               }
             }
           }

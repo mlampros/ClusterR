@@ -109,6 +109,19 @@ opt_mbkm = Optimal_Clusters_KMeans(dat, max_clusters = 10, criterion = "distorti
 
                                    plot_clusters = FALSE, mini_batch_params = params_mbkm)
                                    
+
+#----------------------------
+# non-contiguous search space
+#----------------------------
+ 
+search_space = c(2,5)
+
+opt_km = Optimal_Clusters_KMeans(dat, max_clusters = search_space, 
+                                 
+                                 criterion = "variance_explained",
+
+                                 plot_clusters = FALSE)
+                                   
 }
 \author{
 Lampros Mouselimis
