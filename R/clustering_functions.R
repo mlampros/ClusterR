@@ -226,9 +226,13 @@ Optimal_Clusters_GMM = function(data, max_clusters, criterion = "AIC", dist_mode
   if (!is.logical(verbose)) stop('the verbose parameter should be either TRUE or FALSE')
   if (var_floor < 0 ) stop('the var_floor parameter can not be negative')
   
-  if (ncol(data) < max_clusters && verbose) { warning("the number of columns of the data should be larger than 'max_clusters'", call. = F); cat(" ", '\n') }
-  
-  if (length(max_clusters) != 1) plot_data = FALSE                       # set "plot_data" to FALSE if the "max_clusters" parameter is not of length 1
+  if (length(max_clusters) != 1) {
+    plot_data = FALSE                       # set "plot_data" to FALSE if the "max_clusters" parameter is not of length 1
+    if (ncol(data) < max(max_clusters) && verbose) { warning("the number of columns of the data should be larger than the maximum value of 'max_clusters'", call. = F); cat(" ", '\n') }
+  }
+  else {
+    if (ncol(data) < max_clusters && verbose) { warning("the number of columns of the data should be larger than 'max_clusters'", call. = F); cat(" ", '\n') }
+  }
   
   flag_non_finite = check_NaN_Inf(data)
   

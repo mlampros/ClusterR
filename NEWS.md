@@ -22,7 +22,7 @@
 * I modified the *Predict_mini_batch_kmeans()* function to accept an armadillo matrix rather than an Rcpp Numeric matrix. The function appers both in *ClusterRHeader.h* file ( 'inst' folder ) and in *export_inst_folder_headers.cpp* file ( 'src' folder )
 * I added the *mini_batch_params* parameter to the *Optimal_Clusters_KMeans* function. Now, the optimal number of clusters can be found also based on the min-batch-kmeans algorithm (except for the *variance_explained* criterion)
 * I changed the license from MIT to GPL-3
-* I added the [affinity propagation algorithm](https://www.psi.toronto.edu/index.php?q=affinity%20propagation) (conversion of the matlab files *apcluster.m* and *referenceRange.m*).
+* I added the *affinity propagation algorithm* (<span></span>www.psi.toronto.edu/index.php?q=affinity%20propagation). Especially, I converted the matlab files *apcluster.m* and *referenceRange.m*.
 * I modified the minimum version of RcppArmadillo in the DESCRIPTION file to 0.9.1 because the Affinity Propagation algorithm requires the *.is_symmetric()* function, which was included in version 0.9.1
 
 
