@@ -14,7 +14,7 @@ Optimal_Clusters_Medoids(data, max_clusters, distance_metric,
 
 \item{max_clusters}{either a numeric value, a contiguous or non-continguous numeric vector specifying the cluster search space}
 
-\item{distance_metric}{a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}}
+\item{distance_metric}{a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}, \emph{cosine}}
 
 \item{criterion}{one of 'dissimilarity' or 'silhouette'}
 

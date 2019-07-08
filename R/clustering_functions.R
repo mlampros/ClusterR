@@ -1047,7 +1047,7 @@ predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
 #'
 #' @param data matrix or data frame. The data parameter can be also a dissimilarity matrix, where the main diagonal equals 0.0 and the number of rows equals the number of columns
 #' @param clusters the number of clusters
-#' @param distance_metric a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}
+#' @param distance_metric a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}, \emph{cosine}
 #' @param minkowski_p a numeric value specifying the minkowski parameter in case that distance_metric = "minkowski"
 #' @param threads an integer specifying the number of cores to run in parallel
 #' @param swap_phase either TRUE or FALSE. If TRUE then both phases ('build' and 'swap') will take place. The 'swap_phase' is considered more computationally intensive.
@@ -1136,7 +1136,7 @@ Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkow
 #' @param clusters the number of clusters
 #' @param samples number of samples to draw from the data set
 #' @param sample_size fraction of data to draw in each sample iteration. It should be a float number greater than 0.0 and less or equal to 1.0
-#' @param distance_metric a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}
+#' @param distance_metric a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}, \emph{cosine}
 #' @param minkowski_p a numeric value specifying the minkowski parameter in case that distance_metric = "minkowski"
 #' @param threads an integer specifying the number of cores to run in parallel. Openmp will be utilized to parallelize the number of the different sample draws
 #' @param swap_phase either TRUE or FALSE. If TRUE then both phases ('build' and 'swap') will take place. The 'swap_phase' is considered more computationally intensive.
@@ -1216,7 +1216,7 @@ Clara_Medoids = function(data, clusters, samples, sample_size, distance_metric =
 #'
 #' @param data matrix or data frame
 #' @param MEDOIDS a matrix of initial cluster medoids (data observations). The rows of the MEDOIDS matrix should be equal to the number of clusters and the columns of the MEDOIDS matrix should be equal to the columns of the data.
-#' @param distance_metric a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}
+#' @param distance_metric a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}, \emph{cosine}
 #' @param fuzzy either TRUE or FALSE. If TRUE, then probabilities for each cluster will be returned based on the distance between observations and medoids.
 #' @param minkowski_p a numeric value specifying the minkowski parameter in case that distance_metric = "minkowski"
 #' @param threads an integer specifying the number of cores to run in parallel. Openmp will be utilized to parallelize the number of initializations (num_init)
@@ -1288,7 +1288,7 @@ function_interactive = function(evaluation_objects, max_clusters, silhouette = F
 #'
 #' @param data matrix or data.frame. If both clara_samples and clara_sample_size equal 0, then the data parameter can be also a dissimilarity matrix, where the main diagonal equals 0.0 and the number of rows equals the number of columns
 #' @param max_clusters either a numeric value, a contiguous or non-continguous numeric vector specifying the cluster search space
-#' @param distance_metric a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}
+#' @param distance_metric a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}, \emph{cosine}
 #' @param criterion one of 'dissimilarity' or 'silhouette'
 #' @param clara_samples number of samples to draw from the data set in case of clustering large applications (clara)
 #' @param clara_sample_size fraction of data to draw in each sample iteration in case of clustering large applications (clara). It should be a float number greater than 0.0 and less or equal to 1.0
@@ -2151,7 +2151,7 @@ center_scale = function(data, mean_center = TRUE, sd_scale = TRUE) {
 #' Distance matrix calculation
 #'
 #' @param data matrix or data frame
-#' @param method a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}
+#' @param method a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}, \emph{cosine}
 #' @param upper either TRUE or FALSE specifying if the upper triangle of the distance matrix should be returned. If FALSE then the upper triangle will be filled with NA's
 #' @param diagonal either TRUE or FALSE specifying if the diagonal of the distance matrix should be returned. If FALSE then the diagonal will be filled with NA's
 #' @param minkowski_p a numeric value specifying the minkowski parameter in case that method = "minkowski"

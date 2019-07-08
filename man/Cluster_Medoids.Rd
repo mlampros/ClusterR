@@ -13,7 +13,7 @@ Cluster_Medoids(data, clusters, distance_metric = "euclidean",
 
 \item{clusters}{the number of clusters}
 
-\item{distance_metric}{a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}}
+\item{distance_metric}{a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}, \emph{cosine}}
 
 \item{minkowski_p}{a numeric value specifying the minkowski parameter in case that distance_metric = "minkowski"}
 

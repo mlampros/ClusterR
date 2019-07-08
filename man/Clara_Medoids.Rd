@@ -17,7 +17,7 @@ Clara_Medoids(data, clusters, samples, sample_size,
 
 \item{sample_size}{fraction of data to draw in each sample iteration. It should be a float number greater than 0.0 and less or equal to 1.0}
 
-\item{distance_metric}{a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}}
+\item{distance_metric}{a string specifying the distance method. One of,  \emph{euclidean},  \emph{manhattan},  \emph{chebyshev},  \emph{canberra},  \emph{braycurtis},  \emph{pearson_correlation},  \emph{simple_matching_coefficient},  \emph{minkowski},  \emph{hamming},  \emph{jaccard_coefficient},  \emph{Rao_coefficient},  \emph{mahalanobis}, \emph{cosine}}
 
 \item{minkowski_p}{a numeric value specifying the minkowski parameter in case that distance_metric = "minkowski"}
 
