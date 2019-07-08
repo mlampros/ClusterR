@@ -1865,6 +1865,45 @@ namespace clustR {
             }
           }
         }
+        
+        else if (method == "cosine") {
+          
+          if (flag_isfinite) {
+            
+            tmp_idx = 1.0 - (arma::as_scalar(arma::accu(data.row(i) % data1.row(j))) / (std::sqrt(arma::accu(arma::pow(data.row(i), 2.0))) * std::sqrt(arma::accu(arma::pow(data1.row(j), 2.0)))));}
+          
+          else {
+            
+            arma::rowvec tmp_idx1, tmp_idx2;
+            
+            int count = 1;
+            
+            for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
+              
+              if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
+                
+                tmp_idx1.set_size(count);
+                
+                tmp_idx2.set_size(count);
+                
+                tmp_idx1(count - 1) = data.row(i)(f);
+                
+                tmp_idx2(count - 1) = data1.row(j)(f);
+                
+                count += 1;
+              }
+            }
+            
+            if (!tmp_idx1.is_empty()) {
+              
+              tmp_idx = 1.0 - (arma::as_scalar(arma::accu(tmp_idx1 % tmp_idx2)) / (std::sqrt(arma::accu(arma::pow(tmp_idx1, 2.0))) * std::sqrt(arma::accu(arma::pow(tmp_idx2, 2.0)))));}
+            
+            else {
+              
+              tmp_idx = arma::datum::nan;
+            }
+          }
+        }
 
         else if (method == "simple_matching_coefficient") {                                                    // for binary data
 

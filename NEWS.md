@@ -1,4 +1,14 @@
 
+## ClusterR 1.2.1
+
+* I fixed an error case in the .pdf manual of the package (https://github.com/mlampros/ClusterR/issues/16)
+
+
+## ClusterR 1.2.0
+
+* I added the 'cosine' distance to the following functions: 'Cluster_Medoids', 'Clara_Medoids', 'predict_Medoids', 'Optimal_Clusters_Medoids' and 'distance_matrix'.
+
+
 ## ClusterR 1.1.9
 
 * I added parallelization for the *exact* method of the *AP_preferenceRange* function which is more computationally intensive as the *bound* method

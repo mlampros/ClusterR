@@ -68,7 +68,7 @@ testthat::test_that("in case that the data is binary it returns the correct outp
 
 testthat::test_that("in case that the data is numeric it returns the correct output for the numeric methods", {
   
-  continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "mahalanobis")
+  continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "mahalanobis", "cosine")
   
   res = rep(NA, length(continuous_methods))
   
@@ -106,7 +106,7 @@ testthat::test_that("in case that the data is binary AND INCLUDE MISSING VALUES 
 
 testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES it returns the correct output for the numeric methods", {
   
-  continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation")
+  continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "cosine")
   
   res = rep(NA, length(continuous_methods))
   
@@ -179,7 +179,7 @@ testthat::test_that("in case that the data is binary it returns the correct outp
 
 testthat::test_that("in case that the data is numeric it returns the correct output for the numeric methods", {
   
-  continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "mahalanobis")
+  continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "mahalanobis", "cosine")
   
   res = rep(NA, length(continuous_methods))
   
@@ -215,7 +215,7 @@ testthat::test_that("in case that the data is binary AND INCLUDE MISSING VALUES 
 
 testthat::test_that("in case that the data is numeric AND INCLUDE MISSING VALUES it returns the correct output for the numeric methods", {
   
-  continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation")
+  continuous_methods = c("euclidean", "manhattan", "chebyshev", "canberra", "braycurtis", "pearson_correlation", "cosine")
   
   res = rep(NA, length(continuous_methods))
   

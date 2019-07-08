@@ -14,7 +14,7 @@ KMeans_arma(data, clusters, n_iter = 10, seed_mode = "random_subset",
 
 \item{n_iter}{the number of clustering iterations (about 10 is typically sufficient)}
 
-\item{seed_mode}{how the initial centroids are seeded. One of, \emph{keep_existing}, \emph{static_subset},\emph{random_subset},\emph{static_spread},\emph{random_spread}.}
+\item{seed_mode}{how the initial centroids are seeded. One of, \emph{keep_existing}, \emph{static_subset}, \emph{random_subset}, \emph{static_spread}, \emph{random_spread}.}
 
 \item{verbose}{either TRUE or FALSE, indicating whether progress is printed during clustering}
 

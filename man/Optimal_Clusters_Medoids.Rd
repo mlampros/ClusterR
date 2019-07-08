@@ -60,7 +60,7 @@ opt_md = Optimal_Clusters_Medoids(dat, 10, 'jaccard_coefficient', plot_clusters 
 #----------------------------
 # non-contiguous search space
 #----------------------------
- 
+
 search_space = c(2,5)
 
 opt_md = Optimal_Clusters_Medoids(dat, search_space, 'jaccard_coefficient', plot_clusters = FALSE)

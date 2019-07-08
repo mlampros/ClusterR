@@ -18,7 +18,7 @@ Optimal_Clusters_GMM(data, max_clusters, criterion = "AIC",
 
 \item{dist_mode}{the distance used during the seeding of initial means and k-means clustering. One of, \emph{eucl_dist}, \emph{maha_dist}.}
 
-\item{seed_mode}{how the initial means are seeded prior to running k-means and/or EM algorithms. One of, \emph{static_subset},\emph{random_subset},\emph{static_spread},\emph{random_spread}.}
+\item{seed_mode}{how the initial means are seeded prior to running k-means and/or EM algorithms. One of, \emph{static_subset}, \emph{random_subset}, \emph{static_spread}, \emph{random_spread}.}
 
 \item{km_iter}{the number of iterations of the k-means algorithm}
 
@@ -59,7 +59,7 @@ opt_gmm = Optimal_Clusters_GMM(dat, 10, criterion = "AIC", plot_data = FALSE)
 #----------------------------
 # non-contiguous search space
 #----------------------------
- 
+
 search_space = c(2,5)
 
 opt_gmm = Optimal_Clusters_GMM(dat, search_space, criterion = "AIC", plot_data = FALSE)

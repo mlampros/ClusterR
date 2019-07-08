@@ -17,10 +17,10 @@ AP_preferenceRange(data, method = "bound", threads = 1)
 Affinity propagation preference range
 }
 \details{
-Given a set of similarities, \emph{data}, this function computes a lower bound, pmin, on the value for the preference where the optimal number of clusters (exemplars) changes from 1 to 2, 
+Given a set of similarities, \emph{data}, this function computes a lower bound, pmin, on the value for the preference where the optimal number of clusters (exemplars) changes from 1 to 2,
 and the exact value of the preference, pmax, where the optimal number of clusters changes from n-1 to n. For N data points, there may be as many as N^2-N pair-wise similarities (note that
 the similarity of data point i to k need not be equal to the similarity of data point k to i). These may be passed in an NxN matrix of similarities, \emph{data}, where data(i,k) is the similarity of
-point i to point k. In fact, only a smaller number of relevant similarities need to be provided, in which case the others are assumed to be -Inf. M similarity values are known, can be passed 
+point i to point k. In fact, only a smaller number of relevant similarities need to be provided, in which case the others are assumed to be -Inf. M similarity values are known, can be passed
 in an Mx3 matrix \emph{data}, where each row of \emph{data} contains a pair of data point indices and a corresponding similarity value: data(j,3) is the similarity of data point data(j,1) to
 data point data(j,2).
 
@@ -37,7 +37,7 @@ dat = matrix(sample(1:255, 2500, replace = TRUE), 100, 25)
 smt = 1.0 - distance_matrix(dat, method = 'euclidean', upper = TRUE, diagonal = TRUE)
 diag(smt) = 0.0
 
-ap_range = AP_preferenceRange(smt, method = "bound") 
+ap_range = AP_preferenceRange(smt, method = "bound")
 
 }
 \references{

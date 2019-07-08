@@ -15,7 +15,7 @@ GMM(data, gaussian_comps = 1, dist_mode = "eucl_dist",
 
 \item{dist_mode}{the distance used during the seeding of initial means and k-means clustering. One of, \emph{eucl_dist}, \emph{maha_dist}.}
 
-\item{seed_mode}{how the initial means are seeded prior to running k-means and/or EM algorithms. One of, \emph{static_subset},\emph{random_subset},\emph{static_spread},\emph{random_spread}.}
+\item{seed_mode}{how the initial means are seeded prior to running k-means and/or EM algorithms. One of, \emph{static_subset}, \emph{random_subset}, \emph{static_spread}, \emph{random_spread}.}
 
 \item{km_iter}{the number of iterations of the k-means algorithm}
 
