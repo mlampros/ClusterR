@@ -36,13 +36,13 @@ install.packages("ClusterR")
 
 <br>
 
-or download the latest version from Github using the *devtools* package,
+or download the latest version from Github using the *remotes* package,
 
 <br>
 
 ```R
 
-devtools::install_github('mlampros/ClusterR')
+remotes::install_github('mlampros/ClusterR', upgrade = 'always', dependencies = TRUE, repos = 'https://cloud.r-project.org/')
  
 
 ```
@@ -152,5 +152,81 @@ Use the following link to report bugs/issues,
 <br><br>
 
 [https://github.com/mlampros/ClusterR/issues](https://github.com/mlampros/ClusterR/issues)
+
+<br>
+
+
+**UPDATE 15-08-2019**
+
+<br>
+
+I've added a **Dockerfile** to the respository so that users can build and run a docker image either on their *personal computer*, a *cloud instance* or a *cluster of computers*. It requires that [docker](https://www.docker.com/) is installed. I've included a [web-link](https://docs.docker.com/install/linux/docker-ce/ubuntu/) in the references on how to install docker on ubuntu but there are similar instructions for windows and Macintosh (either in the official docker website or on the web generally). The whole process was tested on Ubuntu 18.04
+
+<br>
+
+To build the docker image on Ubuntu use,
+
+<br>
+
+```R
+
+sudo docker build -f Dockerfile --rm --force-rm -t rstudio/clusterr .
+
+
+```
+
+<br>
+
+the name of the image (both in *build* and *run* steps) can be changed depending on your preference (this is just an example usage). Then to run the image use,
+
+<br>
+
+```R
+
+docker run --rm -d --name dckr_rstd_clust -e USER=rstudio -e PASSWORD=give_here_your_password -p 8787:8787 rstudio/clusterr
+
+
+```
+
+<br>
+
+the **USER** defaults to *rstudio* but you have to give your **PASSWORD** of preference (see also the [second reference web-link](https://www.rocker-project.org/) for more information).
+
+<br>
+
+Open your web-browser and depending where the docker image was *build / run* give, 
+
+<br>
+
+**1st. Option** on your personal computer,
+
+<br>
+
+```R
+http://0.0.0.0:8787 
+
+```
+
+<br>
+
+**2nd. Option** on a cloud instance, 
+
+<br>
+
+```R
+http://Public DNS:8787
+
+```
+
+<br>
+
+to access the Rstudio console in order to give your username and password.
+
+<br>
+
+*References:*
+
+* [https://docs.docker.com/install/linux/docker-ce/ubuntu/](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+* [https://www.rocker-project.org/](https://www.rocker-project.org/)
 
 <br>

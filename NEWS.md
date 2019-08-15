@@ -1,4 +1,8 @@
 
+## ClusterR 1.2.1
+
+* I added a dockerfile in the root of the package directory and instructions in the README.md file on how to build and run the docker image  (https://github.com/mlampros/ClusterR/issues/17)
+
 
 ## ClusterR 1.2.0
 
