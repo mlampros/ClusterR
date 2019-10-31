@@ -40,8 +40,6 @@ k-means using RcppArmadillo
 \details{
 This function has the following features in comparison to the KMeans_arma function:
 
-It allows for multiple initializations (which can be parallelized if Openmp is available).
-
 Besides optimal_init, quantile_init, random and kmeans++ initilizations one can specify the centroids using the CENTROIDS parameter.
 
 The running time and convergence of the algorithm can be adjusted using the num_init, max_iters and tol parameters.

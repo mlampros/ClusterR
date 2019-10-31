@@ -160,7 +160,6 @@ plot_2d(data = pca_dat, clusters = as.vector(pr), centroids_medoids = as.matrix(
 
 As stated before the *KMeans_rcpp* function offers some additional features in comparison to the *KMeans_arma* function,<br>
 
-* It allows for multiple initializations (which can be parallelized if Openmp is available)
 * Besides *optimal_init*, *quantile_init*, *random* and *kmeans++* initilizations one can specify the centroids using the CENTROIDS parameter
 * The running time and convergence of the algorithm can be adjusted using the *num_init*, *max_iters* and *tol* parameters
 * If num_init > 1 then KMeans_rcpp returns the attributes of the best initialization using as criterion the within-cluster-sum-of-squared-error
