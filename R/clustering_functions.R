@@ -185,6 +185,13 @@ tryCatch_optimal_clust_GMM <- function(data, max_clusters, dist_mode, seed_mode,
 #'
 #' In case that the \emph{max_clusters} parameter is a contiguous or non-contiguous vector then plotting is disabled. Therefore, plotting is enabled only if the \emph{max_clusters} parameter is of length 1.
 #'
+#' @importFrom grDevices dev.cur
+#' @importFrom grDevices dev.off
+#' @importFrom graphics plot
+#' @importFrom graphics axis
+#' @importFrom graphics abline
+#' @importFrom graphics text
+#'
 #' @export
 #' @examples
 #'
@@ -257,14 +264,14 @@ Optimal_Clusters_GMM = function(data, max_clusters, criterion = "AIC", dist_mode
 
     if (plot_data) {
 
-      if (dev.cur() != 1) {
+      if (grDevices::dev.cur() != 1) {
 
-        dev.off()                          # reset par()
+        grDevices::dev.off()                          # reset par()
       }
 
       vec_out = as.vector(gmm)
 
-      tmp_VAL = as.vector(na.omit(vec_out))
+      tmp_VAL = as.vector(stats::na.omit(vec_out))
 
       if (length(which(is.na(vec_out))) > 0) {
 
@@ -281,17 +288,17 @@ Optimal_Clusters_GMM = function(data, max_clusters, criterion = "AIC", dist_mode
 
       y_MAX = max(tmp_VAL)
 
-      plot(x = x_dis, y = y_dis, type = 'l', xlab = 'clusters', ylab = criterion, col = 'blue', lty = 3, axes = FALSE)
+      graphics::plot(x = x_dis, y = y_dis, type = 'l', xlab = 'clusters', ylab = criterion, col = 'blue', lty = 3, axes = FALSE)
 
-      axis(1, at = seq(1, length(vec_out) , by = 1))
+      graphics::axis(1, at = seq(1, length(vec_out) , by = 1))
 
-      axis(2, at = seq(round(min(tmp_VAL) - round(summary(y_MAX)[['Max.']]) / 10), y_MAX + round(summary(y_MAX)[['Max.']]) / 10, by = round((summary(tmp_VAL)['Max.'] - summary(tmp_VAL)['Min.']) / 5)), las = 1, cex.axis = 0.8)
+      graphics::axis(2, at = seq(round(min(tmp_VAL) - round(summary(y_MAX)[['Max.']]) / 10), y_MAX + round(summary(y_MAX)[['Max.']]) / 10, by = round((summary(tmp_VAL)['Max.'] - summary(tmp_VAL)['Min.']) / 5)), las = 1, cex.axis = 0.8)
 
-      abline(h = seq(round(min(tmp_VAL) - round(summary(y_MAX)[['Max.']]) / 10), y_MAX + round(summary(y_MAX)[['Max.']]) / 10, by = round((summary(tmp_VAL)['Max.'] - summary(tmp_VAL)['Min.']) / 5)), v = seq(1, length(vec_out) , by = 1),
+      graphics::abline(h = seq(round(min(tmp_VAL) - round(summary(y_MAX)[['Max.']]) / 10), y_MAX + round(summary(y_MAX)[['Max.']]) / 10, by = round((summary(tmp_VAL)['Max.'] - summary(tmp_VAL)['Min.']) / 5)), v = seq(1, length(vec_out) , by = 1),
 
              col = "gray", lty = 3)
 
-      text(x = 1:length(vec_out), y = vec_out, labels = round(vec_out, 1), cex = 0.8, font = 2)
+      graphics::text(x = 1:length(vec_out), y = vec_out, labels = round(vec_out, 1), cex = 0.8, font = 2)
     }
 
     res = as.vector(gmm)
@@ -586,6 +593,12 @@ predict_KMeans = function(data, CENTROIDS) {
 #' Moreover, the \emph{distortion_fK} criterion can't be computed if the \emph{max_clusters} parameter is a contiguous or non-continguous vector ( the \emph{distortion_fK} criterion requires consecutive clusters ).
 #' The same applies also to the \emph{Adjusted_Rsquared} criterion which returns incorrect output.
 #'
+#' @importFrom utils txtProgressBar
+#' @importFrom utils setTxtProgressBar
+#' @importFrom graphics par
+#' @importFrom graphics mtext
+#' @importFrom stats na.omit
+#'
 #' @export
 #' @examples
 #'
@@ -710,19 +723,19 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 
     if (criterion == "variance_explained") {
 
-      vec_out[COUNT] = sum(na.omit(as.vector(km$WCSS_per_cluster))) / km$total_SSE
+      vec_out[COUNT] = sum(stats::na.omit(as.vector(km$WCSS_per_cluster))) / km$total_SSE
     }
 
     if (criterion == "WCSSE") {
 
-      vec_out[COUNT] = sum(na.omit(as.vector(km$WCSS_per_cluster)))
+      vec_out[COUNT] = sum(stats::na.omit(as.vector(km$WCSS_per_cluster)))
     }
 
     if (criterion == "dissimilarity") {
 
       eval_km = evaluation_rcpp(data, as.vector(km$clusters), FALSE)
 
-      tmp_dis = mean(na.omit(unlist(lapply(eval_km$INTRA_cluster_dissimilarity, mean))))
+      tmp_dis = mean(stats::na.omit(unlist(lapply(eval_km$INTRA_cluster_dissimilarity, mean))))
 
       vec_out[COUNT] = tmp_dis
     }
@@ -737,7 +750,7 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 
         eval_km = evaluation_rcpp(data, as.vector(km$clusters), TRUE)
 
-        tmp_silh = mean(na.omit(unlist(lapply(eval_km$silhouette, mean))))
+        tmp_silh = mean(stats::na.omit(unlist(lapply(eval_km$silhouette, mean))))
 
         vec_out[COUNT] = tmp_silh
       }
@@ -745,7 +758,7 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 
     if (criterion == "distortion_fK") {
 
-      vec_out[COUNT] = sum(na.omit(as.vector(km$WCSS_per_cluster)))
+      vec_out[COUNT] = sum(stats::na.omit(as.vector(km$WCSS_per_cluster)))
     }
 
     if (criterion == "AIC") {                             # http://stackoverflow.com/questions/15839774/how-to-calculate-bic-for-k-means-clustering-in-r
@@ -754,7 +767,7 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 
       k = nrow(km$centers)
 
-      D = sum(na.omit(km$WCSS_per_cluster))
+      D = sum(stats::na.omit(km$WCSS_per_cluster))
 
       vec_out[COUNT] = D + 2.0 * m * k
     }
@@ -767,14 +780,14 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 
       n = length(km$clusters)
 
-      D = sum(na.omit(km$WCSS_per_cluster))
+      D = sum(stats::na.omit(km$WCSS_per_cluster))
 
       vec_out[COUNT] = D + log(n) * m * k
     }
 
     if (criterion == 'Adjusted_Rsquared') {
 
-      vec_out[COUNT] = sum(na.omit(km$WCSS_per_cluster))
+      vec_out[COUNT] = sum(stats::na.omit(km$WCSS_per_cluster))
     }
 
     if (verbose) { utils::setTxtProgressBar(pb, COUNT) }
@@ -798,7 +811,7 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 
     if (plot_clusters) {
 
-      tmp_VAL = as.vector(na.omit(vec_out))
+      tmp_VAL = as.vector(stats::na.omit(vec_out))
 
       if (length(which(is.na(vec_out))) > 0) {
 
@@ -815,15 +828,15 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 
       y_MAX = max(tmp_VAL)
 
-      plot(x = x_dis, y = y_dis, type = 'l', xlab = 'clusters', ylab = criterion, col = 'blue', lty = 3, axes = FALSE)
+      graphics::plot(x = x_dis, y = y_dis, type = 'l', xlab = 'clusters', ylab = criterion, col = 'blue', lty = 3, axes = FALSE)
 
-      axis(1, at = seq(1, length(vec_out) , by = 1))
+      graphics::axis(1, at = seq(1, length(vec_out) , by = 1))
 
       if (criterion == 'silhouette') {
 
-        axis(2, at = seq(0, y_MAX + 0.05, by = 0.05 ), las = 1, cex.axis = 0.8)
+        graphics::axis(2, at = seq(0, y_MAX + 0.05, by = 0.05 ), las = 1, cex.axis = 0.8)
 
-        abline(h = seq(0.0, max(as.vector(na.omit(vec_out))), 0.05), v = seq(1, length(vec_out) , by = 1), col = "gray", lty = 3)}
+        graphics::abline(h = seq(0.0, max(as.vector(stats::na.omit(vec_out))), 0.05), v = seq(1, length(vec_out) , by = 1), col = "gray", lty = 3)}
 
       else {
 
@@ -831,18 +844,18 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 
         out_max_summary = ifelse(tmp_summary == 0, 1, tmp_summary)
 
-        axis(2, at = seq(0, y_MAX + out_max_summary / 10, by = out_max_summary / 10), las = 1, cex.axis = 0.8)
+        graphics::axis(2, at = seq(0, y_MAX + out_max_summary / 10, by = out_max_summary / 10), las = 1, cex.axis = 0.8)
 
-        abline(h = seq(0.0, max(as.vector(na.omit(vec_out))), out_max_summary / 10), v = seq(1, length(vec_out) , by = 1), col = "gray", lty = 3)
+        graphics::abline(h = seq(0.0, max(as.vector(stats::na.omit(vec_out))), out_max_summary / 10), v = seq(1, length(vec_out) , by = 1), col = "gray", lty = 3)
       }
 
       if (criterion %in% c("variance_explained", "Adjusted_Rsquared", "dissimilarity", "silhouette")) {
 
-        text(x = 1:length(vec_out), y = vec_out, labels = round(vec_out, 2), cex = 0.8, font = 2) }
+        graphics::text(x = 1:length(vec_out), y = vec_out, labels = round(vec_out, 2), cex = 0.8, font = 2) }
 
       else {
 
-        text(x = 1:length(vec_out), y = vec_out, labels = round(vec_out, 1), cex = 0.8, font = 2)
+        graphics::text(x = 1:length(vec_out), y = vec_out, labels = round(vec_out, 1), cex = 0.8, font = 2)
       }
     }
   }
@@ -873,21 +886,21 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
         y_fk = fK_vec
       }
 
-      par(oma = c(0, 2, 0, 0))
+      graphics::par(oma = c(0, 2, 0, 0))
 
-      plot(y_fk, type = 'l', xlab = 'clusters', ylab = 'f(K)', col = 'green', axes = FALSE)
+      graphics::plot(y_fk, type = 'l', xlab = 'clusters', ylab = 'f(K)', col = 'green', axes = FALSE)
 
-      axis(1, at = x_fk)
+      graphics::axis(1, at = x_fk)
 
-      axis(2, at = seq(0, max(y_fk) + 0.1, by = round(summary(y_fk)[['Max.']]) / 10), las = 1, cex.axis = 0.8)
+      graphics::axis(2, at = seq(0, max(y_fk) + 0.1, by = round(summary(y_fk)[['Max.']]) / 10), las = 1, cex.axis = 0.8)
 
-      abline(h = seq(0.0, max(y_fk), round(summary(y_fk)[['Max.']]) / 10), v = seq(1, length(y_fk) , by = 1), col = "gray", lty = 3)
+      graphics::abline(h = seq(0.0, max(y_fk), round(summary(y_fk)[['Max.']]) / 10), v = seq(1, length(y_fk) , by = 1), col = "gray", lty = 3)
 
-      abline(h = fK_threshold, col = 'blue', lty = 3)
+      graphics::abline(h = fK_threshold, col = 'blue', lty = 3)
 
-      mtext("threshold", side = 2, line = 2, at = fK_threshold, las = 1, cex = 0.9)
+      graphics::mtext("threshold", side = 2, line = 2, at = fK_threshold, las = 1, cex = 0.9)
 
-      text(x = x_fk, y = y_fk, labels = round(y_fk,2), cex = 0.8, font = 2)
+      graphics::text(x = x_fk, y = y_fk, labels = round(y_fk,2), cex = 0.8, font = 2)
     }
   }
 
@@ -1305,6 +1318,9 @@ function_interactive = function(evaluation_objects, max_clusters, silhouette = F
 #'
 #' In case that the \emph{max_clusters} parameter is a contiguous or non-contiguous vector then plotting is disabled. Therefore, plotting is enabled only if the \emph{max_clusters} parameter is of length 1.
 #'
+#' @importFrom graphics legend
+#' @importFrom graphics lines
+#'
 #' @export
 #' @examples
 #'
@@ -1387,9 +1403,9 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
 
   if (plot_clusters) {
 
-    if (dev.cur() != 1) {
+    if (grDevices::dev.cur() != 1) {
 
-      dev.off()                          # reset par()
+      grDevices::dev.off()                          # reset par()
     }
 
     if (criterion == "dissimilarity") {
@@ -1398,11 +1414,11 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
 
       for (i in 2:max_clusters) { tmp_dis[i] = opt_cl[[i]]$avg_intra_clust_dissimilarity }
 
-      SUM_dis = sum(na.omit(tmp_dis))
+      SUM_dis = sum(stats::na.omit(tmp_dis))
 
       for (i in 2:max_clusters) { tmp_dis[i] = tmp_dis[i] / SUM_dis }           # the dissimilarities are divided by the sum, so that they are in the range 0 to 1
 
-      tmp_VAL = as.vector(na.omit(tmp_dis))
+      tmp_VAL = as.vector(stats::na.omit(tmp_dis))
 
       if (length(which(is.na(tmp_dis))) > 0) {
 
@@ -1417,17 +1433,17 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
         y_dis = tmp_dis
       }
 
-      plot(x = x_dis, y = y_dis, type = 'l', xlab = 'clusters', ylab = criterion, col = 'red', xaxp = c(1, 10, 10), axes = FALSE)
+      graphics::plot(x = x_dis, y = y_dis, type = 'l', xlab = 'clusters', ylab = criterion, col = 'red', xaxp = c(1, 10, 10), axes = FALSE)
 
-      axis(1, at = seq(1, length(tmp_dis) , by = 1))
+      graphics::axis(1, at = seq(1, length(tmp_dis) , by = 1))
 
-      axis(2, at = round(seq(0, max(tmp_VAL) + max(tmp_VAL)/10 , by = 0.01), 2))
+      graphics::axis(2, at = round(seq(0, max(tmp_VAL) + max(tmp_VAL)/10 , by = 0.01), 2))
 
-      abline(h = seq(0.0, max(tmp_VAL) + max(tmp_VAL)/10, 0.1), v = seq(1, length(tmp_dis) , by = 1), col = "gray", lty = 3)
+      graphics::abline(h = seq(0.0, max(tmp_VAL) + max(tmp_VAL)/10, 0.1), v = seq(1, length(tmp_dis) , by = 1), col = "gray", lty = 3)
 
-      text(x = x_dis, y = y_dis, labels = round(y_dis, 3), cex = 0.8)
+      graphics::text(x = x_dis, y = y_dis, labels = round(y_dis, 3), cex = 0.8)
 
-      legend("topright", legend = 'avg. dissimilarity', col = "red", lty = 1, text.font = 1)
+      graphics::legend("topright", legend = 'avg. dissimilarity', col = "red", lty = 1, text.font = 1)
 
 
       # consecutive plots [ the 'tryCatch' function is necessary otherwise it raises an error of the type : "Error in plot.new() : figure margins too large" ]
@@ -1451,7 +1467,7 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
 
       for (i in 2:max_clusters) { tmp_dis[i] = opt_cl[[i]]$avg_intra_clust_dissimilarity }
 
-      SUM_dis = sum(na.omit(tmp_dis))
+      SUM_dis = sum(stats::na.omit(tmp_dis))
 
       for (i in 2:max_clusters) { tmp_dis[i] = tmp_dis[i] / SUM_dis }            # the dissimilarities are divided by the sum, so that they are in the range 0 to 1
 
@@ -1472,7 +1488,7 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
 
       for (i in 2:max_clusters) { tmp_silh[i] = opt_cl[[i]]$avg_width_silhouette }
 
-      SUM_sil = sum(na.omit(tmp_silh))
+      SUM_sil = sum(stats::na.omit(tmp_silh))
 
       for (i in 2:max_clusters) { tmp_silh[i] = tmp_silh[i] / SUM_sil }             # the silhoutte widths are divided by the sum, so that they are in the range 0 to 1
 
@@ -1489,27 +1505,27 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
         y_sil = tmp_silh
       }
 
-      tmp_VAL_ALL = as.vector(na.omit(c(tmp_dis, tmp_silh)))
+      tmp_VAL_ALL = as.vector(stats::na.omit(c(tmp_dis, tmp_silh)))
 
       y_MIN = min(tmp_VAL_ALL)
 
       y_MAX = max(tmp_VAL_ALL)
 
-      plot(x = x_dis, y = y_dis, type = 'l', xlab = 'clusters', ylim = c(y_MIN, y_MAX), col = 'red', ylab = 'dissimilarity -- silhouette', axes = FALSE)
+      graphics::plot(x = x_dis, y = y_dis, type = 'l', xlab = 'clusters', ylim = c(y_MIN, y_MAX), col = 'red', ylab = 'dissimilarity -- silhouette', axes = FALSE)
 
-      axis(1, at = seq(1, length(tmp_dis) , by = 1))
+      graphics::axis(1, at = seq(1, length(tmp_dis) , by = 1))
 
-      axis(2, at = round(seq(y_MIN, y_MAX + y_MAX/10 , by = 0.01), 2))
+      graphics::axis(2, at = round(seq(y_MIN, y_MAX + y_MAX/10 , by = 0.01), 2))
 
-      abline(h = seq(0.0, y_MAX + y_MAX/10, 0.05), v = seq(1, length(tmp_dis) , by = 1), col = "gray", lty = 3)
+      graphics::abline(h = seq(0.0, y_MAX + y_MAX/10, 0.05), v = seq(1, length(tmp_dis) , by = 1), col = "gray", lty = 3)
 
-      text(x = x_dis, y = y_dis, labels = round(y_dis,3), cex = 0.8)
+      graphics::text(x = x_dis, y = y_dis, labels = round(y_dis,3), cex = 0.8)
 
-      lines(x = x_sil[1:length(x_sil)], y = y_sil[1:length(y_sil)], type = 'l', col = 'blue')
+      graphics::lines(x = x_sil[1:length(x_sil)], y = y_sil[1:length(y_sil)], type = 'l', col = 'blue')
 
-      text(x = x_sil[1:length(x_sil)], y = y_sil[1:length(y_sil)], labels = round(y_sil[1:length(y_sil)],3), cex = 0.8)
+      graphics::text(x = x_sil[1:length(x_sil)], y = y_sil[1:length(y_sil)], labels = round(y_sil[1:length(y_sil)],3), cex = 0.8)
 
-      legend("topright", legend = c('avg. dissimilarity', 'avg. silhouette width'), col = c("red","blue"), lty = 1, text.font = 1)
+      graphics::legend("topright", legend = c('avg. dissimilarity', 'avg. silhouette width'), col = c("red","blue"), lty = 1, text.font = 1)
 
 
       # consecutive plots [ the 'tryCatch' function is necessary otherwise it raises an error of the type : "Error in plot.new() : figure margins too large" ]
@@ -1544,6 +1560,11 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
 #' @details
 #' This function takes the result-object of the \emph{Cluster_Medoids} or \emph{Clara_Medoids} function and depending on the argument \emph{silhouette} it plots either the dissimilarities or
 #' the silhouette widths of the observations belonging to each cluster.
+#' 
+#' @importFrom graphics par
+#' @importFrom graphics barplot
+#' @importFrom graphics title
+#' 
 #' @export
 #' @examples
 #'
@@ -1578,22 +1599,22 @@ Silhouette_Dissimilarity_Plot = function(evaluation_object, silhouette = TRUE) {
 
   # default graphics parameter setting
 
-  if (dev.cur() != 1) {
+  if (grDevices::dev.cur() != 1) {
 
-    dev.off()                          # reset par()
+    grDevices::dev.off()                          # reset par()
   }
 
   success_plot_flag = rep(FALSE, length(evaluation_object$list_intra_dissm))
 
   len_object = length(evaluation_object$list_intra_dissm)
 
-  op <- par(mfrow = c(len_object, 1),
-
-            oma = c(2,2,2.5,2) + 0.1,
-
-            mar = c(2,2,2,2) + 0.1,
-
-            mgp = c(2.0, 1.0, 0.0))
+  op <- graphics::par(mfrow = c(len_object, 1),
+                      
+                      oma = c(2,2,2.5,2) + 0.1,
+                      
+                      mar = c(2,2,2,2) + 0.1,
+                      
+                      mgp = c(2.0, 1.0, 0.0))
 
 
   # adjust y-axis using the max. number of the cluster obs.
@@ -1609,42 +1630,42 @@ Silhouette_Dissimilarity_Plot = function(evaluation_object, silhouette = TRUE) {
 
       if (i == 1) {
 
-        barplot(sort(as.vector(evaluation_object$list_silhouette[[i]]), decreasing = F), width = 2, horiz = T, xlim = c(-1.0, 1.0), ylim = c(0, max_ylim), axes = F)
+        graphics::barplot(sort(as.vector(evaluation_object$list_silhouette[[i]]), decreasing = F), width = 2, horiz = T, xlim = c(-1.0, 1.0), ylim = c(0, max_ylim), axes = F)
 
         if (len_object < 8) {
 
-          legend("topleft", legend = c(paste0("cluster ", i), paste0('silhouette : ', round(mean(evaluation_object$list_silhouette[[i]]), 3)),
+          graphics::legend("topleft", legend = c(paste0("cluster ", i), paste0('silhouette : ', round(mean(evaluation_object$list_silhouette[[i]]), 3)),
 
                                        paste0('observations : ', length(evaluation_object$list_silhouette[[i]]))), text.font = 2, cex = 1.0)}
 
         else {
 
-          legend("topleft", legend = paste0("cluster ", paste0(i,  paste0( ' , silhouette : ', paste0(round(mean(evaluation_object$list_silhouette[[i]]), 3)),
+          graphics::legend("topleft", legend = paste0("cluster ", paste0(i,  paste0( ' , silhouette : ', paste0(round(mean(evaluation_object$list_silhouette[[i]]), 3)),
 
                                                                            paste0(' , observations : ', length(evaluation_object$list_silhouette[[i]]))))), text.font = 2, cex = 1.0)
         }
 
-        title(main = paste0("Silhouette plot for the ", paste0(sum(unlist(lapply(evaluation_object$list_silhouette, length))), " data observations")),
+        graphics::title(main = paste0("Silhouette plot for the ", paste0(sum(unlist(lapply(evaluation_object$list_silhouette, length))), " data observations")),
 
               cex.main = 1.5, font.main = 4, col.main = "blue", outer = T)
 
-        mtext(paste0("average silhouette width : ", round(evaluation_object$avg_width_silhouette, 3)), outer = T, side = 1,
+        graphics::mtext(paste0("average silhouette width : ", round(evaluation_object$avg_width_silhouette, 3)), outer = T, side = 1,
 
               cex = 0.75, font = 2, col = "blue")}
 
       else if (i == length(evaluation_object$list_silhouette)) {
 
-        barplot(sort(as.vector(evaluation_object$list_silhouette[[i]]), decreasing = F), width = 2, horiz = T, xlim = c(-1.0, 1.0), ylim = c(0, max_ylim), axes = T)
+        graphics::barplot(sort(as.vector(evaluation_object$list_silhouette[[i]]), decreasing = F), width = 2, horiz = T, xlim = c(-1.0, 1.0), ylim = c(0, max_ylim), axes = T)
 
         if (len_object < 8) {
 
-          legend("topleft", legend = c(paste0("cluster ", i), paste0('silhouette : ', round(mean(evaluation_object$list_silhouette[[i]]), 3)),
+          graphics::legend("topleft", legend = c(paste0("cluster ", i), paste0('silhouette : ', round(mean(evaluation_object$list_silhouette[[i]]), 3)),
 
                                        paste0('observations : ', length(evaluation_object$list_silhouette[[i]]))), text.font = 2, cex = 1.0)}
 
         else {
 
-          legend("topleft", legend = paste0("cluster ", paste0(i,  paste0( ' , silhouette : ', paste0(round(mean(evaluation_object$list_silhouette[[i]]), 3)),
+          graphics::legend("topleft", legend = paste0("cluster ", paste0(i,  paste0( ' , silhouette : ', paste0(round(mean(evaluation_object$list_silhouette[[i]]), 3)),
 
                                                                            paste0(' , observations : ', length(evaluation_object$list_silhouette[[i]]))))), text.font = 2, cex = 1.0)
         }
@@ -1652,17 +1673,17 @@ Silhouette_Dissimilarity_Plot = function(evaluation_object, silhouette = TRUE) {
 
       else {
 
-        barplot(sort(as.vector(evaluation_object$list_silhouette[[i]]), decreasing = F), width = 2, horiz = T, xlim = c(-1.0, 1.0), ylim = c(0, max_ylim), axes = F)
+        graphics::barplot(sort(as.vector(evaluation_object$list_silhouette[[i]]), decreasing = F), width = 2, horiz = T, xlim = c(-1.0, 1.0), ylim = c(0, max_ylim), axes = F)
 
         if (len_object < 8) {
 
-          legend("topleft", legend = c(paste0("cluster ", i), paste0('silhouette : ', round(mean(evaluation_object$list_silhouette[[i]]), 3)),
+          graphics::legend("topleft", legend = c(paste0("cluster ", i), paste0('silhouette : ', round(mean(evaluation_object$list_silhouette[[i]]), 3)),
 
                                        paste0('observations : ', length(evaluation_object$list_silhouette[[i]]))), text.font = 2, cex = 1.0)}
 
         else {
 
-          legend("topleft", legend = paste0("cluster ", paste0(i,  paste0( ' , silhouette : ', paste0(round(mean(evaluation_object$list_silhouette[[i]]), 3)),
+          graphics::legend("topleft", legend = paste0("cluster ", paste0(i,  paste0( ' , silhouette : ', paste0(round(mean(evaluation_object$list_silhouette[[i]]), 3)),
 
                                                                            paste0(' , observations : ', length(evaluation_object$list_silhouette[[i]]))))), text.font = 2, cex = 1.0)
         }
@@ -1680,46 +1701,46 @@ Silhouette_Dissimilarity_Plot = function(evaluation_object, silhouette = TRUE) {
 
       if (i == 1) {
 
-        barplot(sort(as.vector(evaluation_object$list_intra_dissm[[i]]), decreasing = F), width = 2, horiz = T, xlim = c(-0.5, round_nearest_half + 0.1),
+        graphics::barplot(sort(as.vector(evaluation_object$list_intra_dissm[[i]]), decreasing = F), width = 2, horiz = T, xlim = c(-0.5, round_nearest_half + 0.1),
 
                 ylim = c(0, max_ylim), axes = F)
 
         if (len_object < 8) {
 
-          legend("topleft", legend = c(paste0("cluster ", i), paste0('dissimilarity : ', round(mean(evaluation_object$list_intra_dissm[[i]]), 3)),
+          graphics::legend("topleft", legend = c(paste0("cluster ", i), paste0('dissimilarity : ', round(mean(evaluation_object$list_intra_dissm[[i]]), 3)),
 
                                        paste0('observations : ', length(evaluation_object$list_intra_dissm[[i]]))), text.font = 2, cex = 1.0)}
 
         else {
 
-          legend("topleft", legend = paste0("cluster ", paste0(i,  paste0( ' , dissimilarity : ', paste0(round(mean(evaluation_object$list_intra_dissm[[i]]), 3)),
+          graphics::legend("topleft", legend = paste0("cluster ", paste0(i,  paste0( ' , dissimilarity : ', paste0(round(mean(evaluation_object$list_intra_dissm[[i]]), 3)),
 
                                                                            paste0(' , observations : ', length(evaluation_object$list_intra_dissm[[i]]))))), text.font = 2, cex = 1.0)
         }
 
-        title(main = paste0("Dissimilarity plot for the ", paste0(sum(unlist(lapply(evaluation_object$list_intra_dissm, length))), " data observations")),
+        graphics::title(main = paste0("Dissimilarity plot for the ", paste0(sum(unlist(lapply(evaluation_object$list_intra_dissm, length))), " data observations")),
 
               cex.main = 1.5, font.main = 4, col.main = "blue", outer = T)
 
-        mtext(paste0("average dissimilarity : ", round(evaluation_object$avg_intra_clust_dissimilarity, 3)), outer = T, side = 1,
+        graphics::mtext(paste0("average dissimilarity : ", round(evaluation_object$avg_intra_clust_dissimilarity, 3)), outer = T, side = 1,
 
               cex = 0.75, font = 2, col = "blue")}
 
       else if (i == length(evaluation_object$list_intra_dissm)) {
 
-        barplot(sort(as.vector(evaluation_object$list_intra_dissm[[i]]), decreasing = F), width = 2, horiz = T, xlim = c(-0.5, round_nearest_half + 0.1),
+        graphics::barplot(sort(as.vector(evaluation_object$list_intra_dissm[[i]]), decreasing = F), width = 2, horiz = T, xlim = c(-0.5, round_nearest_half + 0.1),
 
                 ylim = c(0, max_ylim), axes = T)
 
         if (len_object < 8) {
 
-          legend("topleft", legend = c(paste0("cluster ", i), paste0('dissimilarity : ', round(mean(evaluation_object$list_intra_dissm[[i]]), 3)),
+          graphics::legend("topleft", legend = c(paste0("cluster ", i), paste0('dissimilarity : ', round(mean(evaluation_object$list_intra_dissm[[i]]), 3)),
 
                                        paste0('observations : ', length(evaluation_object$list_intra_dissm[[i]]))), text.font = 2, cex = 1.0)}
 
         else {
 
-          legend("topleft", legend = paste0("cluster ", paste0(i,  paste0( ' , dissimilarity : ', paste0(round(mean(evaluation_object$list_intra_dissm[[i]]), 3)),
+          graphics::legend("topleft", legend = paste0("cluster ", paste0(i,  paste0( ' , dissimilarity : ', paste0(round(mean(evaluation_object$list_intra_dissm[[i]]), 3)),
 
                                                                            paste0(' , observations : ', length(evaluation_object$list_intra_dissm[[i]]))))), text.font = 2, cex = 1.0)
         }
@@ -1727,19 +1748,19 @@ Silhouette_Dissimilarity_Plot = function(evaluation_object, silhouette = TRUE) {
 
       else {
 
-        barplot(sort(as.vector(evaluation_object$list_intra_dissm[[i]]), decreasing = F), width = 2, horiz = T, xlim = c(-0.5, round_nearest_half + 0.1),
+        graphics::barplot(sort(as.vector(evaluation_object$list_intra_dissm[[i]]), decreasing = F), width = 2, horiz = T, xlim = c(-0.5, round_nearest_half + 0.1),
 
                 ylim = c(0, max_ylim), axes = F)
 
         if (len_object < 8) {
 
-          legend("topleft", legend = c(paste0("cluster ", i), paste0('dissimilarity : ', round(mean(evaluation_object$list_intra_dissm[[i]]), 3)),
+          graphics::legend("topleft", legend = c(paste0("cluster ", i), paste0('dissimilarity : ', round(mean(evaluation_object$list_intra_dissm[[i]]), 3)),
 
                                        paste0('observations : ', length(evaluation_object$list_intra_dissm[[i]]))), text.font = 2, cex = 1.0)}
 
         else {
 
-          legend("topleft", legend = paste0("cluster ", paste0(i,  paste0( ' , dissimilarity : ', paste0(round(mean(evaluation_object$list_intra_dissm[[i]]), 3)),
+          graphics::legend("topleft", legend = paste0("cluster ", paste0(i,  paste0( ' , dissimilarity : ', paste0(round(mean(evaluation_object$list_intra_dissm[[i]]), 3)),
 
                                                                            paste0(' , observations : ', length(evaluation_object$list_intra_dissm[[i]]))))), text.font = 2, cex = 1.0)
         }
@@ -1771,6 +1792,9 @@ Silhouette_Dissimilarity_Plot = function(evaluation_object, silhouette = TRUE) {
 #' @author Lampros Mouselimis
 #' @details
 #' This function plots the clusters using 2-dimensional data and medoids or centroids.
+#' 
+#' @importFrom ggplot2 ggplot aes geom_point scale_shape_manual scale_size_manual theme element_blank
+#' 
 #' @export
 #' @examples
 #'
@@ -1791,9 +1815,9 @@ Silhouette_Dissimilarity_Plot = function(evaluation_object, silhouette = TRUE) {
 
 plot_2d = function(data, clusters, centroids_medoids) {
 
-  if (dev.cur() != 1) {
+  if (grDevices::dev.cur() != 1) {
 
-    dev.off()                          # reset par()
+    grDevices::dev.off()                          # reset par()
   }
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
@@ -1883,6 +1907,9 @@ entropy_formula = function(x_vec) {
 #' @author Lampros Mouselimis
 #' @details
 #' This function uses external validation methods to evaluate the clustering results
+#' 
+#' @importFrom gmp asNumeric chooseZ as.bigz
+#' 
 #' @export
 #' @examples
 #'

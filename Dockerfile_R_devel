@@ -1,4 +1,4 @@
-FROM rocker/rstudio 
+FROM rocker/r-devel 
 
  
 LABEL maintainer='Lampros Mouselimis' 
@@ -24,6 +24,6 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update && \
  apt-get clean 
 
  
-ENV USER rstudio 
+CMD ["R"] 
 
  
