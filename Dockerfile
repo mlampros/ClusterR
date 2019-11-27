@@ -1,11 +1,11 @@
-FROM rocker/rstudio 
+FROM rocker/rstudio-daily:devel 
 
  
 LABEL maintainer='Lampros Mouselimis' 
 
  
 RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update && \ 
- apt-get install -y libfftw3-dev libgmp-dev git-core pandoc pandoc-citeproc libpng-dev make libcurl4-openssl-dev libssl-dev && \ 
+ apt-get install -y libfftw3-dev libgmp-dev git-core pandoc pandoc-citeproc libpng-dev make libssl-dev libcurl4-openssl-dev && \ 
  apt-get install -y sudo && \ 
  apt-get install -y libgfortran3 && \ 
  apt-get install -y libarmadillo-dev && \ 
