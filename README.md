@@ -9,7 +9,7 @@
 ## ClusterR
 <br>
 
-The ClusterR package consists of Gaussian mixture models, k-means, mini-batch-kmeans, k-medoids and affinity propagation clustering algorithms with the option to plot, validate, predict (new data) and find the optimal number of clusters. The package takes advantage of 'RcppArmadillo' to speed up the computationally intensive parts of the functions. More details on the functionality of ClusterR can be found in the [blog-post](http://mlampros.github.io/2016/09/12/clusterR_package/), Vignette and in the package Documentation.
+The ClusterR package consists of Gaussian mixture models, k-means, mini-batch-kmeans, k-medoids and affinity propagation clustering algorithms with the option to plot, validate, predict (new data) and find the optimal number of clusters. The package takes advantage of 'RcppArmadillo' to speed up the computationally intensive parts of the functions. More details on the functionality of ClusterR can be found in the [blog-post](http://mlampros.github.io/2016/09/12/clusterR_package/), Vignette and in the package Documentation ( *scroll down for information on how to use the* **docker image** )
 <br><br>
 
 **UPDATE 16-08-2018**
@@ -157,41 +157,51 @@ Use the following link to report bugs/issues,
 <br>
 
 
-**UPDATE 15-08-2019**
+**UPDATE 28-11-2019**
 
 <br>
 
-I've added a **Dockerfile** to the respository so that users can build and run a docker image either on their *personal computer*, a *cloud instance* or a *cluster of computers*. It requires that [docker](https://www.docker.com/) is installed. I've included a [web-link](https://docs.docker.com/install/linux/docker-ce/ubuntu/) in the references on how to install docker on ubuntu but there are similar instructions for windows and Macintosh (either in the official docker website or on the web generally). The whole process was tested on Ubuntu 18.04
-
-<br>
-
-To build the docker image on Ubuntu use,
+**Docker images** of the *ClusterR* package are available to download from my [dockerhub](https://hub.docker.com/r/mlampros/clusterr) account. The images come with *Rstudio* and the *R-development* version (latest) installed. The whole process was tested on Ubuntu 18.04. To **pull** & **run** the image do the following,
 
 <br>
 
 ```R
 
-sudo docker build -f Dockerfile --rm --force-rm -t rstudio/clusterr .
+docker pull mlampros/clusterr:rstudiodev
+
+docker run -d --name rstudio_dev -e USER=rstudio -e PASSWORD=give_here_your_password --rm -p 8787:8787 mlampros/clusterr:rstudiodev
+
+```
+
+<br>
+
+The user can also **bind** a home directory / folder to the image to use its files by specifying the **-v** command,
+
+<br>
+
+```R
+
+docker run -d --name rstudio_dev -e USER=rstudio -e PASSWORD=give_here_your_password --rm -p 8787:8787 -v /home/YOUR_DIR:/home/rstudio/YOUR_DIR mlampros/clusterr:rstudiodev
 
 
 ```
 
 <br>
 
-the name of the image (both in *build* and *run* steps) can be changed depending on your preference (this is just an example usage). Then to run the image use,
+In the latter case you might have first give permission privileges for write access to **YOUR_DIR** directory (not necessarily) using,
 
 <br>
 
 ```R
 
-docker run --rm -d --name dckr_rstd_clust -e USER=rstudio -e PASSWORD=give_here_your_password -p 8787:8787 rstudio/clusterr
+chmod -R 777 /home/YOUR_DIR
 
 
 ```
 
 <br>
 
-the **USER** defaults to *rstudio* but you have to give your **PASSWORD** of preference (see also the [second reference web-link](https://www.rocker-project.org/) for more information).
+The **USER** defaults to *rstudio* but you have to give your **PASSWORD** of preference (see [www.rocker-project.org](https://www.rocker-project.org/) for more information).
 
 <br>
 
@@ -225,9 +235,3 @@ to access the Rstudio console in order to give your username and password.
 
 <br>
 
-*References:*
-
-* [https://docs.docker.com/install/linux/docker-ce/ubuntu/](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
-* [https://www.rocker-project.org/](https://www.rocker-project.org/)
-
-<br>
