@@ -1,4 +1,4 @@
-FROM rocker/rstudio-daily:devel 
+FROM rocker/rstudio:devel 
 
  
 LABEL maintainer='Lampros Mouselimis' 
