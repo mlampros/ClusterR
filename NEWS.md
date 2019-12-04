@@ -3,7 +3,7 @@
 
 * I added a dockerfile in the root of the package directory and instructions in the README.md file on how to build and run the docker image  (https://github.com/mlampros/ClusterR/issues/17)
 * I fixed a documentation and Vignette mistake regarding the *KMeans_rcpp* function (https://github.com/mlampros/ClusterR/issues/19)
-* I fixed the *"failure: the condition has length > 1"* CRAN error which appears when I compare a scalar with a matrix R object.
+* I fixed the *"failure: the condition has length > 1"* CRAN error which appeared mainly due to the misuse of the base *class()* function in multiple code snippets in the package (for more info on this matter see: https://developer.r-project.org/Blog/public/2019/11/09/when-you-think-class.-think-again/index.html)
 
 
 ## ClusterR 1.2.0

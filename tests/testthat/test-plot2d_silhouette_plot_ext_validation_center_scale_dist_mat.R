@@ -120,7 +120,7 @@ testthat::test_that("the function returns a plot of class 'gg', 'ggplot' ", {
 
   km = KMeans_rcpp(pca_dat, clusters = 2, num_init = 5, max_iters = 100)
 
-  testthat::expect_true( sum(class(plot_2d(pca_dat, km$clusters, km$centroids)) %in% c("gg", "ggplot")) == 2 )
+  testthat::expect_true( inherits(plot_2d(pca_dat, km$clusters, km$centroids), c("gg", "ggplot")) )
 })
 
 
