@@ -4,11 +4,21 @@
 \alias{Optimal_Clusters_KMeans}
 \title{Optimal number of Clusters for Kmeans or Mini-Batch-Kmeans}
 \usage{
-Optimal_Clusters_KMeans(data, max_clusters,
-  criterion = "variance_explained", fK_threshold = 0.85,
-  num_init = 1, max_iters = 200, initializer = "kmeans++",
-  tol = 1e-04, plot_clusters = TRUE, verbose = FALSE,
-  tol_optimal_init = 0.3, seed = 1, mini_batch_params = NULL)
+Optimal_Clusters_KMeans(
+  data,
+  max_clusters,
+  criterion = "variance_explained",
+  fK_threshold = 0.85,
+  num_init = 1,
+  max_iters = 200,
+  initializer = "kmeans++",
+  tol = 1e-04,
+  plot_clusters = TRUE,
+  verbose = FALSE,
+  tol_optimal_init = 0.3,
+  seed = 1,
+  mini_batch_params = NULL
+)
 }
 \arguments{
 \item{data}{matrix or data frame}

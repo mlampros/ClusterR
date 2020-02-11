@@ -4,9 +4,17 @@
 \alias{Cluster_Medoids}
 \title{Partitioning around medoids}
 \usage{
-Cluster_Medoids(data, clusters, distance_metric = "euclidean",
-  minkowski_p = 1, threads = 1, swap_phase = TRUE, fuzzy = FALSE,
-  verbose = FALSE, seed = 1)
+Cluster_Medoids(
+  data,
+  clusters,
+  distance_metric = "euclidean",
+  minkowski_p = 1,
+  threads = 1,
+  swap_phase = TRUE,
+  fuzzy = FALSE,
+  verbose = FALSE,
+  seed = 1
+)
 }
 \arguments{
 \item{data}{matrix or data frame. The data parameter can be also a dissimilarity matrix, where the main diagonal equals 0.0 and the number of rows equals the number of columns}

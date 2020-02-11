@@ -4,8 +4,15 @@
 \alias{tryCatch_KMEANS_arma}
 \title{tryCatch function to prevent armadillo errors in KMEANS_arma}
 \usage{
-tryCatch_KMEANS_arma(data, clusters, n_iter, verbose, seed_mode, CENTROIDS,
-  seed)
+tryCatch_KMEANS_arma(
+  data,
+  clusters,
+  n_iter,
+  verbose,
+  seed_mode,
+  CENTROIDS,
+  seed
+)
 }
 \description{
 tryCatch function to prevent armadillo errors in KMEANS_arma

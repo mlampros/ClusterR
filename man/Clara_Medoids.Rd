@@ -4,9 +4,19 @@
 \alias{Clara_Medoids}
 \title{Clustering large applications}
 \usage{
-Clara_Medoids(data, clusters, samples, sample_size,
-  distance_metric = "euclidean", minkowski_p = 1, threads = 1,
-  swap_phase = TRUE, fuzzy = FALSE, verbose = FALSE, seed = 1)
+Clara_Medoids(
+  data,
+  clusters,
+  samples,
+  sample_size,
+  distance_metric = "euclidean",
+  minkowski_p = 1,
+  threads = 1,
+  swap_phase = TRUE,
+  fuzzy = FALSE,
+  verbose = FALSE,
+  seed = 1
+)
 }
 \arguments{
 \item{data}{matrix or data frame}

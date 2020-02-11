@@ -4,8 +4,7 @@
 \alias{function_interactive}
 \title{Interactive function for consecutive plots ( using dissimilarities or the silhouette widths of the observations )}
 \usage{
-function_interactive(evaluation_objects, max_clusters,
-  silhouette = FALSE)
+function_interactive(evaluation_objects, max_clusters, silhouette = FALSE)
 }
 \description{
 Interactive function for consecutive plots ( using dissimilarities or the silhouette widths of the observations )

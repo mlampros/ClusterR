@@ -2265,13 +2265,27 @@ distance_matrix = function(data, method = 'euclidean', upper = FALSE, diagonal =
 #' diag(smt) = 0.0
 #'
 #' ap = AP_affinity_propagation(smt, p = median(as.vector(smt)))
+#' 
+#' str(ap)
 #'
 
 AP_affinity_propagation = function(data, p, maxits = 1000, convits = 100, dampfact = 0.9, details = FALSE, nonoise = 0.0, time = FALSE) {
 
   if (!inherits(data, "matrix")) stop("The 'data' parameter should be a matrix!", call. = F)
+  
+  lst_res = affinity_propagation(data, p, maxits, convits, dampfact, details, nonoise, 2.2204e-16, time)
+  
+  vec_clust = rep(NA, nrow(data))
+  ap_clust = lst_res$clusters
+  nams_ap_clust = names(ap_clust)
+  
+  for (x in 1:length(ap_clust)) {
+    vec_clust[ap_clust[[x]] + 1] = as.integer(nams_ap_clust[x])                  # add 1 to account for the difference in indexing between Rcpp and R
+  }
+  
+  lst_res[['clusters_vectorized']] = vec_clust
 
-  return(affinity_propagation(data, p, maxits, convits, dampfact, details, nonoise, 2.2204e-16, time))
+  return(lst_res)
 }
 
 

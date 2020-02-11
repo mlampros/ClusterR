@@ -4,8 +4,18 @@
 \alias{tryCatch_optimal_clust_GMM}
 \title{tryCatch function to prevent armadillo errors in GMM_arma_AIC_BIC}
 \usage{
-tryCatch_optimal_clust_GMM(data, max_clusters, dist_mode, seed_mode,
-  km_iter, em_iter, verbose, var_floor, criterion, seed)
+tryCatch_optimal_clust_GMM(
+  data,
+  max_clusters,
+  dist_mode,
+  seed_mode,
+  km_iter,
+  em_iter,
+  verbose,
+  var_floor,
+  criterion,
+  seed
+)
 }
 \description{
 tryCatch function to prevent armadillo errors in GMM_arma_AIC_BIC

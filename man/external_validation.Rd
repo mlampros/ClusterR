@@ -4,8 +4,12 @@
 \alias{external_validation}
 \title{external clustering validation}
 \usage{
-external_validation(true_labels, clusters,
-  method = "adjusted_rand_index", summary_stats = FALSE)
+external_validation(
+  true_labels,
+  clusters,
+  method = "adjusted_rand_index",
+  summary_stats = FALSE
+)
 }
 \arguments{
 \item{true_labels}{a numeric vector of length equal to the length of the clusters vector}

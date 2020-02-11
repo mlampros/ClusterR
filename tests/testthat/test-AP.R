@@ -25,7 +25,7 @@ testthat::test_that("the AP function returns error-free", {
   
   ap = AP_affinity_propagation(data = sm_mt, p = median(as.vector(sm_mt)))
   
-  testthat::expect_true( all(names(ap) %in% c("K", "N", "netsim", "dpsim", "expref", "iterations", "exemplars", "idx", "clusters")) )
+  testthat::expect_true( all(names(ap) %in% c("K", "N", "netsim", "dpsim", "expref", "iterations", "exemplars", "idx", "clusters", "clusters_vectorized")) )
 })
 
 

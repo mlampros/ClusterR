@@ -4,8 +4,16 @@
 \alias{AP_affinity_propagation}
 \title{Affinity propagation clustering}
 \usage{
-AP_affinity_propagation(data, p, maxits = 1000, convits = 100,
-  dampfact = 0.9, details = FALSE, nonoise = 0, time = FALSE)
+AP_affinity_propagation(
+  data,
+  p,
+  maxits = 1000,
+  convits = 100,
+  dampfact = 0.9,
+  details = FALSE,
+  nonoise = 0,
+  time = FALSE
+)
 }
 \arguments{
 \item{data}{a matrix. Either a similarity matrix (where number of rows equal to number of columns) or a 3-dimensional matrix where the 1st, 2nd and 3rd column correspond to (i-index, j-index, value) triplet of a similarity matrix.}
@@ -54,6 +62,8 @@ smt = 1.0 - distance_matrix(dat, method = 'euclidean', upper = TRUE, diagonal = 
 diag(smt) = 0.0
 
 ap = AP_affinity_propagation(smt, p = median(as.vector(smt)))
+
+str(ap)
 
 }
 \references{

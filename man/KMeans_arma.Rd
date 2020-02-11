@@ -4,8 +4,15 @@
 \alias{KMeans_arma}
 \title{k-means using the Armadillo library}
 \usage{
-KMeans_arma(data, clusters, n_iter = 10, seed_mode = "random_subset",
-  verbose = FALSE, CENTROIDS = NULL, seed = 1)
+KMeans_arma(
+  data,
+  clusters,
+  n_iter = 10,
+  seed_mode = "random_subset",
+  verbose = FALSE,
+  CENTROIDS = NULL,
+  seed = 1
+)
 }
 \arguments{
 \item{data}{matrix or data frame}

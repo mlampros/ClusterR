@@ -4,8 +4,14 @@
 \alias{distance_matrix}
 \title{Distance matrix calculation}
 \usage{
-distance_matrix(data, method = "euclidean", upper = FALSE,
-  diagonal = FALSE, minkowski_p = 1, threads = 1)
+distance_matrix(
+  data,
+  method = "euclidean",
+  upper = FALSE,
+  diagonal = FALSE,
+  minkowski_p = 1,
+  threads = 1
+)
 }
 \arguments{
 \item{data}{matrix or data frame}

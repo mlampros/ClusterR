@@ -4,8 +4,14 @@
 \alias{predict_Medoids}
 \title{Predictions for the Medoid functions}
 \usage{
-predict_Medoids(data, MEDOIDS = NULL, distance_metric = "euclidean",
-  fuzzy = FALSE, minkowski_p = 1, threads = 1)
+predict_Medoids(
+  data,
+  MEDOIDS = NULL,
+  distance_metric = "euclidean",
+  fuzzy = FALSE,
+  minkowski_p = 1,
+  threads = 1
+)
 }
 \arguments{
 \item{data}{matrix or data frame}

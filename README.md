@@ -5,6 +5,7 @@
 [![Downloads](http://cranlogs.r-pkg.org/badges/grand-total/ClusterR?color=blue)](http://www.r-pkg.org/pkg/ClusterR)
 <a href="https://www.buymeacoffee.com/VY0x8snyh" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" height="21px" ></a>
 [![](https://img.shields.io/docker/automated/mlampros/clusterr.svg)](https://hub.docker.com/r/mlampros/clusterr)
+[![Dependencies](https://tinyverse.netlify.com/badge/ClusterR)](https://cran.r-project.org/package=ClusterR)
 
 
 ## ClusterR

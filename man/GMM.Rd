@@ -4,9 +4,17 @@
 \alias{GMM}
 \title{Gaussian Mixture Model clustering}
 \usage{
-GMM(data, gaussian_comps = 1, dist_mode = "eucl_dist",
-  seed_mode = "random_subset", km_iter = 10, em_iter = 5,
-  verbose = FALSE, var_floor = 1e-10, seed = 1)
+GMM(
+  data,
+  gaussian_comps = 1,
+  dist_mode = "eucl_dist",
+  seed_mode = "random_subset",
+  km_iter = 10,
+  em_iter = 5,
+  verbose = FALSE,
+  var_floor = 1e-10,
+  seed = 1
+)
 }
 \arguments{
 \item{data}{matrix or data frame}
