@@ -201,15 +201,28 @@ namespace clustR {
       // returns the clusters. The returned clusters should match the clusters in case of the KMEANS_rcpp function.
       //
 
-      arma::rowvec validate_centroids(arma::mat& data, arma::mat init_centroids) {
+      arma::rowvec validate_centroids(arma::mat& data, arma::mat init_centroids, int threads = 1) {
+        
+        #ifdef _OPENMP
+        omp_set_num_threads(threads);
+        #endif
 
         arma::rowvec tmp_idx(data.n_rows);
 
-        for (unsigned int k = 0; k < data.n_rows; k++) {
+        unsigned int k;
+
+        #ifdef _OPENMP
+        #pragma omp parallel for schedule(static) shared(data, init_centroids, tmp_idx) private(k)
+        #endif
+        for (k = 0; k < data.n_rows; k++) {
 
           arma::vec tmp_vec = WCSS(arma::conv_to< arma::rowvec >::from(data.row(k)), init_centroids);
-
-          tmp_idx(k) = MinMat(tmp_vec);
+          double iter_val = MinMat(tmp_vec);
+          
+          #ifdef _OPENMP
+          #pragma omp atomic write
+          #endif
+          tmp_idx(k) = iter_val;
         }
 
         return tmp_idx;

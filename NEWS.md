@@ -1,4 +1,10 @@
 
+## ClusterR 1.2.3
+
+* I've added the *threads* parameter to the *predict_KMeans()* function to return the k-means clusters in parallel  (useful especially for high dimensional data, see: https://stackoverflow.com/q/61551071/8302386)
+* I've added a check-duplicated *CENTROIDS* if-condition in the *predict_KMeans()* function similar to the base kmeans function (see: https://stackoverflow.com/q/61551071/8302386). Due to the fact that the *CENTROIDS* output matrix is of class *"k-means clustering"* the base R function *duplicated()* performs a check column-wise rather than row-wise. Therefore before checking for duplicates I have to set the class to NULL.
+
+
 ## ClusterR 1.2.2
 
 * I've added the vectorized version of clusters to the output of the Affinity Propagation algorithm

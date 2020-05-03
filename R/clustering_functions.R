@@ -498,6 +498,7 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
 #'
 #' @param data matrix or data frame
 #' @param CENTROIDS a matrix of initial cluster centroids. The rows of the CENTROIDS matrix should be equal to the number of clusters and the columns should be equal to the columns of the data.
+#' @param threads an integer specifying the number of cores to run in parallel
 #' @return a vector (clusters)
 #' @author Lampros Mouselimis
 #' @details
@@ -513,23 +514,27 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
 #'
 #' km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'kmeans++')
 #'
-#' pr = predict_KMeans(dat, km$centroids)
+#' pr = predict_KMeans(dat, km$centroids, threads = 1)
 #
 
 
-predict_KMeans = function(data, CENTROIDS) {
+predict_KMeans = function(data, CENTROIDS, threads = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
   if (!is.matrix(CENTROIDS)) stop("CENTROIDS should be a matrix")
   if (ncol(data) != ncol(CENTROIDS))
     stop('the number of columns of the data should match the number of columns of the CENTROIDS ')
+  if (threads < 1) stop('the number of threads should be greater or equal to 1')
 
   flag_non_finite = check_NaN_Inf(data)
+  if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values", call. = F)
+  
+  if (!is.null(class(CENTROIDS))) class(CENTROIDS) = NULL                                                  # set the class of the input 'CENTROIDS' to NULL otherwise the 'duplicated()' function might check it column-wise rather than row-wise
+  flag_dups = which(duplicated(CENTROIDS))
+  if (length(flag_dups) > 0) stop("The 'CENTROIDS' input matrix includes duplicated rows!", call. = F)
 
-  if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values")
-
-  res = as.vector(validate_centroids(data, CENTROIDS)) + 1
+  res = as.vector(validate_centroids(data, CENTROIDS, threads)) + 1
 
   class(res) = "k-means clustering"
 
@@ -2265,24 +2270,24 @@ distance_matrix = function(data, method = 'euclidean', upper = FALSE, diagonal =
 #' diag(smt) = 0.0
 #'
 #' ap = AP_affinity_propagation(smt, p = median(as.vector(smt)))
-#' 
+#'
 #' str(ap)
 #'
 
 AP_affinity_propagation = function(data, p, maxits = 1000, convits = 100, dampfact = 0.9, details = FALSE, nonoise = 0.0, time = FALSE) {
 
   if (!inherits(data, "matrix")) stop("The 'data' parameter should be a matrix!", call. = F)
-  
+
   lst_res = affinity_propagation(data, p, maxits, convits, dampfact, details, nonoise, 2.2204e-16, time)
-  
+
   vec_clust = rep(NA, nrow(data))
   ap_clust = lst_res$clusters
   nams_ap_clust = names(ap_clust)
-  
+
   for (x in 1:length(ap_clust)) {
     vec_clust[ap_clust[[x]] + 1] = as.integer(nams_ap_clust[x])                  # add 1 to account for the difference in indexing between Rcpp and R
   }
-  
+
   lst_res[['clusters_vectorized']] = vec_clust
 
   return(lst_res)

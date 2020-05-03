@@ -5,8 +5,8 @@ check_NaN_Inf <- function(x) {
     .Call(`_ClusterR_check_NaN_Inf`, x)
 }
 
-validate_centroids <- function(data, init_centroids) {
-    .Call(`_ClusterR_validate_centroids`, data, init_centroids)
+validate_centroids <- function(data, init_centroids, threads) {
+    .Call(`_ClusterR_validate_centroids`, data, init_centroids, threads)
 }
 
 SCALE <- function(data, mean_center = TRUE, sd_scale = TRUE) {

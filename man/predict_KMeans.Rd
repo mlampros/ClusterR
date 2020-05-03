@@ -4,12 +4,14 @@
 \alias{predict_KMeans}
 \title{Prediction function for the k-means}
 \usage{
-predict_KMeans(data, CENTROIDS)
+predict_KMeans(data, CENTROIDS, threads = 1)
 }
 \arguments{
 \item{data}{matrix or data frame}
 
 \item{CENTROIDS}{a matrix of initial cluster centroids. The rows of the CENTROIDS matrix should be equal to the number of clusters and the columns should be equal to the columns of the data.}
+
+\item{threads}{an integer specifying the number of cores to run in parallel}
 }
 \value{
 a vector (clusters)
@@ -30,7 +32,7 @@ dat = center_scale(dat)
 
 km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'kmeans++')
 
-pr = predict_KMeans(dat, km$centroids)
+pr = predict_KMeans(dat, km$centroids, threads = 1)
 }
 \author{
 Lampros Mouselimis
