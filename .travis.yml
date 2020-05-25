@@ -1,63 +1,24 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
 language: r
 warnings_are_errors: false
 sudo: required
 cache: packages
 
-dist: trusty
-
-os:
-  - linux
-
-compiler:
-  - gcc
-
-env:
-  global:
-    - R_BUILD_ARGS="--no-build-vignettes --no-manual"
-    - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
 
 before_install:
 
-  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6B05F25D762E3157 
   - sudo apt-get -qq update
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get -qq update
-  - sudo apt-get -qq install gcc-4.8
-  - sudo apt-get -qq install g++-4.8
-  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 90
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
-  - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.8 90
-  - sudo apt-get install libgfortran3
-  - sudo apt-get install r-base-dev
-  - sudo apt-get install libarmadillo-dev
-  - sudo apt-get update
-  - sudo apt-get install libopenblas-dev
-  - sudo apt-get install libblas-dev liblapack-dev
-  - sudo apt-get update
-  - sudo apt-get install libarpack++2-dev
-  - sudo apt-get install gfortran
-  - sudo ln -s /usr/lib/x86_64-linux-gnu/libgfortran.so.3 /usr/lib/libgfortran.so
-  - sudo apt-get update
   - sudo apt-get install libgmp3-dev
-  
 
-r_packages:
-  - devtools
-  - roxygen2
-  - testthat
-  - knitr
-  - rmarkdown
-  - Rcpp
-  - RcppArmadillo
-  - covr
-  - gmp
-  - FD
-  - ggplot2
-  - gtools
-  
+
+install:
+  - Rscript -e "install.packages(c( 'devtools', 'roxygen2', 'testthat', 'knitr', 'rmarkdown', 'Rcpp', 'RcppArmadillo', 'gmp', 'FD', 'ggplot2', 'gtools', 'covr' ), repos =  'https://cloud.r-project.org/' )"
+
 
 after_success:
-  - Rscript -e 'covr::codecov(line_exclusions = c("R/RcppExports.R", "src/RcppExports.cpp"), quiet = FALSE)'
+  - Rscript -e 'covr::codecov(quiet = FALSE)'
+
 
 notifications:
   email:
