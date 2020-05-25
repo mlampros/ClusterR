@@ -13,7 +13,7 @@ before_install:
 
 
 install:
-  - Rscript -e "install.packages(c( 'devtools', 'roxygen2', 'testthat', 'knitr', 'rmarkdown', 'Rcpp', 'RcppArmadillo', 'gmp', 'FD', 'ggplot2', 'gtools', 'covr' ), repos =  'https://cloud.r-project.org/' )"
+  - Rscript -e "install.packages(c('OpenImageR', 'devtools', 'roxygen2', 'testthat', 'knitr', 'rmarkdown', 'covr', 'Rcpp', 'RcppArmadillo', 'gmp', 'FD', 'ggplot2', 'gtools'), repos =  'https://cloud.r-project.org/' )"
 
 
 after_success:
