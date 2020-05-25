@@ -1,5 +1,10 @@
 
 
+## ClusterR 1.2.3
+
+* I've added the value of 1 to the output clusters of the *predict_GMM()* function to account for the difference in indexing between R and C++
+
+
 ## ClusterR 1.2.2
 
 * I've added the vectorized version of clusters to the output of the Affinity Propagation algorithm

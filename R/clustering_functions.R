@@ -134,7 +134,7 @@ predict_GMM = function(data, CENTROIDS, COVARIANCE, WEIGHTS) {
 
   res = predict_MGausDPDF(data, CENTROIDS, COVARIANCE, WEIGHTS, eps = 1.0e-8)
 
-  return(structure(list(log_likelihood = res$Log_likelihood_raw, cluster_proba = res$cluster_proba, cluster_labels = as.vector(res$cluster_labels)),
+  return(structure(list(log_likelihood = res$Log_likelihood_raw, cluster_proba = res$cluster_proba, cluster_labels = as.vector(res$cluster_labels) + 1),          # I've added 1 to the output cluster labels to account for the difference in indexing between R and C++
 
                    class = 'Gaussian Mixture Models'))
 }
@@ -529,10 +529,10 @@ predict_KMeans = function(data, CENTROIDS, threads = 1) {
 
   flag_non_finite = check_NaN_Inf(data)
   if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values", call. = F)
-  
+
   if (!is.null(class(CENTROIDS))) class(CENTROIDS) = NULL                                                  # set the class of the input 'CENTROIDS' to NULL otherwise the 'duplicated()' function might check it column-wise rather than row-wise
-  flag_dups = which(duplicated(CENTROIDS))
-  if (length(flag_dups) > 0) stop("The 'CENTROIDS' input matrix includes duplicated rows!", call. = F)
+  flag_dups = duplicated(CENTROIDS)
+  if (sum(flag_dups) > 0) stop("The 'CENTROIDS' input matrix includes duplicated rows!", call. = F)
 
   res = as.vector(validate_centroids(data, CENTROIDS, threads)) + 1
 
