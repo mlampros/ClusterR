@@ -202,7 +202,7 @@ namespace clustR {
       //
 
       arma::rowvec validate_centroids(arma::mat& data, arma::mat init_centroids, int threads = 1) {
-        
+
         #ifdef _OPENMP
         omp_set_num_threads(threads);
         #endif
@@ -218,7 +218,7 @@ namespace clustR {
 
           arma::vec tmp_vec = WCSS(arma::conv_to< arma::rowvec >::from(data.row(k)), init_centroids);
           double iter_val = MinMat(tmp_vec);
-          
+
           #ifdef _OPENMP
           #pragma omp atomic write
           #endif
@@ -1614,7 +1614,7 @@ namespace clustR {
                                     int km_iter, int em_iter, bool verbose, double var_floor = 1e-10, std::string criterion = "AIC", int seed = 1) {
 
         int LEN_max_clust = max_clusters.n_elem;
-        
+
         set_seed(seed);             // R's RNG
 
         arma::rowvec evaluate_comps(LEN_max_clust, arma::fill::zeros); //, aic_avg_weights(LEN_max_clust, arma::fill::zeros);
@@ -1878,41 +1878,41 @@ namespace clustR {
             }
           }
         }
-        
+
         else if (method == "cosine") {
-          
+
           if (flag_isfinite) {
-            
+
             tmp_idx = 1.0 - (arma::as_scalar(arma::accu(data.row(i) % data1.row(j))) / (std::sqrt(arma::accu(arma::pow(data.row(i), 2.0))) * std::sqrt(arma::accu(arma::pow(data1.row(j), 2.0)))));}
-          
+
           else {
-            
+
             arma::rowvec tmp_idx1, tmp_idx2;
-            
+
             int count = 1;
-            
+
             for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
-              
+
               if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
-                
+
                 tmp_idx1.set_size(count);
-                
+
                 tmp_idx2.set_size(count);
-                
+
                 tmp_idx1(count - 1) = data.row(i)(f);
-                
+
                 tmp_idx2(count - 1) = data1.row(j)(f);
-                
+
                 count += 1;
               }
             }
-            
+
             if (!tmp_idx1.is_empty()) {
-              
+
               tmp_idx = 1.0 - (arma::as_scalar(arma::accu(tmp_idx1 % tmp_idx2)) / (std::sqrt(arma::accu(arma::pow(tmp_idx1, 2.0))) * std::sqrt(arma::accu(arma::pow(tmp_idx2, 2.0)))));}
-            
+
             else {
-              
+
               tmp_idx = arma::datum::nan;
             }
           }
@@ -3270,7 +3270,7 @@ namespace clustR {
                           std::string criterion = "dissimilarity", int threads = 1, bool swap_phase = false, bool verbose = false, int seed = 1) {
 
         set_seed(seed);             // R's RNG
-        
+
         int LEN_max_clust = iter_clust.n_elem;
 
         Rcpp::List medoids_object(LEN_max_clust);

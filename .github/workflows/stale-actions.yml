@@ -1,0 +1,25 @@
+# for the 'secrets.GITHUB_TOKEN' see: https://docs.github.com/en/actions/reference/authentication-in-a-workflow#about-the-github_token-secret
+
+name: "Mark or close stale issues and PRs"
+
+on:
+  schedule:
+  - cron: "00 * * * *"
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/stale@v3
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        days-before-stale: 12
+        days-before-close: 7
+        stale-issue-message: "This is Robo-lampros because the Human-lampros is lazy. This issue has been automatically marked as stale because it has not had recent activity. It will be closed after 7 days if no further activity occurs. Feel free to re-open a closed issue and the Human-lampros will respond."
+        stale-pr-message: "This is Robo-lampros because the Human-lampros is lazy. This PR has been automatically marked as stale because it has not had recent activity. It will be closed after 7 days if no further activity occurs."
+        close-issue-message: "This issue was automatically closed because of being stale. Feel free to re-open a closed issue and the Human-lampros will respond."
+        close-pr-message: "This PR was automatically closed because of being stale."
+        stale-pr-label: "stale"
+        stale-issue-label: "stale"
+        exempt-issue-labels: "bug,enhancement,pinned,security,pending,work_in_progress"
+        exempt-pr-labels: "bug,enhancement,pinned,security,pending,work_in_progress"

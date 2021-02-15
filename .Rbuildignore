@@ -1,4 +1,6 @@
 ^Dockerfile$
-^.travis.yml$
 ^.git$
 ^.github$
+^\.ccache$
+^\.github$
+^tic\.R$
