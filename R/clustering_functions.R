@@ -598,6 +598,10 @@ predict_KMeans = function(data, CENTROIDS, threads = 1) {
 #' Moreover, the \emph{distortion_fK} criterion can't be computed if the \emph{max_clusters} parameter is a contiguous or non-continguous vector ( the \emph{distortion_fK} criterion requires consecutive clusters ).
 #' The same applies also to the \emph{Adjusted_Rsquared} criterion which returns incorrect output.
 #'
+#' @references
+#'
+#' https://core.ac.uk/download/pdf/205410925.pdf
+#'
 #' @importFrom utils txtProgressBar
 #' @importFrom utils setTxtProgressBar
 #' @importFrom graphics par

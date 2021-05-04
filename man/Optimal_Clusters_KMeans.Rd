@@ -133,6 +133,9 @@ opt_km = Optimal_Clusters_KMeans(dat, max_clusters = search_space,
                                  plot_clusters = FALSE)
 
 }
+\references{
+https://core.ac.uk/download/pdf/205410925.pdf
+}
 \author{
 Lampros Mouselimis
 }

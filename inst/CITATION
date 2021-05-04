@@ -1,0 +1,92 @@
+citHeader("Please cite both the package and the original articles / software in your publications:")
+
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(
+  bibtype = "Manual",
+  title   = "{ClusterR}: Gaussian Mixture Models, K-Means, Mini-Batch-Kmeans, K-Medoids and Affinity Propagation Clustering",
+  author  = person("Lampros", "Mouselimis"),
+  year    = year,
+  note    = note,
+  url     = "https://CRAN.R-project.org/package=ClusterR"
+)
+
+bibentry(
+  bibtype  = "Article",
+  title    = "Armadillo: a template-based C++ library for linear algebra",
+  author   = c(as.person("Conrad Sanderson"), as.person("Ryan Curtin")),
+  journal  = "Journal of Open Source Software",
+  year     = "2016",
+  volume   = "1",
+  pages    = "26",
+  doi      = "10.21105/joss.00026"
+)
+
+bibentry(
+  bibtype  = "Article",
+  title    = "A User-Friendly Hybrid Sparse Matrix Class in C++",
+  author   = c(as.person("Conrad Sanderson"), as.person("Ryan Curtin")),
+  journal  = "Lecture Notes in Computer Science (LNCS)",
+  year     = "2018",
+  volume   = "10931",
+  pages    = "422--430",
+  doi      = "10.1007/978-3-319-96418-8_50"
+)
+
+bibentry(
+  bibtype = "Manual",
+  title   = "Mini-Batch-K-Means",
+  author  = person("Siddharth", "Agrawal"),
+  year    = "2013",
+  url     = "https://github.com/siddharth-agrawal/Mini-Batch-K-Means"
+)
+
+bibentry(
+  bibtype  = "Article",
+  title    = "Web-scale k-means clustering",
+  author   = person("D.", "Sculley"),
+  journal  = "ACM Digital Library",
+  year     = "2010",
+  doi      = "10.1145/1772690.1772862"
+)
+
+bibentry(
+  bibtype  = "PhdThesis",
+  title    = "Affinity Propagation: Clustering Data by Passing Messages",
+  author   = person("Delbert", "Dueck"),
+  year     = "2009",
+  school   = "University of Toronto",
+  url      = "http://old.psi.toronto.edu/~psi/pubs2/2009/DDueck-thesis_printable.pdf"
+)
+
+bibentry(
+  bibtype  = "Article",
+  title    = "Clustering by Passing Messages Between Data Points",
+  author   = c(as.person("Brendan Frey"), as.person("Delbert Dueck")),
+  journal  = "Science",
+  year     = "2007",
+  volume   = "315",
+  pages    = "972--976",
+  doi      = "10.1126/science.1136800"
+)
+
+bibentry(
+  bibtype  = "Article",
+  title    = "Clustering in an Object-Oriented Environment",
+  author   = c(as.person("Anja Struyf"), as.person("Mia Hubert"), as.person("Peter Rousseeuw")),
+  journal  = "Journal of Statistical Software",
+  year     = "1997",
+  doi      = "10.18637/jss.v001.i04"
+)
+
+bibentry(
+  bibtype  = "Article",
+  title    = "Selection of K in K-means clustering",
+  author   = c(as.person("D Pham"), as.person("S Dimov"), as.person("C Nguyen")),
+  journal  = "Proceedings of the Institution of Mechanical Engineers, Part C: Journal of Mechanical Engineering Science",
+  year     = "2004",
+  url      = "https://core.ac.uk/download/pdf/205410925.pdf",
+  doi      = "10.1243/095440605X8298"
+)
+
