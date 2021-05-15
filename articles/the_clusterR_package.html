@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ClusterR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
       <h1 data-toc-skip>Functionality of the ClusterR package</h1>
                         <h4 class="author">Lampros Mouselimis</h4>
             
-            <h4 class="date">2021-05-03</h4>
+            <h4 class="date">2021-05-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/mlampros/ClusterR/blob/master/vignettes/the_clusterR_package.Rmd"><code>vignettes/the_clusterR_package.Rmd</code></a></small>
       <div class="hidden name"><code>the_clusterR_package.Rmd</code></div>
@@ -294,7 +294,7 @@
 <span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span>
   
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></code></pre></div>
-<pre><code>## time to complete : 1.416335 secs</code></pre>
+<pre><code>## time to complete : 1.885025 secs</code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">getcent_init</span> <span class="op">=</span> <span class="va">km_init</span><span class="op">$</span><span class="va">centroids</span>
 
@@ -324,7 +324,7 @@
 <span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span>
   
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></code></pre></div>
-<pre><code>## time to complete : 0.8711717 secs</code></pre>
+<pre><code>## time to complete : 1.300478 secs</code></pre>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">getcent_mb</span> <span class="op">=</span> <span class="va">km_mb</span><span class="op">$</span><span class="va">centroids</span>
 
@@ -371,7 +371,7 @@
 </tr></tbody>
 </table>
 <p><br></p>
-<p>As mentioned before the <em>gowdis</em> function of the FD package allows the user to give different weights to each separate variable. The weights parameter can be tuned, for example by using <a href="http://www.math.vu.nl/~sbhulai/papers/paper-vandenhoven.pdf">random search</a>, in order to achieve better clustering results. For instance, by using the following weights for each separate variable one can improve both the <em>adjusted-rand-index</em> (external validation) and the <em>average silhouette width</em> (internal validation), <br></p>
+<p>As mentioned before the <em>gowdis</em> function of the FD package allows the user to give different weights to each separate variable. The weights parameter can be tuned, for example by using <a href="https://www.math.vu.nl/~sbhulai/papers/paper-vandenhoven.pdf">random search</a>, in order to achieve better clustering results. For instance, by using the following weights for each separate variable one can improve both the <em>adjusted-rand-index</em> (external validation) and the <em>average silhouette width</em> (internal validation), <br></p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">predictors</th>
@@ -517,7 +517,7 @@
 <span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span>
   
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></code></pre></div>
-<pre><code>## time to complete : 1.943703 secs</code></pre>
+<pre><code>## time to complete : 2.516299 secs</code></pre>
 <p><br></p>
 <table class="table">
 <caption>hamming-Clara-Medoids</caption>
@@ -543,7 +543,7 @@
 <span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span>
   
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></code></pre></div>
-<pre><code>## time to complete : 11.77976 secs</code></pre>
+<pre><code>## time to complete : 13.57709 secs</code></pre>
 <p><br></p>
 <table class="table">
 <caption>hamming-Cluster-Medoids</caption>
