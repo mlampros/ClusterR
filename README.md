@@ -239,7 +239,7 @@ to access the Rstudio console in order to give your username and password.
 
 ### **Citation:**
 
-If you use the code of this repository in your paper or research please cite both **ClusterR** and the **original articles / software** [https://cran.r-project.org/web/packages/ClusterR/citation.html](https://cran.r-project.org/web/packages/ClusterR/citation.html):
+If you use the code of this repository in your paper or research please cite both **ClusterR** and the **original articles / software** `https://CRAN.R-project.org/package=ClusterR`:
 
 <br>
 

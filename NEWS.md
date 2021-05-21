@@ -1,4 +1,9 @@
 
+## ClusterR 1.2.5
+
+* I fixed the Error of the CRAN results due to mistakes in creation of a matrix in the *test-kmeans.R* file
+
+
 ## ClusterR 1.2.4
 
 * I fixed an error in the *CITATION* file
