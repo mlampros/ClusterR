@@ -133,6 +133,13 @@ predict_GMM = function(data, CENTROIDS, COVARIANCE, WEIGHTS) {
 }
 
 
+#' @rdname predict_GMM
+#' @param object,newdata,... arguments for the `predict` generic
+#' @export
+predict.GMMCluster <- function(object, newdata, ...) {
+  predict_GMM(newdata, object$centroids, object$covariance_matrices, object$weights)$cluster_labels
+}
+
 
 #' tryCatch function to prevent armadillo errors in GMM_arma_AIC_BIC
 #'
@@ -525,6 +532,12 @@ predict_KMeans = function(data, CENTROIDS, threads = 1) {
   as.vector(validate_centroids(data, CENTROIDS, threads)) + 1
 }
 
+#' @rdname predict_KMeans
+#' @param object,newdata,... arguments for the `predict` generic
+#' @export
+predict.KMeansCluster <- function(object, newdata, threads = 1, ...) {
+  predict_KMeans(newdata, CENTROIDS = object$centroids, threads = threads)
+}
 
 #' Optimal number of Clusters for Kmeans or Mini-Batch-Kmeans
 #'
@@ -1064,8 +1077,6 @@ predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
 #'
 #' cm = Cluster_Medoids(dat, clusters = 3, distance_metric = 'euclidean', swap_phase = TRUE)
 #'
-
-
 Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkowski_p = 1.0, threads = 1, swap_phase = TRUE, fuzzy = FALSE, verbose = FALSE, seed = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
@@ -1113,11 +1124,16 @@ Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkow
     tmp_rows = data[as.vector(medoids_mat$medoids) + 1, ]
   }
 
-  return(structure(list(medoids = tmp_rows, medoid_indices = as.vector(medoids_mat$medoids) + 1, best_dissimilarity = medoids_mat$cost,
-
-                        dissimilarity_matrix = medoids_mat$dissimilarity_matrix, clusters = as.vector(medoids_mat$clusters) + 1, silhouette_matrix = dsm,
-
-                        fuzzy_probs = medoids_mat$fuzzy_probs, clustering_stats = cs), class = "cluster medoids silhouette"))
+  return(structure(list(medoids = tmp_rows,
+                        medoid_indices = as.vector(medoids_mat$medoids) + 1,
+                        best_dissimilarity = medoids_mat$cost,
+                        dissimilarity_matrix = medoids_mat$dissimilarity_matrix,
+                        clusters = as.vector(medoids_mat$clusters) + 1,
+                        silhouette_matrix = dsm,
+                        fuzzy_probs = medoids_mat$fuzzy_probs,
+                        clustering_stats = cs,
+                        distance_metric = distance_metric),
+                   class = c("MedoidsCluster", "cluster medoids silhouette")))
 }
 
 
@@ -1195,11 +1211,17 @@ Clara_Medoids = function(data, clusters, samples, sample_size, distance_metric =
 
   cs$clusters = cs$clusters + 1
 
-  return(structure(list(medoids = medoids_mat$medoids, medoid_indices = as.vector(medoids_mat$medoid_indices) + 1, sample_indices = as.vector(medoids_mat$sample_indices) + 1,
-
-                        best_dissimilarity = medoids_mat$bst_dissimilarity, clusters = as.vector(medoids_mat$clusters) + 1, silhouette_matrix = dsm,
-
-                        fuzzy_probs = medoids_mat$fuzzy_probs, clustering_stats = cs, dissimilarity_matrix = medoids_mat$bst_sample_dissimilarity_matrix), class = "cluster medoids silhouette"))
+  return(structure(list(medoids = medoids_mat$medoids,
+                        medoid_indices = as.vector(medoids_mat$medoid_indices) + 1,
+                        sample_indices = as.vector(medoids_mat$sample_indices) + 1,
+                        best_dissimilarity = medoids_mat$bst_dissimilarity,
+                        clusters = as.vector(medoids_mat$clusters) + 1,
+                        silhouette_matrix = dsm,
+                        fuzzy_probs = medoids_mat$fuzzy_probs,
+                        clustering_stats = cs,
+                        dissimilarity_matrix = medoids_mat$bst_sample_dissimilarity_matrix,
+                        distance_metric = distance_metric),
+                   class = c("MedoidsCluster", "cluster medoids silhouette")))
 }
 
 
@@ -1250,10 +1272,25 @@ predict_Medoids = function(data, MEDOIDS = NULL, distance_metric = 'euclidean', 
   structure(
     list(clusters = as.vector(res$clusters) + 1,
          fuzzy_clusters = res$fuzzy_clusters,
-         dissimilarity = res$dissimilarity),
-    class = c("MedoidsClusteR", "cluster medoids silhouette"))
+         dissimilarity = res$dissimilarity,
+         distance_metric = distance_metric),
+    class = c("MedoidsCluster", "cluster medoids silhouette"))
 }
 
+
+#' @rdname predict_Medoids
+#' @param object,newdata,... arguments for the `predict` generic
+#' @export
+predict.MedoidsCluster <- function(object, newdata,
+                                   fuzzy = FALSE, threads = 1, ...) {
+  out <- predict_Medoids(newdata, MEDOIDS = object$medoids,
+                         distance_metric = object$distance_metric,
+                         fuzzy = fuzzy, threads = threads)
+  if (fuzzy)
+    out$fuzzy_clusters
+  else
+    out$clusters
+}
 
 
 #' Interactive function for consecutive plots ( using dissimilarities or the silhouette widths of the observations )

@@ -2,9 +2,12 @@
 % Please edit documentation in R/clustering_functions.R
 \name{predict_GMM}
 \alias{predict_GMM}
+\alias{predict.GMMCluster}
 \title{Prediction function for a Gaussian Mixture Model object}
 \usage{
 predict_GMM(data, CENTROIDS, COVARIANCE, WEIGHTS)
+
+\method{predict}{GMMCluster}(object, newdata, ...)
 }
 \arguments{
 \item{data}{matrix or data frame}
@@ -14,6 +17,8 @@ predict_GMM(data, CENTROIDS, COVARIANCE, WEIGHTS)
 \item{COVARIANCE}{matrix or data frame containing the diagonal covariance matrices, stored as row vectors}
 
 \item{WEIGHTS}{vector containing the weights}
+
+\item{object, newdata, ...}{arguments for the `predict` generic}
 }
 \value{
 a list consisting of the log-likelihoods, cluster probabilities and cluster labels.
