@@ -486,7 +486,7 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
 
                           WCSS_per_cluster = res$WCSS_per_cluster, obs_per_cluster = res$obs_per_cluster, between.SS_DIV_total.SS = (res$total_SSE - sum(res$WCSS_per_cluster)) / res$total_SSE),
 
-                     class = "k-means clustering"))
+                     class = c("KMeansCluster", "k-means clustering")))
   }
 }
 
