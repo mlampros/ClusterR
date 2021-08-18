@@ -421,7 +421,7 @@ testthat::test_that("in case of 'Cluster_Medoids' function AND silhouette = TRUE
 
   plt_sd = Silhouette_Dissimilarity_Plot(cm, silhouette = TRUE)
 
-  testthat::expect_true( plt_sd == T )
+  testthat::expect_true( plt_sd )
 })
 
 
@@ -431,7 +431,7 @@ testthat::test_that("in case of 'Cluster_Medoids' function AND silhouette = FALS
 
   plt_sd = Silhouette_Dissimilarity_Plot(cm, silhouette = FALSE)
 
-  testthat::expect_true( plt_sd == T )
+  testthat::expect_true( plt_sd )
 })
 
 
@@ -441,7 +441,7 @@ testthat::test_that("in case of 'Clara_Medoids' function AND silhouette = TRUE, 
 
   plt_sd = Silhouette_Dissimilarity_Plot(cm, silhouette = TRUE)
 
-  testthat::expect_true( plt_sd == T )
+  testthat::expect_true( plt_sd )
 })
 
 
@@ -451,5 +451,5 @@ testthat::test_that("in case of 'Clara_Medoids' function AND silhouette = FALSE,
 
   plt_sd = Silhouette_Dissimilarity_Plot(cm, silhouette = FALSE)
 
-  testthat::expect_true( plt_sd == T )
+  testthat::expect_true( plt_sd )
 })

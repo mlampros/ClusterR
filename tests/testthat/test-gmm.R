@@ -284,7 +284,7 @@ testthat::test_that("in case that the data is a matrix the result is a list of l
     
     testthat::expect_true( length(res) == 4 && sum(names(res) %in% c("centroids", "covariance_matrices", "weights", "Log_likelihood")) == 4 &&
                            
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && class(res) == "Gaussian Mixture Models" )
+                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && inherits(res, "Gaussian Mixture Models") )
   }
 })
 
@@ -301,7 +301,7 @@ testthat::test_that("in case that the data is a data frame the result is a list 
     
     testthat::expect_true( length(res) == 4 && sum(names(res) %in% c("centroids", "covariance_matrices", "weights", "Log_likelihood")) == 4 &&
                            
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && class(res) == "Gaussian Mixture Models" )
+                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && inherits(res, "Gaussian Mixture Models") )
   }
 })
 
@@ -318,7 +318,7 @@ testthat::test_that("in case that the data is a matrix the result is a list of l
     
     testthat::expect_true( length(res) == 4 && sum(names(res) %in% c("centroids", "covariance_matrices", "weights", "Log_likelihood")) == 4 &&
                            
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && class(res) == "Gaussian Mixture Models" )
+                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && inherits(res, "Gaussian Mixture Models") )
   }
 })
 
@@ -335,7 +335,7 @@ testthat::test_that("in case that the data is a data frame the result is a list 
     
     testthat::expect_true( length(res) == 4 && sum(names(res) %in% c("centroids", "covariance_matrices", "weights", "Log_likelihood")) == 4 &&
                            
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && class(res) == "Gaussian Mixture Models" )
+                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && inherits(res, "Gaussian Mixture Models") )
   }
 })
 
@@ -353,7 +353,7 @@ testthat::test_that("in case that the data is a matrix the result is a list of l
     
     testthat::expect_true( length(res) == 4 && sum(names(res) %in% c("centroids", "covariance_matrices", "weights", "Log_likelihood")) == 4 &&
                            
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && class(res) == "Gaussian Mixture Models" )
+                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && inherits(res, "Gaussian Mixture Models") )
   }
 })
 
@@ -370,7 +370,7 @@ testthat::test_that("in case that the data is a data frame the result is a list 
     
     testthat::expect_true( length(res) == 4 && sum(names(res) %in% c("centroids", "covariance_matrices", "weights", "Log_likelihood")) == 4 &&
                            
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && class(res) == "Gaussian Mixture Models" )
+                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && inherits(res, "Gaussian Mixture Models") )
   }
 })
 
@@ -451,9 +451,9 @@ testthat::test_that("in case that the data is a matrix the result is a list of l
   
   res = predict_GMM(X, CENTROIDS, COVARIANCE, WEIGHTS)
   
-  testthat::expect_true( length(res) == 3 && sum(names(res) %in% c("log_likelihood", "cluster_proba", "cluster_labels")) == 3 &&
-                           
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 3 && class(res) == "Gaussian Mixture Models")
+  testthat::expect_true(length(res) == 3 &&
+                        all(names(res) %in% c("log_likelihood", "cluster_proba", "cluster_labels")) &&
+                        all(unlist(lapply(res, function(x) !is.null(x)))))
 })
 
 
@@ -461,9 +461,9 @@ testthat::test_that("in case that the data is a data frame the result is a list 
   
   res = predict_GMM(dat, CENTROIDS, COVARIANCE, WEIGHTS)
   
-  testthat::expect_true( length(res) == 3 && sum(names(res) %in% c("log_likelihood", "cluster_proba", "cluster_labels")) == 3 &&
-                           
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 3 && class(res) == "Gaussian Mixture Models" )
+  testthat::expect_true(length(res) == 3 &&
+                        all(names(res) %in% c("log_likelihood", "cluster_proba", "cluster_labels")) &&
+                        all(unlist(lapply(res, function(x) !is.null(x)))))
 })
 
 
@@ -473,9 +473,9 @@ testthat::test_that("in case that the data is a matrix AND the CENTROIDS is a da
   
   res = predict_GMM(X, tmp_c, COVARIANCE, WEIGHTS)
   
-  testthat::expect_true( length(res) == 3 && sum(names(res) %in% c("log_likelihood", "cluster_proba", "cluster_labels")) == 3 &&
-                           
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 3 && class(res) == "Gaussian Mixture Models")
+  testthat::expect_true(length(res) == 3 &&
+                        all(names(res) %in% c("log_likelihood", "cluster_proba", "cluster_labels")) &&
+                        all(unlist(lapply(res, function(x) !is.null(x)))))
 })
 
 
@@ -485,9 +485,9 @@ testthat::test_that("in case that the data is a matrix AND the COVARIANCE is a d
   
   res = predict_GMM(X, CENTROIDS, tmp_c, WEIGHTS)
   
-  testthat::expect_true( length(res) == 3 && sum(names(res) %in% c("log_likelihood", "cluster_proba", "cluster_labels")) == 3 &&
-                           
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 3 && class(res) == "Gaussian Mixture Models")
+  testthat::expect_true(length(res) == 3 &&
+                        all(names(res) %in% c("log_likelihood", "cluster_proba", "cluster_labels")) &&
+                        all(unlist(lapply(res, function(x) !is.null(x)))))
 })
 
 
@@ -632,7 +632,7 @@ testthat::test_that("in case that the data is a matrix the result is a vector an
   
   else {
     
-    testthat::expect_true( length(res) == Nr_clusters && class(res) == "Gaussian Mixture Models" )
+    testthat::expect_true( length(res) == Nr_clusters && inherits(res, "Gaussian Mixture Models") )
   }
 })
 
@@ -650,7 +650,7 @@ testthat::test_that("in case that the data is a data frame the result is a vecto
   
   else {
     
-    testthat::expect_true( length(res) == Nr_clusters && class(res) == "Gaussian Mixture Models" )
+    testthat::expect_true( length(res) == Nr_clusters && inherits(res, "Gaussian Mixture Models") )
   }
 })
 
@@ -668,7 +668,7 @@ testthat::test_that("in case of different parameters the result is a vector and 
   
   else {
     
-    testthat::expect_true( length(res) == Nr_clusters && class(res) == "Gaussian Mixture Models" )
+    testthat::expect_true( length(res) == Nr_clusters && inherits(res, "Gaussian Mixture Models") )
   }
 })
 
@@ -686,7 +686,7 @@ testthat::test_that("in case of a contiguous-vector it returns the correct outpu
   
   else {
     
-    testthat::expect_true( length(res) == length(Nr_clusters) && class(res) == "Gaussian Mixture Models" )
+    testthat::expect_true( length(res) == length(Nr_clusters) && inherits(res, "Gaussian Mixture Models") )
   }
 })
 
@@ -704,6 +704,6 @@ testthat::test_that("in case of a non-contiguous-vector it returns the correct o
   
   else {
     
-    testthat::expect_true( length(res) == length(Nr_clusters) && class(res) == "Gaussian Mixture Models" )
+    testthat::expect_true( length(res) == length(Nr_clusters) && inherits(res, "Gaussian Mixture Models") )
   }
 })

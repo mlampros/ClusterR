@@ -122,7 +122,7 @@ testthat::test_that("in case that the data is a matrix the result is a CENTROIDS
 
   km = KMeans_arma(X, clusters = 2, n_iter = 10, "random_subset", verbose = F)
 
-  testthat::expect_true( is.matrix(km) && class(km) == "k-means clustering" )
+  testthat::expect_true( is.matrix(km) && inherits(km, "k-means clustering") )
 })
 
 
@@ -130,7 +130,7 @@ testthat::test_that("in case that the data is a data frame the result is a CENTR
 
   km = KMeans_arma(dat, clusters = 2, n_iter = 10, "random_subset", verbose = F)
 
-  testthat::expect_true( is.matrix(km) && class(km) == "k-means clustering" )
+  testthat::expect_true( is.matrix(km) && inherits(km, "k-means clustering") )
 })
 
 
@@ -140,7 +140,7 @@ testthat::test_that("it returns a CENTROID-matrix of class 'k-means clustering' 
 
   res = KMeans_arma(X, clusters = 2, n_iter = 5, "keep_existing", verbose = F, CENTROIDS = cntr)
 
-  testthat::expect_true( is.matrix(res) && class(res) == 'k-means clustering' )
+  testthat::expect_true( is.matrix(res) && inherits(res, 'k-means clustering') )
 })
 
 
@@ -154,7 +154,7 @@ testthat::test_that("it returns a matrix of class 'k-means clustering' for diffe
 
     tmp_km = KMeans_arma(X, clusters = 2, n_iter = 5, parms[i], verbose = F)
 
-    res_vec[i] =  (is.matrix(tmp_km) && class(tmp_km) == 'k-means clustering')
+    res_vec[i] =  (is.matrix(tmp_km) && inherits(tmp_km, 'k-means clustering'))
   }
 
   testthat::expect_true( sum(res_vec) == length(parms) )
@@ -286,7 +286,7 @@ testthat::test_that("in case that the data is a matrix the result is a list and 
 
                            nrow(km$centroids) == clust && ncol(km$centroids) == ncol(X) && length(km$total_SSE) == 1 && is.numeric(km$total_SSE) && length(km$best_initialization) == 1 &&
 
-                           is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && class(km) == "k-means clustering"  )
+                           is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && inherits(km, "k-means clustering")  )
 })
 
 
@@ -302,7 +302,7 @@ testthat::test_that("in case that the data is a data frame the result is a list 
 
                            nrow(km$centroids) == clust && ncol(km$centroids) == ncol(X) && length(km$total_SSE) == 1 && is.numeric(km$total_SSE) && length(km$best_initialization) == 1 &&
 
-                           is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && class(km) == "k-means clustering"  )
+                           is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && inherits(km, "k-means clustering")  )
 })
 
 
@@ -326,7 +326,7 @@ testthat::test_that("KMeans_rcpp returns the correct output for the initializers
 
                     nrow(km$centroids) == clust && ncol(km$centroids) == ncol(X) && length(km$total_SSE) == 1 && is.numeric(km$total_SSE) && length(km$best_initialization) == 1 &&
 
-                    is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && class(km) == "k-means clustering")
+                    is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && inherits(km, "k-means clustering"))
 
     count = count + 1
   }
@@ -350,7 +350,7 @@ testthat::test_that("KMeans_rcpp returns the correct output if CENTROIDS is user
 
                            nrow(km$centroids) == clust && ncol(km$centroids) == ncol(X) && length(km$total_SSE) == 1 && is.numeric(km$total_SSE) && length(km$best_initialization) == 1 &&
 
-                           is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && class(km) == "k-means clustering"  )
+                           is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && inherits(km, "k-means clustering")  )
 })
 
 
@@ -367,7 +367,7 @@ testthat::test_that("KMeans_rcpp returns the correct output if CENTROIDS is user
 #
 #                            nrow(km$centroids) == clust && ncol(km$centroids) == ncol(tbl) && length(km$total_SSE) == 1 && is.numeric(km$total_SSE) && length(km$best_initialization) == 1 &&
 #
-#                            is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && class(km) == "k-means clustering"  )
+#                            is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && inherits(km, "k-means clustering")  )
 # })
 
 
@@ -427,7 +427,7 @@ testthat::test_that("predict_KMeans returns the correct output if the input is a
 
   km = predict_KMeans(dat, CENTROIDS = cntr)
 
-  testthat::expect_true( length(km) == nrow(X) && class(km) == "k-means clustering"  )
+  testthat::expect_true( length(km) == nrow(X) )
 })
 
 
@@ -437,7 +437,7 @@ testthat::test_that("predict_KMeans returns the correct output if the input is a
 
   km = predict_KMeans(X, CENTROIDS = cntr)
 
-  testthat::expect_true( length(km) == nrow(X) && class(km) == "k-means clustering"  )
+  testthat::expect_true( length(km) == nrow(X) )
 })
 
 
@@ -447,7 +447,7 @@ testthat::test_that("the predict_KMeans works using the CENTROIDS of the KMeans_
 
   km_preds = predict_KMeans(X, CENTROIDS = km$centroids)
 
-  testthat::expect_true( length(km_preds) == nrow(X) && class(km) == "k-means clustering"  )
+  testthat::expect_true( length(km_preds) == nrow(X) )
 })
 
 
@@ -457,7 +457,7 @@ testthat::test_that("the predict_KMeans works using the CENTROIDS of the KMeans_
 
   km_preds = predict_KMeans(X, CENTROIDS = km)
 
-  testthat::expect_true( length(km_preds) == nrow(X) && class(km_preds) == "k-means clustering"  )
+  testthat::expect_true( length(km_preds) == nrow(X) )
 })
 
 
@@ -587,7 +587,7 @@ testthat::test_that("Optimal_Clusters_KMeans returns the correct output if the i
 
   res =  Optimal_Clusters_KMeans(dat, max_clusters = nr_clust, criterion = 'distortion_fK', plot_clusters = FALSE, tol_optimal_init = 0.2)
 
-  testthat::expect_true( length(res) == nr_clust && class(res) == "k-means clustering"  )
+  testthat::expect_true( length(res) == nr_clust )
 })
 
 
@@ -606,7 +606,7 @@ testthat::test_that("Optimal_Clusters_KMeans returns the correct output for diff
 
     res =  Optimal_Clusters_KMeans(dat, max_clusters = nr_clust, criterion = i, plot_clusters = T, tol_optimal_init = 0.2)
 
-    out[count] = (length(res) == nr_clust && class(res) == "k-means clustering")
+    out[count] = (length(res) == nr_clust)
 
     count = count + 1
   }
@@ -625,7 +625,7 @@ testthat::test_that("Optimal_Clusters_KMeans returns the correct output if the '
 
                                 plot_clusters = FALSE, mini_batch_params = params_mbkm)
 
-  testthat::expect_true( length(res) == nr_clust && class(res) == "k-means clustering"  )
+  testthat::expect_true( length(res) == nr_clust  )
 })
 
 
@@ -836,7 +836,7 @@ testthat::test_that("in case that the data is a matrix the result is a list and 
 
                            ncol(km$centroids) == ncol(X) && is.matrix(km$WCSS_per_cluster) && ncol(km$WCSS_per_cluster) == clust && is.numeric(km$best_initialization) && length(km$best_initialization) == 1 &&
 
-                           is.matrix(km$iters_per_initialization) && ncol(km$iters_per_initialization) == numinit && class(km) == "k-means clustering"  )
+                           is.matrix(km$iters_per_initialization) && ncol(km$iters_per_initialization) == numinit && inherits(km, "k-means clustering")  )
 })
 
 
@@ -852,7 +852,7 @@ testthat::test_that("in case that the data is a matrix the result is a list and 
 
                            ncol(km$centroids) == ncol(X) && is.matrix(km$WCSS_per_cluster) && ncol(km$WCSS_per_cluster) == clust && is.numeric(km$best_initialization) && length(km$best_initialization) == 1 &&
 
-                           is.matrix(km$iters_per_initialization) && ncol(km$iters_per_initialization) == numinit && class(km) == "k-means clustering"  )
+                           is.matrix(km$iters_per_initialization) && ncol(km$iters_per_initialization) == numinit && inherits(km, "k-means clustering")  )
 })
 
 
@@ -875,7 +875,7 @@ testthat::test_that("for different parameter settings it returns the correct out
 
                 ncol(km$centroids) == ncol(X) && is.matrix(km$WCSS_per_cluster) && ncol(km$WCSS_per_cluster) == clust && is.numeric(km$best_initialization) && length(km$best_initialization) == 1 &&
 
-                is.matrix(km$iters_per_initialization) && ncol(km$iters_per_initialization) == numinit && class(km) == "k-means clustering")
+                is.matrix(km$iters_per_initialization) && ncol(km$iters_per_initialization) == numinit && inherits(km, "k-means clustering"))
   }
 
   testthat::expect_true( sum(res) == length(inits) )
@@ -895,7 +895,7 @@ testthat::test_that("it returns the correct output if the CENTROIDS parameter is
 
                            ncol(km$centroids) == ncol(X) && is.matrix(km$WCSS_per_cluster) && ncol(km$WCSS_per_cluster) == clust && is.numeric(km$best_initialization) && length(km$best_initialization) == 1 &&
 
-                           is.matrix(km$iters_per_initialization) && class(km) == "k-means clustering"  )
+                           is.matrix(km$iters_per_initialization) && inherits(km, "k-means clustering")  )
 })
 
 
@@ -912,7 +912,7 @@ testthat::test_that("in case that the init_fraction is greater than 0.0 and the 
 
                            ncol(km$centroids) == ncol(X) && is.matrix(km$WCSS_per_cluster) && ncol(km$WCSS_per_cluster) == clust && is.numeric(km$best_initialization) && length(km$best_initialization) == 1 &&
 
-                           is.matrix(km$iters_per_initialization) && ncol(km$iters_per_initialization) == numinit && class(km) == "k-means clustering"  )
+                           is.matrix(km$iters_per_initialization) && ncol(km$iters_per_initialization) == numinit && inherits(km, "k-means clustering")  )
 })
 
 
@@ -928,7 +928,7 @@ testthat::test_that("in case that the init_fraction is greater than 0.0 and the 
 
                            ncol(km$centroids) == ncol(X) && is.matrix(km$WCSS_per_cluster) && ncol(km$WCSS_per_cluster) == clust && is.numeric(km$best_initialization) && length(km$best_initialization) == 1 &&
 
-                           is.matrix(km$iters_per_initialization) && ncol(km$iters_per_initialization) == numinit && class(km) == "k-means clustering"  )
+                           is.matrix(km$iters_per_initialization) && ncol(km$iters_per_initialization) == numinit && inherits(km, "k-means clustering")  )
 })
 
 #####################################
@@ -996,7 +996,7 @@ testthat::test_that("in case that the data is a matrix (fuzzy = TRUE) the result
 
   testthat::expect_true( all(names(km) %in% c("clusters", "fuzzy_clusters"))  && is.matrix(km$fuzzy_clusters) && nrow(km$fuzzy_clusters) == nrow(X) && ncol(km$fuzzy_clusters) == 2 &&
 
-                           is.vector(km$clusters) && length(km$clusters) == nrow(X) && class(km) == "k-means clustering"  )
+                           is.vector(km$clusters) && length(km$clusters) == nrow(X) && inherits(km, "k-means clustering")  )
 })
 
 
@@ -1009,7 +1009,7 @@ testthat::test_that("in case that the data is a data frame (fuzzy = TRUE) the re
 
   testthat::expect_true( all(names(km) %in% c("clusters", "fuzzy_clusters"))  && is.matrix(km$fuzzy_clusters) && nrow(km$fuzzy_clusters) == nrow(X) && ncol(km$fuzzy_clusters) == 2 &&
 
-                           is.vector(km$clusters) && length(km$clusters) == nrow(X) && class(km) == "k-means clustering"  )
+                           is.vector(km$clusters) && length(km$clusters) == nrow(X) && inherits(km, "k-means clustering")  )
 })
 
 
@@ -1019,6 +1019,6 @@ testthat::test_that("in case that the data is a matrix (fuzzy = FALSE) the resul
 
   km = predict_MBatchKMeans(X, MbatchKm$centroids, fuzzy = FALSE)
 
-  testthat::expect_true( is.numeric(km) && length(km) == nrow(X) && class(km) == "k-means clustering"  )
+  testthat::expect_true( is.numeric(km) && length(km) == nrow(X) )
 })
 

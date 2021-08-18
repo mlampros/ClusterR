@@ -108,7 +108,7 @@ testthat::test_that("in case that the data is a matrix, it returns the correct o
   cm = Cluster_Medoids(X, clusters = 2, distance_metric = 'euclidean', swap_phase = TRUE, fuzzy = T)
 
   testthat::expect_true( sum(names(cm) %in% c("medoids", "medoid_indices", "best_dissimilarity", "dissimilarity_matrix",
-                                          "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats")) == 8 && class(cm) == "cluster medoids silhouette" && is.matrix(cm$medoids) && is.vector(cm$medoid_indices) &&
+                                          "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats")) == 8 && inherits(cm, "cluster medoids silhouette") && is.matrix(cm$medoids) && is.vector(cm$medoid_indices) &&
                            is.numeric(cm$best_dissimilarity) && is.vector(cm$clusters) && is.data.frame(cm$silhouette_matrix) && is.matrix(cm$fuzzy_probs) && is.data.frame(cm$clustering_stats) )
 })
 
@@ -121,7 +121,7 @@ testthat::test_that("in case that the data is a dissimilarity matrix, it returns
   cm = Cluster_Medoids(dism_mat, clusters = 2, distance_metric = 'euclidean', swap_phase = TRUE, fuzzy = T)
 
   testthat::expect_true( sum(names(cm) %in% c("medoids", "medoid_indices", "best_dissimilarity", "dissimilarity_matrix",
-                                              "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats")) == 8 && class(cm) == "cluster medoids silhouette" && is.vector(cm$medoids) && is.vector(cm$medoid_indices) &&
+                                              "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats")) == 8 && inherits(cm, "cluster medoids silhouette") && is.vector(cm$medoids) && is.vector(cm$medoid_indices) &&
                            is.numeric(cm$best_dissimilarity) && is.vector(cm$clusters) && is.data.frame(cm$silhouette_matrix) && is.matrix(cm$fuzzy_probs) && is.data.frame(cm$clustering_stats) )
 })
 
@@ -132,7 +132,7 @@ testthat::test_that("in case that the data is a matrix, it returns the correct o
   cm = Cluster_Medoids(dat, clusters = 2, distance_metric = 'euclidean', swap_phase = TRUE, fuzzy = T)
 
   testthat::expect_true( sum(names(cm) %in% c("medoids", "medoid_indices", "best_dissimilarity", "dissimilarity_matrix",
-                                              "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats")) == 8 && class(cm) == "cluster medoids silhouette" && is.matrix(cm$medoids) && is.vector(cm$medoid_indices) &&
+                                              "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats")) == 8 && inherits(cm, "cluster medoids silhouette") && is.matrix(cm$medoids) && is.vector(cm$medoid_indices) &&
                            is.numeric(cm$best_dissimilarity) && is.vector(cm$clusters) && is.data.frame(cm$silhouette_matrix) && is.matrix(cm$fuzzy_probs) && is.data.frame(cm$clustering_stats) )
 })
 
@@ -142,7 +142,7 @@ testthat::test_that("in case that clusters = 1, it returns the correct output", 
   cm = Cluster_Medoids(dat, clusters = 1, distance_metric = 'euclidean', swap_phase = TRUE, fuzzy = T)
 
   testthat::expect_true( sum(names(cm) %in% c("medoids", "medoid_indices", "best_dissimilarity", "dissimilarity_matrix",
-                                              "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats")) == 8 && class(cm) == "cluster medoids silhouette" && is.vector(cm$medoids) && is.vector(cm$medoid_indices) &&
+                                              "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats")) == 8 && inherits(cm, "cluster medoids silhouette") && is.vector(cm$medoids) && is.vector(cm$medoid_indices) &&
                            is.numeric(cm$best_dissimilarity) && is.vector(cm$clusters) && is.null(cm$silhouette_matrix) && is.matrix(cm$fuzzy_probs) && is.null(cm$clustering_stats) )
 })
 
@@ -292,7 +292,7 @@ testthat::test_that("in case that the data is a matrix, it returns the correct o
 
   testthat::expect_true( sum(names(cm) %in% c("medoids", "medoid_indices", "sample_indices", "best_dissimilarity",
                                               "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats",
-                                              "dissimilarity_matrix")) == 9 && class(cm) == "cluster medoids silhouette" && is.matrix(cm$medoids) && is.vector(cm$medoid_indices) && is.vector(cm$sample_indices) &&
+                                              "dissimilarity_matrix")) == 9 && inherits(cm, "cluster medoids silhouette") && is.matrix(cm$medoids) && is.vector(cm$medoid_indices) && is.vector(cm$sample_indices) &&
                            is.numeric(cm$best_dissimilarity) && is.vector(cm$clusters) && is.data.frame(cm$silhouette_matrix) && is.matrix(cm$fuzzy_probs) && is.data.frame(cm$clustering_stats) )
 })
 
@@ -303,7 +303,7 @@ testthat::test_that("in case that the data is a data frame, it returns the corre
 
   testthat::expect_true( sum(names(cm) %in% c("medoids", "medoid_indices", "sample_indices", "best_dissimilarity",
                                               "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats",
-                                              "dissimilarity_matrix")) == 9 && class(cm) == "cluster medoids silhouette" && is.matrix(cm$medoids) && is.vector(cm$medoid_indices) && is.vector(cm$sample_indices) &&
+                                              "dissimilarity_matrix")) == 9 && inherits(cm, "cluster medoids silhouette") && is.matrix(cm$medoids) && is.vector(cm$medoid_indices) && is.vector(cm$sample_indices) &&
                            is.numeric(cm$best_dissimilarity) && is.vector(cm$clusters) && is.data.frame(cm$silhouette_matrix) && is.matrix(cm$fuzzy_probs) && is.data.frame(cm$clustering_stats) )
 })
 
@@ -315,7 +315,7 @@ testthat::test_that("in case that the clusters parameter is 1, it returns the co
 
   testthat::expect_true( sum(names(cm) %in% c("medoids", "medoid_indices", "sample_indices", "best_dissimilarity",
                                               "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats",
-                                              "dissimilarity_matrix")) == 9 && class(cm) == "cluster medoids silhouette" && is.matrix(cm$medoids) && is.vector(cm$medoid_indices) && is.vector(cm$sample_indices) &&
+                                              "dissimilarity_matrix")) == 9 && inherits(cm, "cluster medoids silhouette") && is.matrix(cm$medoids) && is.vector(cm$medoid_indices) && is.vector(cm$sample_indices) &&
                            is.numeric(cm$best_dissimilarity) && is.vector(cm$clusters) && is.null(cm$silhouette_matrix) && is.matrix(cm$fuzzy_probs) && is.data.frame(cm$clustering_stats) )
 })
 
@@ -408,7 +408,7 @@ testthat::test_that("in case that the data is a matrix, it returns the correct o
 
   pr = predict_Medoids(X, MEDOIDS = cm$medoids, 'euclidean', fuzzy = TRUE)
 
-  testthat::expect_true( sum(names(pr) %in% c("clusters", "fuzzy_clusters", "dissimilarity")) == 3 && class(pr) == "cluster medoids silhouette" && is.vector(pr$clusters) &&
+  testthat::expect_true( sum(names(pr) %in% c("clusters", "fuzzy_clusters", "dissimilarity")) == 3 && inherits(pr, "cluster medoids silhouette") && is.vector(pr$clusters) &&
                            is.matrix(pr$fuzzy_clusters) && is.numeric(pr$dissimilarity) )
 })
 
@@ -419,7 +419,7 @@ testthat::test_that("in case that the data is a data frame, it returns the corre
 
   pr = predict_Medoids(dat, MEDOIDS = cm$medoids, 'euclidean', fuzzy = TRUE)
 
-  testthat::expect_true( sum(names(pr) %in% c("clusters", "fuzzy_clusters", "dissimilarity")) == 3 && class(pr) == "cluster medoids silhouette" && is.vector(pr$clusters) &&
+  testthat::expect_true( sum(names(pr) %in% c("clusters", "fuzzy_clusters", "dissimilarity")) == 3 && inherits(pr, "cluster medoids silhouette") && is.vector(pr$clusters) &&
                            is.matrix(pr$fuzzy_clusters) && is.numeric(pr$dissimilarity) )
 })
 
@@ -430,7 +430,7 @@ testthat::test_that("in case that MEDOIDS is a data frame, it returns the correc
 
   pr = predict_Medoids(X, MEDOIDS = tmp_cm, 'euclidean', fuzzy = TRUE)
 
-  testthat::expect_true( sum(names(pr) %in% c("clusters", "fuzzy_clusters", "dissimilarity")) == 3 && class(pr) == "cluster medoids silhouette" && is.vector(pr$clusters) &&
+  testthat::expect_true( sum(names(pr) %in% c("clusters", "fuzzy_clusters", "dissimilarity")) == 3 && inherits(pr, "cluster medoids silhouette") && is.vector(pr$clusters) &&
                            is.matrix(pr$fuzzy_clusters) && is.numeric(pr$dissimilarity) )
 })
 
@@ -604,7 +604,7 @@ testthat::test_that("in case that the data is a matrix, it returns the correct o
 
   opt_md = Optimal_Clusters_Medoids(X, max_clusters = 10, 'euclidean', 'dissimilarity', plot_clusters = F)
 
-  testthat::expect_true( class(opt_md) == "cluster medoids silhouette" && mean(unlist(lapply(opt_md, length))[-1]) == 6 )
+  testthat::expect_true( mean(unlist(lapply(opt_md, length))[-1]) == 6 )
 })
 
 
@@ -617,7 +617,7 @@ testthat::test_that("in case that the data is a matrix, it returns the correct o
   clust_four = opt_md[[4]]$sum_intra_dissim == opt_md1[[2]]$sum_intra_dissim
   clust_six = opt_md[[6]]$avg_width_silhouette == opt_md1[[3]]$avg_width_silhouette
 
-  testthat::expect_true( class(opt_md) == "cluster medoids silhouette" && mean(unlist(lapply(opt_md, length))[-1]) == 6 && all(clust_two, clust_four, clust_six) )
+  testthat::expect_true( mean(unlist(lapply(opt_md, length))[-1]) == 6 && all(clust_two, clust_four, clust_six) )
 })
 
 
@@ -625,7 +625,7 @@ testthat::test_that("in case that the data is a data frame, it returns the corre
 
   opt_md = Optimal_Clusters_Medoids(dat, max_clusters = 10, 'euclidean', 'dissimilarity', plot_clusters = FALSE)
 
-  testthat::expect_true( class(opt_md) == "cluster medoids silhouette" && mean(unlist(lapply(opt_md, length))[-1]) == 6 )
+  testthat::expect_true( mean(unlist(lapply(opt_md, length))[-1]) == 6 )
 })
 
 
@@ -639,10 +639,9 @@ testthat::test_that("in case of Cluster_Medoids for different parameter settings
 
     opt_md = Optimal_Clusters_Medoids(dat, max_clusters = 10, 'euclidean', tmp[i], plot_clusters = F)
 
-    res[i] = (inherits(opt_md, 'cluster medoids silhouette') && mean(unlist(lapply(opt_md, length))[-1]) == 6)
+    testthat::expect_equal(mean(unlist(lapply(opt_md, length))[-1]), 6)
   }
-
-  testthat::expect_true( sum(res) == length(tmp) )
+  
 })
 
 
@@ -656,9 +655,8 @@ testthat::test_that("in case of Clara_Medoids for different parameter settings, 
 
     opt_md = Optimal_Clusters_Medoids(dat, max_clusters = 10, 'euclidean', tmp[i], clara_samples = 5, clara_sample_size = 0.2, plot_clusters = F)
 
-    res[i] = (inherits(opt_md, 'cluster medoids silhouette') && mean(unlist(lapply(opt_md, length))[-1]) == 6)
+    testthat::expect_equal(mean(unlist(lapply(opt_md, length))[-1]), 6)
   }
 
-  testthat::expect_true( sum(res) == length(tmp) )
 })
 
