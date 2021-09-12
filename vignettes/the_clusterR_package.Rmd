@@ -47,17 +47,15 @@ dat = center_scale(X, mean_center = T, sd_scale = T)  # centering and scaling th
 
 ```{r, eval = F}
 gmm = GMM(dat, 2, dist_mode = "maha_dist", seed_mode = "random_subset", km_iter = 10,
-          
           em_iter = 10, verbose = F)          
 
 # predict centroids, covariance matrix and weights
-
-pr = predict_GMM(dat, gmm$centroids, gmm$covariance_matrices, gmm$weights)    
+pr = predict(gmm, newdata = dat)
 
 ```
 <br>
 
-The *GMM* function, initially, returns the *centroids*, the *covariance matrix* ( where each row of the matrix represents a diagonal covariance matrix), the *weights* and the *log-likelihoods* for each gaussian component. Then, the *predict_GMM* function takes the output of the *GMM* model and returns the probable clusters.
+The *GMM* function, initially, returns the *centroids*, the *covariance matrix* ( where each row of the matrix represents a diagonal covariance matrix), the *weights* and the *log-likelihoods* for each gaussian component. Then, the *predict* function takes the *GMM* model and returns the most probable clusters.
 
 In addition to the previous mentioned functions, the **Optimal_Clusters_GMM** can be utilized to estimate the number of clusters of the data using either the *AIC* (Akaike information) or the *BIC* (Bayesian information) criterion,
 
@@ -173,9 +171,7 @@ More details about KMeans_rcpp can be found in the package documentation. I'll e
 
 library(OpenImageR)
 
-path = 'elephant.jpg'
-
-im = readImage(path)
+im = readImage('elephant.jpg')
 
 # first resize the image to reduce the dimensions
 im = resizeImage(im, 75, 75, method = 'bilinear')            
@@ -194,10 +190,11 @@ im2 = apply(im, 3, as.vector)                                # vectorize RGB
 # perform KMeans_rcpp clustering
 
 km_rc = KMeans_rcpp(im2, clusters = 5, num_init = 5, max_iters = 100, 
-                    
                     initializer = 'optimal_init', verbose = F)
 
 km_rc$between.SS_DIV_total.SS
+pr = predict(km_rc, newdata = im2)
+
 ```
 
 <br>
@@ -258,9 +255,7 @@ I'll take advantage of the *vector quantization* example to show the differences
 
 ```{r fig.width = 3.0, fig.height = 3.0, echo = T, eval = T}
 
-path_d = 'dog.jpg'
-
-im_d = readImage(path_d)
+im_d = readImage('dog.jpg')
 
 # first resize the image to reduce the dimensions
 im_d = resizeImage(im_d, 350, 350, method = 'bilinear')            
@@ -282,8 +277,7 @@ First, we perform a *k-means* clustering,
 start = Sys.time()
 
 km_init = KMeans_rcpp(im3, clusters = 5, num_init = 5, max_iters = 100, 
-                    
-                    initializer = 'kmeans++', verbose = F)
+                      initializer = 'kmeans++', verbose = F)
 
 end = Sys.time()
 
@@ -312,12 +306,10 @@ and then a *mini-batch-kmeans* clustering,
 start = Sys.time()
 
 km_mb = MiniBatchKmeans(im3, clusters = 5, batch_size = 20, num_init = 5, max_iters = 100, 
-                        
                         init_fraction = 0.2, initializer = 'kmeans++', early_stop_iter = 10,
-                        
                         verbose = F)
 
-pr_mb = predict_MBatchKMeans(im3, km_mb$centroids)
+pr_mb = predict(km_mb, newdata = im3)
 
 end = Sys.time()
 
