@@ -426,8 +426,11 @@ testthat::test_that("predict_KMeans returns the correct output if the input is a
   cntr = matrix(runif(2 * (ncol(X))), nrow = 2, ncol = ncol(X))
 
   km = predict_KMeans(dat, CENTROIDS = cntr)
+  testthat::expect_true(length(km) == nrow(X))
 
-  testthat::expect_true( length(km) == nrow(X) )
+  km = KMeans_rcpp(dat, 5)
+  testthat::expect_equal(predict_KMeans(dat, CENTROIDS = km$centroids),
+                         predict(km, dat))
 })
 
 
@@ -457,7 +460,8 @@ testthat::test_that("the predict_KMeans works using the CENTROIDS of the KMeans_
 
   km_preds = predict_KMeans(X, CENTROIDS = km)
 
-  testthat::expect_true( length(km_preds) == nrow(X) )
+  testthat::expect_true(length(km_preds) == nrow(X))
+  ## testthat::expect_equal(km_preds, predict(km, X))
 })
 
 

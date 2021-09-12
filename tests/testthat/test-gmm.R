@@ -446,6 +446,14 @@ testthat::test_that("in case that the determinant is zero the function returns a
 # predict_GMM function
 #######################
 
+testthat::test_that("GMM predict method works", {
+  gmm = GMM(dat, 3)
+  testthat::expect_equal(predict_GMM(dat,
+                                     CENTROIDS = gmm$centroids,
+                                     COVARIANCE = gmm$covariance_matrices,
+                                     WEIGHTS = gmm$weights)$cluster_labels,
+                         predict(gmm, dat))
+})
 
 testthat::test_that("in case that the data is a matrix the result is a list of length 3 and the class is 'Gaussian Mixture Models' ", {
   

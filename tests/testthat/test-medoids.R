@@ -419,8 +419,10 @@ testthat::test_that("in case that the data is a data frame, it returns the corre
 
   pr = predict_Medoids(dat, MEDOIDS = cm$medoids, 'euclidean', fuzzy = TRUE)
 
-  testthat::expect_true( sum(names(pr) %in% c("clusters", "fuzzy_clusters", "dissimilarity")) == 3 && inherits(pr, "cluster medoids silhouette") && is.vector(pr$clusters) &&
-                           is.matrix(pr$fuzzy_clusters) && is.numeric(pr$dissimilarity) )
+  testthat::expect_true(sum(names(pr) %in% c("clusters", "fuzzy_clusters", "dissimilarity")) == 3 &&
+                        inherits(pr, "cluster medoids silhouette") && is.vector(pr$clusters) &&
+                        is.matrix(pr$fuzzy_clusters) && is.numeric(pr$dissimilarity))
+  testthat::expect_equal(pr$clusters, predict(cm, dat))
 })
 
 
@@ -430,8 +432,9 @@ testthat::test_that("in case that MEDOIDS is a data frame, it returns the correc
 
   pr = predict_Medoids(X, MEDOIDS = tmp_cm, 'euclidean', fuzzy = TRUE)
 
-  testthat::expect_true( sum(names(pr) %in% c("clusters", "fuzzy_clusters", "dissimilarity")) == 3 && inherits(pr, "cluster medoids silhouette") && is.vector(pr$clusters) &&
-                           is.matrix(pr$fuzzy_clusters) && is.numeric(pr$dissimilarity) )
+  testthat::expect_true(sum(names(pr) %in% c("clusters", "fuzzy_clusters", "dissimilarity")) == 3 &&
+                        inherits(pr, "cluster medoids silhouette") && is.vector(pr$clusters) &&
+                        is.matrix(pr$fuzzy_clusters) && is.numeric(pr$dissimilarity))
 })
 
 

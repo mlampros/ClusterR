@@ -367,8 +367,6 @@ tryCatch_KMEANS_arma <- function(data, clusters, n_iter, verbose, seed_mode, CEN
 #'
 #' km = KMeans_arma(dat, clusters = 2, n_iter = 10, "random_subset")
 #'
-
-
 KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset", verbose = FALSE, CENTROIDS = NULL, seed = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
@@ -395,8 +393,10 @@ KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset",
 
   } else {
 
-    return(structure(res, class = c("KMeansCluster", "k-means clustering")))
-
+    ## FIXME: this function currently returns centroids. It should probably
+    ## return the same data structure as KMeans_cpp.
+    ## return(structure(res, class = c("KMeansCluster", "k-means clustering")))
+    return (structure(res, class = "k-means clustering"))
   }
 }
 
@@ -475,18 +475,25 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
 
   if (fuzzy) {
 
-    return(structure(list(clusters = as.vector(res$clusters + 1), fuzzy_clusters = res$fuzzy_clusters, centroids = res$centers, total_SSE = res$total_SSE,
+    return(structure(list(clusters = as.vector(res$clusters + 1),
+                          fuzzy_clusters = res$fuzzy_clusters,
+                          centroids = res$centers,
+                          total_SSE = res$total_SSE,
+                          best_initialization = res$best_initialization,
+                          WCSS_per_cluster = res$WCSS_per_cluster,
+                          obs_per_cluster = res$obs_per_cluster,
+                          between.SS_DIV_total.SS = (res$total_SSE - sum(res$WCSS_per_cluster)) / res$total_SSE),
+                     class = c("KMeansCluster", "k-means clustering")))
 
-                          best_initialization = res$best_initialization, WCSS_per_cluster = res$WCSS_per_cluster, obs_per_cluster = res$obs_per_cluster,
+  } else {
 
-                          between.SS_DIV_total.SS = (res$total_SSE - sum(res$WCSS_per_cluster)) / res$total_SSE), class = "k-means clustering"))}
-
-  else {
-
-    return(structure(list(clusters = as.vector(res$clusters + 1), centroids = res$centers, total_SSE = res$total_SSE, best_initialization = res$best_initialization,
-
-                          WCSS_per_cluster = res$WCSS_per_cluster, obs_per_cluster = res$obs_per_cluster, between.SS_DIV_total.SS = (res$total_SSE - sum(res$WCSS_per_cluster)) / res$total_SSE),
-
+    return(structure(list(clusters = as.vector(res$clusters + 1),
+                          centroids = res$centers,
+                          total_SSE = res$total_SSE,
+                          best_initialization = res$best_initialization,
+                          WCSS_per_cluster = res$WCSS_per_cluster,
+                          obs_per_cluster = res$obs_per_cluster,
+                          between.SS_DIV_total.SS = (res$total_SSE - sum(res$WCSS_per_cluster)) / res$total_SSE),
                      class = c("KMeansCluster", "k-means clustering")))
   }
 }
