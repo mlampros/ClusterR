@@ -127,6 +127,7 @@ predict_GMM = function(data, CENTROIDS, COVARIANCE, WEIGHTS) {
 
   res = predict_MGausDPDF(data, CENTROIDS, COVARIANCE, WEIGHTS, eps = 1.0e-8)
 
+  # I've added 1 to the output cluster labels to account for the difference in indexing between R and C++
   list(log_likelihood = res$Log_likelihood_raw,
        cluster_proba = res$cluster_proba,
        cluster_labels = as.vector(res$cluster_labels) + 1)
