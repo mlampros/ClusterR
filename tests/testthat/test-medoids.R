@@ -311,7 +311,7 @@ testthat::test_that("in case that the data is a data frame, it returns the corre
 
 testthat::test_that("in case that the clusters parameter is 1, it returns the correct output", {
 
-  cm = Clara_Medoids(dat, clusters = 1, samples = 5, sample_size = 0.2, swap_phase = TRUE, fuzzy = T)
+  cm = Clara_Medoids(dat, clusters = 2, samples = 5, sample_size = 0.2, swap_phase = TRUE, fuzzy = T)
 
   testthat::expect_true( sum(names(cm) %in% c("medoids", "medoid_indices", "sample_indices", "best_dissimilarity",
                                               "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats",

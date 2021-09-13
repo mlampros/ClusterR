@@ -76,12 +76,16 @@ GMM = function(data, gaussian_comps = 1, dist_mode = 'eucl_dist', seed_mode = 'r
 
   if ('Error' %in% names(res)) {
 
-    return(res)}
+    return(res)
 
-  else {
+  } else {
 
-    return(structure(list(centroids = res$centroids, covariance_matrices = res$covariance_matrices, weights = as.vector(res$weights), Log_likelihood = res$Log_likelihood_raw),
-                     class = c("GMMCluster", 'Gaussian Mixture Models')))
+    structure(list(call = match.call(),
+                   centroids = res$centroids,
+                   covariance_matrices = res$covariance_matrices,
+                   weights = as.vector(res$weights),
+                   Log_likelihood = res$Log_likelihood_raw),
+              class = c("GMMCluster", 'Gaussian Mixture Models'))
   }
 }
 
@@ -141,6 +145,13 @@ predict.GMMCluster <- function(object, newdata, ...) {
   predict_GMM(newdata, object$centroids, object$covariance_matrices, object$weights)$cluster_labels
 }
 
+#' @export
+print.GMMCluster <- function(x, ...) {
+  cat("GMM Cluster\n",
+      "Call:", deparse(x$call), "\n",
+      "Data cols:", ncol(x$centroids), "\n",
+      "Centroids:", nrow(x$centroids), "\n")
+}
 
 #' tryCatch function to prevent armadillo errors in GMM_arma_AIC_BIC
 #'
@@ -448,8 +459,6 @@ KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset",
 #'
 #' km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'kmeans++')
 #'
-
-
 KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initializer = 'kmeans++', fuzzy = FALSE,
 
                        verbose = FALSE, CENTROIDS = NULL, tol = 1e-4, tol_optimal_init = 0.3, seed = 1) {
@@ -475,7 +484,8 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
 
   if (fuzzy) {
 
-    return(structure(list(clusters = as.vector(res$clusters + 1),
+    return(structure(list(call = match.call(),
+                          clusters = as.vector(res$clusters + 1),
                           fuzzy_clusters = res$fuzzy_clusters,
                           centroids = res$centers,
                           total_SSE = res$total_SSE,
@@ -487,7 +497,8 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
 
   } else {
 
-    return(structure(list(clusters = as.vector(res$clusters + 1),
+    return(structure(list(call = match.call(),
+                          clusters = as.vector(res$clusters + 1),
                           centroids = res$centers,
                           total_SSE = res$total_SSE,
                           best_initialization = res$best_initialization,
@@ -545,6 +556,18 @@ predict_KMeans = function(data, CENTROIDS, threads = 1) {
 #' @export
 predict.KMeansCluster <- function(object, newdata, threads = 1, ...) {
   predict_KMeans(newdata, CENTROIDS = object$centroids, threads = threads)
+}
+
+#' @export
+print.KMeansCluster <- function(x, ...) {
+  WSSE <- sum(x$WCSS_per_cluster)
+  BSSE <- x$total_SSE - WSSE
+  cat("KMeans Cluster\n",
+      "Call:", deparse(x$call), "\n",
+      "Data cols:", ncol(x$centroids), "\n",
+      "Centroids:", nrow(x$centroids), "\n",
+      "BSS/SS:", BSSE/x$total_SSE, "\n",
+      "SS:", x$total_SSE, "=", WSSE, "(WSS) +", BSSE, "(BSS)\n")
 }
 
 #' Optimal number of Clusters for Kmeans or Mini-Batch-Kmeans
@@ -1132,7 +1155,8 @@ Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkow
     tmp_rows = data[as.vector(medoids_mat$medoids) + 1, ]
   }
 
-  return(structure(list(medoids = tmp_rows,
+  return(structure(list(call = match.call(),
+                        medoids = tmp_rows,
                         medoid_indices = as.vector(medoids_mat$medoids) + 1,
                         best_dissimilarity = medoids_mat$cost,
                         dissimilarity_matrix = medoids_mat$dissimilarity_matrix,
@@ -1177,8 +1201,6 @@ Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkow
 #'
 #' clm = Clara_Medoids(dat, clusters = 3, samples = 5, sample_size = 0.2, swap_phase = TRUE)
 #'
-
-
 Clara_Medoids = function(data, clusters, samples, sample_size, distance_metric = "euclidean", minkowski_p = 1.0, threads = 1, swap_phase = TRUE, fuzzy = FALSE, verbose = FALSE, seed = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
@@ -1219,7 +1241,8 @@ Clara_Medoids = function(data, clusters, samples, sample_size, distance_metric =
 
   cs$clusters = cs$clusters + 1
 
-  return(structure(list(medoids = medoids_mat$medoids,
+  return(structure(list(call = match.call(),
+                        medoids = medoids_mat$medoids,
                         medoid_indices = as.vector(medoids_mat$medoid_indices) + 1,
                         sample_indices = as.vector(medoids_mat$sample_indices) + 1,
                         best_dissimilarity = medoids_mat$bst_dissimilarity,
@@ -1278,7 +1301,8 @@ predict_Medoids = function(data, MEDOIDS = NULL, distance_metric = 'euclidean', 
   res = predict_medoids(data, distance_metric, MEDOIDS, minkowski_p, threads, fuzzy, 1.0e-6)
 
   structure(
-    list(clusters = as.vector(res$clusters) + 1,
+    list(call = match.call(),
+         clusters = as.vector(res$clusters) + 1,
          fuzzy_clusters = res$fuzzy_clusters,
          dissimilarity = res$dissimilarity,
          distance_metric = distance_metric),
@@ -1300,6 +1324,21 @@ predict.MedoidsCluster <- function(object, newdata,
     out$clusters
 }
 
+#' @export
+print.MedoidsCluster <- function(x, ...) {
+  stats <- as.data.frame(t(x$clustering_stats[-1]))
+  for (nm in names(stats))
+    stats[[nm]] <- format(stats[[nm]], drop0trailing = T)
+  stats <- do.call(rbind, list(index = x$medoid_indices, stats))
+  rownames(stats) <- paste("  ", rownames(stats))
+  colnames(stats) <- x$clustering_stats$clusters
+  cat("Medoids Cluster\n",
+      "Call:", deparse(x$call), "\n",
+      "Data cols:", ncol(x$medoids), "\n",
+      "Medoids:", nrow(x$medoids), "\n",
+      "Cluster stats:\n")
+  print(stats)
+}
 
 #' Interactive function for consecutive plots ( using dissimilarities or the silhouette widths of the observations )
 #'
