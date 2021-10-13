@@ -271,107 +271,53 @@ testthat::test_that("in case that the data includes NaN or Inf values, it return
 # GMM function
 #################
 
+test_GMMCluster <- function(res) {
+  if ('Error' %in% names(res)) {
+    expect_true( length(res) == 2)
+  } else {
+
+    expect_s3_class(res, "GMMCluster")
+    expect_equal(names(res),
+                 c("call", "centroids", "covariance_matrices",
+                   "weights", "Log_likelihood"))
+    expect_true(all(!sapply(res, is.null)))
+  }
+  
+}
 
 testthat::test_that("in case that the data is a matrix the result is a list of length 4 and the class is 'Gaussian Mixture Models' ", {
-  
-  res = GMM(X, 2, "maha_dist", "random_subset", 10, 10)
-  
-  if ('Error' %in% names(res)) {
-    
-    testthat::expect_true( length(res) == 2)}
-  
-  else {
-    
-    testthat::expect_true( length(res) == 4 && sum(names(res) %in% c("centroids", "covariance_matrices", "weights", "Log_likelihood")) == 4 &&
-                           
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && inherits(res, "Gaussian Mixture Models") )
-  }
+  res <- GMM(X, 2, "maha_dist", "random_subset", 10, 10)
+  test_GMMCluster(res)
 })
 
-
 testthat::test_that("in case that the data is a data frame the result is a list of length 4 and the class is 'Gaussian Mixture Models' ", {
-  
-  res = GMM(dat, 2, "eucl_dist", "static_subset", 10, 10)
-  
-  if ('Error' %in% names(res)) {
-    
-    testthat::expect_true( length(res) == 2)}
-  
-  else {
-    
-    testthat::expect_true( length(res) == 4 && sum(names(res) %in% c("centroids", "covariance_matrices", "weights", "Log_likelihood")) == 4 &&
-                           
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && inherits(res, "Gaussian Mixture Models") )
-  }
+  res <- GMM(dat, 2, "eucl_dist", "static_subset", 10, 10)
+  test_GMMCluster(res)
 })
 
 
 testthat::test_that("in case that the data is a matrix the result is a list of length 4 and the class is 'Gaussian Mixture Models' ", {
-  
-  res = GMM(X, 2, "maha_dist", "random_subset", 10, 10)
-  
-  if ('Error' %in% names(res)) {
-    
-    testthat::expect_true( length(res) == 2)}
-  
-  else {
-    
-    testthat::expect_true( length(res) == 4 && sum(names(res) %in% c("centroids", "covariance_matrices", "weights", "Log_likelihood")) == 4 &&
-                           
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && inherits(res, "Gaussian Mixture Models") )
-  }
+  res <- GMM(X, 2, "maha_dist", "random_subset", 10, 10)
+  test_GMMCluster(res)
 })
 
 
 testthat::test_that("in case that the data is a data frame the result is a list of length 4 and the class is 'Gaussian Mixture Models' ", {
-  
-  res = GMM(dat, 2, "eucl_dist", "static_subset", 10, 10)
-  
-  if ('Error' %in% names(res)) {
-    
-    testthat::expect_true( length(res) == 2)}
-  
-  else {
-    
-    testthat::expect_true( length(res) == 4 && sum(names(res) %in% c("centroids", "covariance_matrices", "weights", "Log_likelihood")) == 4 &&
-                           
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && inherits(res, "Gaussian Mixture Models") )
-  }
+  res <- GMM(dat, 2, "eucl_dist", "static_subset", 10, 10)
+  test_GMMCluster(res)
 })
 
 
 
 testthat::test_that("in case that the data is a matrix the result is a list of length 4 and the class is 'Gaussian Mixture Models' ", {
-  
-  res = GMM(X, 2, "maha_dist", "random_spread", 10, 10)
-  
-  if ('Error' %in% names(res)) {
-    
-    testthat::expect_true( length(res) == 2)}
-  
-  else {
-    
-    testthat::expect_true( length(res) == 4 && sum(names(res) %in% c("centroids", "covariance_matrices", "weights", "Log_likelihood")) == 4 &&
-                           
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && inherits(res, "Gaussian Mixture Models") )
-  }
+  res <- GMM(X, 2, "maha_dist", "random_spread", 10, 10)
+  test_GMMCluster(res)
 })
 
 
 testthat::test_that("in case that the data is a data frame the result is a list of length 4 and the class is 'Gaussian Mixture Models' ", {
-  
-  res = GMM(dat, 2, "eucl_dist", "static_spread", 10, 10)
-  
-  if ('Error' %in% names(res)) {
-    
-    testthat::expect_true( length(res) == 2)}
-  
-  else {
-    
-    testthat::expect_true( length(res) == 4 && sum(names(res) %in% c("centroids", "covariance_matrices", "weights", "Log_likelihood")) == 4 &&
-                           
-                           sum(unlist(lapply(res, function(x) !is.null(x)))) == 4 && inherits(res, "Gaussian Mixture Models") )
-  }
+  res <- GMM(dat, 2, "eucl_dist", "static_spread", 10, 10)
+  test_GMMCluster(res)
 })
 
 

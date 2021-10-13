@@ -441,7 +441,6 @@ for (i in 1:ncol(cl_X)) { cl_X[, i] = as.numeric(cl_X[, i]) }
 start = Sys.time()
 
 cl_f = Clara_Medoids(cl_X, clusters = 2, distance_metric = 'hamming', samples = 5, 
-                     
                      sample_size = 0.2, swap_phase = TRUE, verbose = F, threads = 1)
 
 end = Sys.time()
@@ -464,8 +463,7 @@ cat('time to complete :', t, attributes(t)$units, '\n')
 
 start = Sys.time()
 
-cl_e = Cluster_Medoids(cl_X, clusters = 2, distance_metric = 'hamming', swap_phase = TRUE, 
-                       
+cl_e = Cluster_Medoids(cl_X, clusters = 2, distance_metric = 'hamming', swap_phase = TRUE,  
                        verbose = F, threads = 1)
 
 end = Sys.time()

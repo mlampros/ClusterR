@@ -273,84 +273,61 @@ testthat::test_that("in case that the data includes NaN or Inf values, it return
 # KMeans_rcpp function
 #######################
 
+test_KMeansCluster <- function(km, nclust) {
+  expect_true(all(c("call", "clusters", "centroids", "total_SSE", "best_initialization", 
+                    "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS") %in%
+                  names(km)))
+  expect_is(km$clusters, "numeric")
+  expect_length(km$clusters, nrow(X))
+  expect_is(km$between.SS_DIV_total.SS, "numeric")
+  expect_length(km$between.SS_DIV_total.SS, 1)
+  if (!is.null(km$fuzzy_clusters)) {
+    expect_is(km$fuzzy_clusters, "matrix")
+    expect_equal(ncol(km$fuzzy_clusters), nclust)
+  }
+  expect_equal(nrow(km$centroids), nclust)
+  expect_equal(ncol(km$centroids), ncol(X))
+  expect_length(km$total_SSE, 1)
+  expect_is(km$total_SSE, "numeric")
+  expect_length(km$best_initialization, 1)
+  expect_is(km$best_initialization, "integer")
+  expect_equal(ncol(km$WCSS_per_cluster), nclust)
+  expect_equal(ncol(km$obs_per_cluster), nclust)
+  expect_s3_class(km, "KMeansCluster")
+}
 
 testthat::test_that("in case that the data is a matrix the result is a list and the class is 'k-means clustering' ", {
-
-  clust = 2
-
-  km = KMeans_rcpp(X, clusters = clust, num_init = 5, max_iters = 100, initializer = 'optimal_init', fuzzy = TRUE)
-
-  testthat::expect_true( all(names(km) %in% c("clusters", "fuzzy_clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS"))  && is.matrix(km$fuzzy_clusters) &&
-
-                           is.vector(km$clusters) && length(km$clusters) == nrow(X) && is.numeric(km$between.SS_DIV_total.SS) && length(km$between.SS_DIV_total.SS) == 1 && ncol(km$fuzzy_clusters) == clust &&
-
-                           nrow(km$centroids) == clust && ncol(km$centroids) == ncol(X) && length(km$total_SSE) == 1 && is.numeric(km$total_SSE) && length(km$best_initialization) == 1 &&
-
-                           is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && inherits(km, "k-means clustering")  )
+  nclust <- 2
+  km <- KMeans_rcpp(X, clusters = nclust, num_init = 5, max_iters = 100, initializer = 'optimal_init', fuzzy = TRUE)
+  test_KMeansCluster(km, nclust)
 })
 
 
 testthat::test_that("in case that the data is a data frame the result is a list and the class is 'k-means clustering' ", {
-
-  clust = 2
-
-  km = KMeans_rcpp(dat, clusters = clust, num_init = 5, max_iters = 100, initializer = 'optimal_init')
-
-  testthat::expect_true( all(names(km) %in% c("clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS"))
-
-                         && is.vector(km$clusters) && length(km$clusters) == nrow(X) && is.numeric(km$between.SS_DIV_total.SS) && length(km$between.SS_DIV_total.SS) == 1 &&
-
-                           nrow(km$centroids) == clust && ncol(km$centroids) == ncol(X) && length(km$total_SSE) == 1 && is.numeric(km$total_SSE) && length(km$best_initialization) == 1 &&
-
-                           is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && inherits(km, "k-means clustering")  )
+  nclust <- 2
+  km <- KMeans_rcpp(dat, clusters = nclust, num_init = 5, max_iters = 100, initializer = 'optimal_init')
+  test_KMeansCluster(km, nclust)
 })
 
 
 testthat::test_that("KMeans_rcpp returns the correct output for the initializers", {
-
-  clust = 2
-
-  res = rep(NA, 4)
-
-  count = 1
-
+  nclust <- 2
+  res <- rep(NA, 4)
+  count <- 1
   set.seed(1)
-
   for (i in c('kmeans++', 'random', 'optimal_init', 'quantile_init')) {
-
-    km = KMeans_rcpp(X, clusters = clust, num_init = 5, max_iters = 10, initializer = i, tol_optimal_init = 0.2)
-
-    res[count] = ( all(names(km) %in% c("clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS"))
-
-                  && is.vector(km$clusters) && length(km$clusters) == nrow(X) && is.numeric(km$between.SS_DIV_total.SS) && length(km$between.SS_DIV_total.SS) == 1 &&
-
-                    nrow(km$centroids) == clust && ncol(km$centroids) == ncol(X) && length(km$total_SSE) == 1 && is.numeric(km$total_SSE) && length(km$best_initialization) == 1 &&
-
-                    is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && inherits(km, "k-means clustering"))
-
-    count = count + 1
+    km <- KMeans_rcpp(X, clusters = nclust, num_init = 5, max_iters = 10, initializer = i, tol_optimal_init = 0.2)
+    test_KMeansCluster(km, nclust)
   }
-
-  testthat::expect_true( all(res) )
 })
 
 
 
 testthat::test_that("KMeans_rcpp returns the correct output if CENTROIDS is user-defined ", {
-
-  clust = 2
-
-  cntr = matrix(runif(2 * (ncol(X))), nrow = 2, ncol = ncol(X))
-
-  km = KMeans_rcpp(X, clusters = clust, num_init = 5, max_iters = 100, CENTROIDS = cntr)
-
-  testthat::expect_true( all(names(km) %in% c("clusters", "centroids", "total_SSE", "best_initialization", "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS"))
-
-                         && is.vector(km$clusters) && length(km$clusters) == nrow(X) && is.numeric(km$between.SS_DIV_total.SS) && length(km$between.SS_DIV_total.SS) == 1 &&
-
-                           nrow(km$centroids) == clust && ncol(km$centroids) == ncol(X) && length(km$total_SSE) == 1 && is.numeric(km$total_SSE) && length(km$best_initialization) == 1 &&
-
-                           is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && inherits(km, "k-means clustering")  )
+  nclust <- 2
+  cntr <- matrix(runif(2 * (ncol(X))), nrow = 2, ncol = ncol(X))
+  km <- KMeans_rcpp(X, clusters = nclust, num_init = 5, max_iters = 100, CENTROIDS = cntr)
+  test_KMeansCluster(km, nclust)
 })
 
 

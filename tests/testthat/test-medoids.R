@@ -285,40 +285,40 @@ testthat::test_that("in case that the data includes NaN or Inf values, it return
 #########################
 
 
+test_MedoidsCluster <- function(cm, nclust) {
+  expect_true(all(c("medoids", "medoid_indices", "sample_indices", "best_dissimilarity",
+                    "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats",
+                    "dissimilarity_matrix") %in% names(cm)))
+  expect_is(cm, "MedoidsCluster")
+  expect_is(cm$medoids, "matrix")
+  expect_is(cm$medoid_indices, "numeric")
+  expect_is(cm$sample_indices, "numeric")
+  expect_is(cm$best_dissimilarity, "numeric")
+  expect_is(cm$clusters, "numeric")
+  expect_is(cm$fuzzy_probs, "matrix")
+  expect_is(cm$clustering_stats, "data.frame")
+  if (nclust > 1) {
+    expect_is(cm$silhouette_matrix, "data.frame")
+  } else {
+    expect_null(cm$silhouette_matrix)
+  }
+}
 
 testthat::test_that("in case that the data is a matrix, it returns the correct output", {
-
-  cm = Clara_Medoids(X, clusters = 2, samples = 5, sample_size = 0.2, swap_phase = TRUE, fuzzy = T)
-
-  testthat::expect_true( sum(names(cm) %in% c("medoids", "medoid_indices", "sample_indices", "best_dissimilarity",
-                                              "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats",
-                                              "dissimilarity_matrix")) == 9 && inherits(cm, "cluster medoids silhouette") && is.matrix(cm$medoids) && is.vector(cm$medoid_indices) && is.vector(cm$sample_indices) &&
-                           is.numeric(cm$best_dissimilarity) && is.vector(cm$clusters) && is.data.frame(cm$silhouette_matrix) && is.matrix(cm$fuzzy_probs) && is.data.frame(cm$clustering_stats) )
+  cm <- Clara_Medoids(X, clusters = 2, samples = 5, sample_size = 0.2, swap_phase = TRUE, fuzzy = T)
+  test_MedoidsCluster(cm, 2)
 })
 
 
 testthat::test_that("in case that the data is a data frame, it returns the correct output", {
-
-  cm = Clara_Medoids(dat, clusters = 2, samples = 5, sample_size = 0.2, swap_phase = TRUE, fuzzy = T)
-
-  testthat::expect_true( sum(names(cm) %in% c("medoids", "medoid_indices", "sample_indices", "best_dissimilarity",
-                                              "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats",
-                                              "dissimilarity_matrix")) == 9 && inherits(cm, "cluster medoids silhouette") && is.matrix(cm$medoids) && is.vector(cm$medoid_indices) && is.vector(cm$sample_indices) &&
-                           is.numeric(cm$best_dissimilarity) && is.vector(cm$clusters) && is.data.frame(cm$silhouette_matrix) && is.matrix(cm$fuzzy_probs) && is.data.frame(cm$clustering_stats) )
+  cm <- Clara_Medoids(dat, clusters = 2, samples = 5, sample_size = 0.2, swap_phase = TRUE, fuzzy = T)
+  test_MedoidsCluster(cm, 2)
 })
-
-
 
 testthat::test_that("in case that the clusters parameter is 1, it returns the correct output", {
-
-  cm = Clara_Medoids(dat, clusters = 2, samples = 5, sample_size = 0.2, swap_phase = TRUE, fuzzy = T)
-
-  testthat::expect_true( sum(names(cm) %in% c("medoids", "medoid_indices", "sample_indices", "best_dissimilarity",
-                                              "clusters", "silhouette_matrix", "fuzzy_probs", "clustering_stats",
-                                              "dissimilarity_matrix")) == 9 && inherits(cm, "cluster medoids silhouette") && is.matrix(cm$medoids) && is.vector(cm$medoid_indices) && is.vector(cm$sample_indices) &&
-                           is.numeric(cm$best_dissimilarity) && is.vector(cm$clusters) && is.null(cm$silhouette_matrix) && is.matrix(cm$fuzzy_probs) && is.data.frame(cm$clustering_stats) )
+  cm <- Clara_Medoids(dat, clusters = 1, samples = 5, sample_size = 0.2, swap_phase = TRUE, fuzzy = T)
+  test_MedoidsCluster(cm, 1)
 })
-
 
 
 #################################
@@ -327,12 +327,9 @@ testthat::test_that("in case that the clusters parameter is 1, it returns the co
 
 
 testthat::test_that("in case that the data is not a matrix or a data frame, it returns an error", {
-
-  cm = Cluster_Medoids(X, clusters = 2, distance_metric = 'euclidean', swap_phase = TRUE, fuzzy = T)
-
-  tmp_x = list(X)
-
-  testthat::expect_error( predict_Medoids(tmp_x, MEDOIDS = cm$medoids, 'euclidean', fuzzy = TRUE) )
+  cm <- Cluster_Medoids(X, clusters = 2, distance_metric = 'euclidean', swap_phase = TRUE, fuzzy = T)
+  tmp_x <- list(X)
+  testthat::expect_error(predict_Medoids(tmp_x, MEDOIDS = cm$medoids, 'euclidean', fuzzy = TRUE) )
 })
 
 
@@ -650,16 +647,13 @@ testthat::test_that("in case of Cluster_Medoids for different parameter settings
 
 testthat::test_that("in case of Clara_Medoids for different parameter settings, it returns the correct output", {
 
-  tmp = c("silhouette","dissimilarity")
-
+  tmp = c("silhouette", "dissimilarity")
   res = rep(NA, length(tmp))
 
   for (i in 1:length(tmp)) {
-
     opt_md = Optimal_Clusters_Medoids(dat, max_clusters = 10, 'euclidean', tmp[i], clara_samples = 5, clara_sample_size = 0.2, plot_clusters = F)
-
     testthat::expect_equal(mean(unlist(lapply(opt_md, length))[-1]), 6)
   }
-
+  
 })
 
