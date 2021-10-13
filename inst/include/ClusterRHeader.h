@@ -818,9 +818,13 @@ namespace clustR {
             fuzzy_mat.row(i) = norm_fuzzy(arma::conv_to< arma::rowvec >::from(lst_fuzzy_out.row(i)), eps);
           }
 
-          return Rcpp::List::create(Rcpp::Named("clusters") = lst_out, Rcpp::Named("fuzzy_clusters") = fuzzy_mat, Rcpp::Named("centers") = centers_out, Rcpp::Named("total_SSE") = tmp_sse,
-
-                                                Rcpp::Named("best_initialization") = end_init, Rcpp::Named("WCSS_per_cluster") = bst_WCSS, Rcpp::Named("obs_per_cluster") = bst_obs);
+          return Rcpp::List::create(Rcpp::Named("clusters") = lst_out,
+									Rcpp::Named("fuzzy_clusters") = fuzzy_mat,
+									Rcpp::Named("centers") = centers_out,
+									Rcpp::Named("total_SSE") = tmp_sse,
+									Rcpp::Named("best_initialization") = end_init,
+									Rcpp::Named("WCSS_per_cluster") = bst_WCSS,
+									Rcpp::Named("obs_per_cluster") = bst_obs);
         }
 
         else {
@@ -2630,7 +2634,6 @@ namespace clustR {
       //
 
       Rcpp::List ClusterMedoids(arma::mat& data, int clusters, std::string method, double minkowski_p = 1.0, int threads = 1, bool verbose = false, bool swap_phase = false,
-
                                 bool fuzzy = false, int seed = 1) {
 
         #ifdef _OPENMP
@@ -2885,14 +2888,16 @@ namespace clustR {
 
         double end_cost_vec_scalar = arma::accu(end_cost_vec);
 
-        return Rcpp::List::create(Rcpp::Named("medoids") = end_idxs, Rcpp::Named("cost") = end_cost_vec_scalar, Rcpp::Named("dissimilarity_matrix") = data,
-
-                                  Rcpp::Named("clusters") = end_indices_vec, Rcpp::Named("end_cost_vec") = end_cost_vec, Rcpp::Named("silhouette_matrix") = befout_silhouette_matrix,
-
-                                              Rcpp::Named("fuzzy_probs") = fuz_out, Rcpp::Named("clustering_stats") = befout_clustering_stats, Rcpp::Named("flag_dissim_mat") = flag_dissim_mat);
+        return Rcpp::List::create(Rcpp::Named("medoids") = end_idxs,
+								  Rcpp::Named("cost") = end_cost_vec_scalar,
+								  Rcpp::Named("dissimilarity_matrix") = data,
+                                  Rcpp::Named("clusters") = end_indices_vec,
+								  Rcpp::Named("end_cost_vec") = end_cost_vec,
+								  Rcpp::Named("silhouette_matrix") = befout_silhouette_matrix,
+								  Rcpp::Named("fuzzy_probs") = fuz_out,
+								  Rcpp::Named("clustering_stats") = befout_clustering_stats,
+								  Rcpp::Named("flag_dissim_mat") = flag_dissim_mat);
       }
-
-
 
 
       // calculate global dissimilarities for claraMedoids
@@ -3088,9 +3093,9 @@ namespace clustR {
 
           Rcpp::List clM_sblist = ClusterMedoids(tmp_dat, clusters, method, minkowski_p, threads, false, swap_phase, false);
 
-          double local_dissim = Rcpp::as<double> (clM_sblist[1]);
+          double local_dissim = Rcpp::as<double> (clM_sblist["cost"]);
 
-          arma::uvec local_medoids = Rcpp::as<arma::uvec> (clM_sblist[0]);
+          arma::uvec local_medoids = Rcpp::as<arma::uvec> (clM_sblist["medoids"]);
 
           arma::mat tmp_glob = dissim_MEDOIDS(data, method, copy_dat.rows(local_medoids), minkowski_p , threads, 1.0e-6);          // use all data to calculate global dissimilarity
 
@@ -3150,13 +3155,15 @@ namespace clustR {
 
         fuz_st_mat = fuz_st_mat.t();
 
-        return Rcpp::List::create(Rcpp::Named("medoids") = subs_meds, Rcpp::Named("bst_dissimilarity") = dism, Rcpp::Named("medoid_indices") = out_medoid,
-
-                                              Rcpp::Named("sample_indices") = clr_split_out_rowvec, Rcpp::Named("clusters") = hard_clust,
-
-                                              Rcpp::Named("bst_sample_silhouette_matrix") = bst_sample_silh_mat, Rcpp::Named("fuzzy_probs") = fuz_and_stats_mt,
-
-                                              Rcpp::Named("clustering_stats") = fuz_st_mat, Rcpp::Named("bst_sample_dissimilarity_matrix") = bst_sample_dissm_mat);
+        return Rcpp::List::create(Rcpp::Named("medoids") = subs_meds,
+                                  Rcpp::Named("best_dissimilarity") = dism,
+                                  Rcpp::Named("medoid_indices") = out_medoid,
+                                  Rcpp::Named("sample_indices") = clr_split_out_rowvec,
+                                  Rcpp::Named("clusters") = hard_clust,
+                                  Rcpp::Named("silhouette_matrix") = bst_sample_silh_mat,
+                                  Rcpp::Named("fuzzy_probs") = fuz_and_stats_mt,
+                                  Rcpp::Named("clustering_stats") = fuz_st_mat,
+                                  Rcpp::Named("dissimilarity_matrix") = bst_sample_dissm_mat);
       }
 
 
@@ -3211,7 +3218,7 @@ namespace clustR {
 
       Rcpp::List split_rcpp_lst(Rcpp::List lst) {
 
-        arma::mat silh_mat = Rcpp::as<arma::mat> (lst[5]);
+        arma::mat silh_mat = Rcpp::as<arma::mat> (lst["silhouette_matrix"]);
 
         arma::vec tmp_clust = arma::conv_to< arma::vec >::from(silh_mat.col(0));
 

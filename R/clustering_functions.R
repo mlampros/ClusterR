@@ -1226,7 +1226,7 @@ Clara_Medoids = function(data, clusters, samples, sample_size, distance_metric =
 
   if (clusters > 1) {
 
-    dsm = data.frame(medoids_mat$bst_sample_silhouette_matrix)
+    dsm = data.frame(medoids_mat$silhouette_matrix)
 
     colnames(dsm) = c('clusters', 'neighbor_clusters', 'intra_clust_dissim', 'outer_clust_dissim', 'silhouette_widths', 'diameter', 'separation')
 
@@ -1245,12 +1245,12 @@ Clara_Medoids = function(data, clusters, samples, sample_size, distance_metric =
                         medoids = medoids_mat$medoids,
                         medoid_indices = as.vector(medoids_mat$medoid_indices) + 1,
                         sample_indices = as.vector(medoids_mat$sample_indices) + 1,
-                        best_dissimilarity = medoids_mat$bst_dissimilarity,
+                        best_dissimilarity = medoids_mat$best_dissimilarity,
                         clusters = as.vector(medoids_mat$clusters) + 1,
                         silhouette_matrix = dsm,
                         fuzzy_probs = medoids_mat$fuzzy_probs,
                         clustering_stats = cs,
-                        dissimilarity_matrix = medoids_mat$bst_sample_dissimilarity_matrix,
+                        dissimilarity_matrix = medoids_mat$dissimilarity_matrix,
                         distance_metric = distance_metric),
                    class = c("MedoidsCluster", "cluster medoids silhouette")))
 }
