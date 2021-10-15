@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ClusterR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.5.9000</span>
       </span>
     </div>
 
@@ -132,7 +132,10 @@
     <p>Prediction function for a Gaussian Mixture Model object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>predict_GMM</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>CENTROIDS</span>, <span class='va'>COVARIANCE</span>, <span class='va'>WEIGHTS</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>predict_GMM</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>CENTROIDS</span>, <span class='va'>COVARIANCE</span>, <span class='va'>WEIGHTS</span><span class='op'>)</span>
+
+<span class='co'># S3 method for GMMCluster</span>
+<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>newdata</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,6 +155,10 @@
     <tr>
       <th>WEIGHTS</th>
       <td><p>vector containing the weights</p></td>
+    </tr>
+    <tr>
+      <th>object, newdata, ...</th>
+      <td><p>arguments for the `predict` generic</p></td>
     </tr>
     </table>
 
