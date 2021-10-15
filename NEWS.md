@@ -1,3 +1,6 @@
+## ClusterR 1.2.5.9000 (development)
+
+* [#24](https://github.com/mlampros/ClusterR/pull/24) Add S3 classes to ClusteR objects (KMeansCluster, MedoidsCluster and GMMCluster) and add generic `predict()` and `print()` methods.
 
 ## ClusterR 1.2.5
 

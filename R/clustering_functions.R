@@ -56,8 +56,6 @@ tryCatch_GMM <- function(data, gaussian_comps, dist_mode, seed_mode, km_iter, em
 #'
 #' gmm = GMM(dat, 2, "maha_dist", "random_subset", 10, 10)
 #'
-
-
 GMM = function(data, gaussian_comps = 1, dist_mode = 'eucl_dist', seed_mode = 'random_subset', km_iter = 10, em_iter = 5, verbose = FALSE, var_floor = 1e-10, seed = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
@@ -78,17 +76,18 @@ GMM = function(data, gaussian_comps = 1, dist_mode = 'eucl_dist', seed_mode = 'r
 
   if ('Error' %in% names(res)) {
 
-    return(res)}
+    return(res)
 
-  else {
+  } else {
 
-    return(structure(list(centroids = res$centroids, covariance_matrices = res$covariance_matrices, weights = as.vector(res$weights), Log_likelihood = res$Log_likelihood_raw),
-
-                     class = 'Gaussian Mixture Models'))
+    structure(list(call = match.call(),
+                   centroids = res$centroids,
+                   covariance_matrices = res$covariance_matrices,
+                   weights = as.vector(res$weights),
+                   Log_likelihood = res$Log_likelihood_raw),
+              class = c("GMMCluster", 'Gaussian Mixture Models'))
   }
 }
-
-
 
 #' Prediction function for a Gaussian Mixture Model object
 #'
@@ -113,8 +112,6 @@ GMM = function(data, gaussian_comps = 1, dist_mode = 'eucl_dist', seed_mode = 'r
 #'
 #' # pr = predict_GMM(dat, gmm$centroids, gmm$covariance_matrices, gmm$weights)
 #'
-
-
 predict_GMM = function(data, CENTROIDS, COVARIANCE, WEIGHTS) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
@@ -134,17 +131,31 @@ predict_GMM = function(data, CENTROIDS, COVARIANCE, WEIGHTS) {
 
   res = predict_MGausDPDF(data, CENTROIDS, COVARIANCE, WEIGHTS, eps = 1.0e-8)
 
-  return(structure(list(log_likelihood = res$Log_likelihood_raw, cluster_proba = res$cluster_proba, cluster_labels = as.vector(res$cluster_labels) + 1),          # I've added 1 to the output cluster labels to account for the difference in indexing between R and C++
-
-                   class = 'Gaussian Mixture Models'))
+  # I've added 1 to the output cluster labels to account for the difference in indexing between R and C++
+  list(log_likelihood = res$Log_likelihood_raw,
+       cluster_proba = res$cluster_proba,
+       cluster_labels = as.vector(res$cluster_labels) + 1)
 }
 
 
+#' @rdname predict_GMM
+#' @param object,newdata,... arguments for the `predict` generic
+#' @export
+predict.GMMCluster <- function(object, newdata, ...) {
+  predict_GMM(newdata, object$centroids, object$covariance_matrices, object$weights)$cluster_labels
+}
+
+#' @export
+print.GMMCluster <- function(x, ...) {
+  cat("GMM Cluster\n",
+      "Call:", deparse(x$call), "\n",
+      "Data cols:", ncol(x$centroids), "\n",
+      "Centroids:", nrow(x$centroids), "\n")
+}
 
 #' tryCatch function to prevent armadillo errors in GMM_arma_AIC_BIC
 #'
 #' @keywords internal
-
 tryCatch_optimal_clust_GMM <- function(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed) {
 
   Error = tryCatch(GMM_arma_AIC_BIC(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed),
@@ -258,9 +269,9 @@ Optimal_Clusters_GMM = function(data, max_clusters, criterion = "AIC", dist_mode
 
   if ('Error' %in% names(gmm)) {
 
-    return(gmm)}
+    return(gmm)
 
-  else {
+  } else {
 
     if (plot_data) {
 
@@ -303,7 +314,7 @@ Optimal_Clusters_GMM = function(data, max_clusters, criterion = "AIC", dist_mode
 
     res = as.vector(gmm)
 
-    class(res) = 'Gaussian Mixture Models'
+    class(res) = c("GMMCluster", 'Gaussian Mixture Models')
 
     return(res)
   }
@@ -367,8 +378,6 @@ tryCatch_KMEANS_arma <- function(data, clusters, n_iter, verbose, seed_mode, CEN
 #'
 #' km = KMeans_arma(dat, clusters = 2, n_iter = 10, "random_subset")
 #'
-
-
 KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset", verbose = FALSE, CENTROIDS = NULL, seed = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
@@ -391,13 +400,14 @@ KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset",
 
   if ('Error' %in% names(res) || is.character(res)) {
 
-    return(res)}
-
-  else {
-
-    class(res) = "k-means clustering"
-
     return(res)
+
+  } else {
+
+    ## FIXME: this function currently returns centroids. It should probably
+    ## return the same data structure as KMeans_cpp.
+    ## return(structure(res, class = c("KMeansCluster", "k-means clustering")))
+    return (structure(res, class = "k-means clustering"))
   }
 }
 
@@ -449,8 +459,6 @@ KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset",
 #'
 #' km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'kmeans++')
 #'
-
-
 KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initializer = 'kmeans++', fuzzy = FALSE,
 
                        verbose = FALSE, CENTROIDS = NULL, tol = 1e-4, tol_optimal_init = 0.3, seed = 1) {
@@ -476,19 +484,28 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
 
   if (fuzzy) {
 
-    return(structure(list(clusters = as.vector(res$clusters + 1), fuzzy_clusters = res$fuzzy_clusters, centroids = res$centers, total_SSE = res$total_SSE,
+    return(structure(list(call = match.call(),
+                          clusters = as.vector(res$clusters + 1),
+                          fuzzy_clusters = res$fuzzy_clusters,
+                          centroids = res$centers,
+                          total_SSE = res$total_SSE,
+                          best_initialization = res$best_initialization,
+                          WCSS_per_cluster = res$WCSS_per_cluster,
+                          obs_per_cluster = res$obs_per_cluster,
+                          between.SS_DIV_total.SS = (res$total_SSE - sum(res$WCSS_per_cluster)) / res$total_SSE),
+                     class = c("KMeansCluster", "k-means clustering")))
 
-                          best_initialization = res$best_initialization, WCSS_per_cluster = res$WCSS_per_cluster, obs_per_cluster = res$obs_per_cluster,
+  } else {
 
-                          between.SS_DIV_total.SS = (res$total_SSE - sum(res$WCSS_per_cluster)) / res$total_SSE), class = "k-means clustering"))}
-
-  else {
-
-    return(structure(list(clusters = as.vector(res$clusters + 1), centroids = res$centers, total_SSE = res$total_SSE, best_initialization = res$best_initialization,
-
-                          WCSS_per_cluster = res$WCSS_per_cluster, obs_per_cluster = res$obs_per_cluster, between.SS_DIV_total.SS = (res$total_SSE - sum(res$WCSS_per_cluster)) / res$total_SSE),
-
-                     class = "k-means clustering"))
+    return(structure(list(call = match.call(),
+                          clusters = as.vector(res$clusters + 1),
+                          centroids = res$centers,
+                          total_SSE = res$total_SSE,
+                          best_initialization = res$best_initialization,
+                          WCSS_per_cluster = res$WCSS_per_cluster,
+                          obs_per_cluster = res$obs_per_cluster,
+                          between.SS_DIV_total.SS = (res$total_SSE - sum(res$WCSS_per_cluster)) / res$total_SSE),
+                     class = c("KMeansCluster", "k-means clustering")))
   }
 }
 
@@ -515,9 +532,6 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
 #' km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'kmeans++')
 #'
 #' pr = predict_KMeans(dat, km$centroids, threads = 1)
-#
-
-
 predict_KMeans = function(data, CENTROIDS, threads = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
@@ -534,14 +548,27 @@ predict_KMeans = function(data, CENTROIDS, threads = 1) {
   flag_dups = duplicated(CENTROIDS)
   if (sum(flag_dups) > 0) stop("The 'CENTROIDS' input matrix includes duplicated rows!", call. = F)
 
-  res = as.vector(validate_centroids(data, CENTROIDS, threads)) + 1
-
-  class(res) = "k-means clustering"
-
-  return(res)
+  as.vector(validate_centroids(data, CENTROIDS, threads)) + 1
 }
 
+#' @rdname predict_KMeans
+#' @param object,newdata,... arguments for the `predict` generic
+#' @export
+predict.KMeansCluster <- function(object, newdata, threads = 1, ...) {
+  predict_KMeans(newdata, CENTROIDS = object$centroids, threads = threads)
+}
 
+#' @export
+print.KMeansCluster <- function(x, ...) {
+  WSSE <- sum(x$WCSS_per_cluster)
+  BSSE <- x$total_SSE - WSSE
+  cat("KMeans Cluster\n",
+      "Call:", deparse(x$call), "\n",
+      "Data cols:", ncol(x$centroids), "\n",
+      "Centroids:", nrow(x$centroids), "\n",
+      "BSS/SS:", BSSE/x$total_SSE, "\n",
+      "SS:", x$total_SSE, "=", WSSE, "(WSS) +", BSSE, "(BSS)\n")
+}
 
 #' Optimal number of Clusters for Kmeans or Mini-Batch-Kmeans
 #'
@@ -914,15 +941,8 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
   }
 
   if (criterion %in% c('variance_explained', 'WCSSE', 'dissimilarity', 'silhouette', 'AIC', 'BIC', 'Adjusted_Rsquared')) {
-
-    class(vec_out) = "k-means clustering"
-
-    return(vec_out)}
-
-  else {
-
-    class(fK_vec) = "k-means clustering"
-
+    return(vec_out)
+  } else {
     return(fK_vec)                                # "distortion_fK"
   }
 }
@@ -1000,9 +1020,7 @@ MiniBatchKmeans = function(data, clusters, batch_size = 10, num_init = 1, max_it
 
   res = mini_batch_kmeans(data, clusters, batch_size, max_iters, num_init, init_fraction, initializer, early_stop_iter, verbose, CENTROIDS, tol, tol_optimal_init, seed)
 
-  class(res) = "k-means clustering"
-
-  return(res)
+  structure(res, class = c("KMeansCluster", "k-means clustering"))
 }
 
 
@@ -1055,8 +1073,6 @@ predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
 
     tmp_res = as.vector(res$clusters + 1)
 
-    class(tmp_res) = "k-means clustering"
-
     return(tmp_res)
   }
 }
@@ -1092,8 +1108,6 @@ predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
 #'
 #' cm = Cluster_Medoids(dat, clusters = 3, distance_metric = 'euclidean', swap_phase = TRUE)
 #'
-
-
 Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkowski_p = 1.0, threads = 1, swap_phase = TRUE, fuzzy = FALSE, verbose = FALSE, seed = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
@@ -1123,9 +1137,9 @@ Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkow
 
     cs = data.frame(medoids_mat$clustering_stats)
 
-    colnames(cs) = c('clusters', 'number_obs', 'max_dissimilarity', 'average_dissimilarity', 'diameter', 'separation')}
+    colnames(cs) = c('clusters', 'number_obs', 'max_dissimilarity', 'average_dissimilarity', 'diameter', 'separation')
 
-  else {
+  } else {
 
     dsm = NULL
 
@@ -1134,18 +1148,24 @@ Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkow
 
   if (medoids_mat$flag_dissim_mat) {
 
-    tmp_rows = as.vector(medoids_mat$medoids) + 1}
+    tmp_rows = as.vector(medoids_mat$medoids) + 1
 
-  else {
+  } else {
 
     tmp_rows = data[as.vector(medoids_mat$medoids) + 1, ]
   }
 
-  return(structure(list(medoids = tmp_rows, medoid_indices = as.vector(medoids_mat$medoids) + 1, best_dissimilarity = medoids_mat$cost,
-
-                        dissimilarity_matrix = medoids_mat$dissimilarity_matrix, clusters = as.vector(medoids_mat$clusters) + 1, silhouette_matrix = dsm,
-
-                        fuzzy_probs = medoids_mat$fuzzy_probs, clustering_stats = cs), class = "cluster medoids silhouette"))
+  return(structure(list(call = match.call(),
+                        medoids = tmp_rows,
+                        medoid_indices = as.vector(medoids_mat$medoids) + 1,
+                        best_dissimilarity = medoids_mat$cost,
+                        dissimilarity_matrix = medoids_mat$dissimilarity_matrix,
+                        clusters = as.vector(medoids_mat$clusters) + 1,
+                        silhouette_matrix = dsm,
+                        fuzzy_probs = medoids_mat$fuzzy_probs,
+                        clustering_stats = cs,
+                        distance_metric = distance_metric),
+                   class = c("MedoidsCluster", "cluster medoids silhouette")))
 }
 
 
@@ -1181,8 +1201,6 @@ Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkow
 #'
 #' clm = Clara_Medoids(dat, clusters = 3, samples = 5, sample_size = 0.2, swap_phase = TRUE)
 #'
-
-
 Clara_Medoids = function(data, clusters, samples, sample_size, distance_metric = "euclidean", minkowski_p = 1.0, threads = 1, swap_phase = TRUE, fuzzy = FALSE, verbose = FALSE, seed = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
@@ -1208,11 +1226,11 @@ Clara_Medoids = function(data, clusters, samples, sample_size, distance_metric =
 
   if (clusters > 1) {
 
-    dsm = data.frame(medoids_mat$bst_sample_silhouette_matrix)
+    dsm = data.frame(medoids_mat$silhouette_matrix)
 
-    colnames(dsm) = c('clusters', 'neighbor_clusters', 'intra_clust_dissim', 'outer_clust_dissim', 'silhouette_widths', 'diameter', 'separation')}
+    colnames(dsm) = c('clusters', 'neighbor_clusters', 'intra_clust_dissim', 'outer_clust_dissim', 'silhouette_widths', 'diameter', 'separation')
 
-  else {
+  } else {
 
     dsm = NULL
   }
@@ -1223,11 +1241,18 @@ Clara_Medoids = function(data, clusters, samples, sample_size, distance_metric =
 
   cs$clusters = cs$clusters + 1
 
-  return(structure(list(medoids = medoids_mat$medoids, medoid_indices = as.vector(medoids_mat$medoid_indices) + 1, sample_indices = as.vector(medoids_mat$sample_indices) + 1,
-
-                        best_dissimilarity = medoids_mat$bst_dissimilarity, clusters = as.vector(medoids_mat$clusters) + 1, silhouette_matrix = dsm,
-
-                        fuzzy_probs = medoids_mat$fuzzy_probs, clustering_stats = cs, dissimilarity_matrix = medoids_mat$bst_sample_dissimilarity_matrix), class = "cluster medoids silhouette"))
+  return(structure(list(call = match.call(),
+                        medoids = medoids_mat$medoids,
+                        medoid_indices = as.vector(medoids_mat$medoid_indices) + 1,
+                        sample_indices = as.vector(medoids_mat$sample_indices) + 1,
+                        best_dissimilarity = medoids_mat$best_dissimilarity,
+                        clusters = as.vector(medoids_mat$clusters) + 1,
+                        silhouette_matrix = dsm,
+                        fuzzy_probs = medoids_mat$fuzzy_probs,
+                        clustering_stats = cs,
+                        dissimilarity_matrix = medoids_mat$dissimilarity_matrix,
+                        distance_metric = distance_metric),
+                   class = c("MedoidsCluster", "cluster medoids silhouette")))
 }
 
 
@@ -1254,9 +1279,6 @@ Clara_Medoids = function(data, clusters, samples, sample_size, distance_metric =
 #' cm = Cluster_Medoids(dat, clusters = 3, distance_metric = 'euclidean', swap_phase = TRUE)
 #'
 #' pm = predict_Medoids(dat, MEDOIDS = cm$medoids, 'euclidean', fuzzy = TRUE)
-#
-
-
 predict_Medoids = function(data, MEDOIDS = NULL, distance_metric = 'euclidean', fuzzy = FALSE, minkowski_p = 1.0, threads = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
@@ -1278,15 +1300,49 @@ predict_Medoids = function(data, MEDOIDS = NULL, distance_metric = 'euclidean', 
 
   res = predict_medoids(data, distance_metric, MEDOIDS, minkowski_p, threads, fuzzy, 1.0e-6)
 
-  return(structure(list(clusters = as.vector(res$clusters) + 1, fuzzy_clusters = res$fuzzy_clusters, dissimilarity = res$dissimilarity), class = "cluster medoids silhouette"))
+  structure(
+    list(call = match.call(),
+         clusters = as.vector(res$clusters) + 1,
+         fuzzy_clusters = res$fuzzy_clusters,
+         dissimilarity = res$dissimilarity,
+         distance_metric = distance_metric),
+    class = c("MedoidsCluster", "cluster medoids silhouette"))
 }
 
 
+#' @rdname predict_Medoids
+#' @param object,newdata,... arguments for the `predict` generic
+#' @export
+predict.MedoidsCluster <- function(object, newdata,
+                                   fuzzy = FALSE, threads = 1, ...) {
+  out <- predict_Medoids(newdata, MEDOIDS = object$medoids,
+                         distance_metric = object$distance_metric,
+                         fuzzy = fuzzy, threads = threads)
+  if (fuzzy)
+    out$fuzzy_clusters
+  else
+    out$clusters
+}
+
+#' @export
+print.MedoidsCluster <- function(x, ...) {
+  stats <- as.data.frame(t(x$clustering_stats[-1]))
+  for (nm in names(stats))
+    stats[[nm]] <- format(stats[[nm]], drop0trailing = T)
+  stats <- do.call(rbind, list(index = x$medoid_indices, stats))
+  rownames(stats) <- paste("  ", rownames(stats))
+  colnames(stats) <- x$clustering_stats$clusters
+  cat("Medoids Cluster\n",
+      "Call:", deparse(x$call), "\n",
+      "Data cols:", ncol(x$medoids), "\n",
+      "Medoids:", nrow(x$medoids), "\n",
+      "Cluster stats:\n")
+  print(stats)
+}
 
 #' Interactive function for consecutive plots ( using dissimilarities or the silhouette widths of the observations )
 #'
 #' @keywords internal
-
 function_interactive = function(evaluation_objects, max_clusters, silhouette = FALSE) {
 
   cat(" ", '\n')
@@ -1552,8 +1608,6 @@ Optimal_Clusters_Medoids = function(data, max_clusters, distance_metric, criteri
       }
     }
   }
-
-  class(opt_cl) = "cluster medoids silhouette"
 
   return(opt_cl)
 }

@@ -2,9 +2,12 @@
 % Please edit documentation in R/clustering_functions.R
 \name{predict_KMeans}
 \alias{predict_KMeans}
+\alias{predict.KMeansCluster}
 \title{Prediction function for the k-means}
 \usage{
 predict_KMeans(data, CENTROIDS, threads = 1)
+
+\method{predict}{KMeansCluster}(object, newdata, threads = 1, ...)
 }
 \arguments{
 \item{data}{matrix or data frame}
@@ -12,6 +15,8 @@ predict_KMeans(data, CENTROIDS, threads = 1)
 \item{CENTROIDS}{a matrix of initial cluster centroids. The rows of the CENTROIDS matrix should be equal to the number of clusters and the columns should be equal to the columns of the data.}
 
 \item{threads}{an integer specifying the number of cores to run in parallel}
+
+\item{object, newdata, ...}{arguments for the `predict` generic}
 }
 \value{
 a vector (clusters)
