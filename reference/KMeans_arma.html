@@ -190,16 +190,16 @@ The clustering will run faster on multi-core machines when OpenMP is enabled in 
     <p>http://arma.sourceforge.net/docs.html</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>dietary_survey_IBS</span><span class='op'>)</span>
-
-<span class='va'>dat</span> <span class='op'>=</span> <span class='va'>dietary_survey_IBS</span><span class='op'>[</span>, <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>dietary_survey_IBS</span><span class='op'>)</span><span class='op'>]</span>
-
-<span class='va'>dat</span> <span class='op'>=</span> <span class='fu'><a href='center_scale.html'>center_scale</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span>
-
-<span class='va'>km</span> <span class='op'>=</span> <span class='fu'>KMeans_arma</span><span class='op'>(</span><span class='va'>dat</span>, clusters <span class='op'>=</span> <span class='fl'>2</span>, n_iter <span class='op'>=</span> <span class='fl'>10</span>, <span class='st'>"random_subset"</span><span class='op'>)</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>dietary_survey_IBS</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dat</span> <span class='op'>=</span> <span class='va'>dietary_survey_IBS</span><span class='op'>[</span>, <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>dietary_survey_IBS</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dat</span> <span class='op'>=</span> <span class='fu'><a href='center_scale.html'>center_scale</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>km</span> <span class='op'>=</span> <span class='fu'>KMeans_arma</span><span class='op'>(</span><span class='va'>dat</span>, clusters <span class='op'>=</span> <span class='fl'>2</span>, n_iter <span class='op'>=</span> <span class='fl'>10</span>, <span class='st'>"random_subset"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

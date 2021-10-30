@@ -162,18 +162,18 @@
     <p>Lampros Mouselimis</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>dietary_survey_IBS</span><span class='op'>)</span>
-
-<span class='va'>dat</span> <span class='op'>=</span> <span class='va'>dietary_survey_IBS</span><span class='op'>[</span>, <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>dietary_survey_IBS</span><span class='op'>)</span><span class='op'>]</span>
-
-<span class='va'>dat</span> <span class='op'>=</span> <span class='fu'><a href='center_scale.html'>center_scale</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span>
-
-<span class='va'>MbatchKm</span> <span class='op'>=</span> <span class='fu'><a href='MiniBatchKmeans.html'>MiniBatchKmeans</a></span><span class='op'>(</span><span class='va'>dat</span>, clusters <span class='op'>=</span> <span class='fl'>2</span>, batch_size <span class='op'>=</span> <span class='fl'>20</span>, num_init <span class='op'>=</span> <span class='fl'>5</span>, early_stop_iter <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
-
-<span class='va'>pr</span> <span class='op'>=</span> <span class='fu'>predict_MBatchKMeans</span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>MbatchKm</span><span class='op'>$</span><span class='va'>centroids</span>, fuzzy <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>dietary_survey_IBS</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dat</span> <span class='op'>=</span> <span class='va'>dietary_survey_IBS</span><span class='op'>[</span>, <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>dietary_survey_IBS</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dat</span> <span class='op'>=</span> <span class='fu'><a href='center_scale.html'>center_scale</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>MbatchKm</span> <span class='op'>=</span> <span class='fu'><a href='MiniBatchKmeans.html'>MiniBatchKmeans</a></span><span class='op'>(</span><span class='va'>dat</span>, clusters <span class='op'>=</span> <span class='fl'>2</span>, batch_size <span class='op'>=</span> <span class='fl'>20</span>, num_init <span class='op'>=</span> <span class='fl'>5</span>, early_stop_iter <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pr</span> <span class='op'>=</span> <span class='fu'>predict_MBatchKMeans</span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>MbatchKm</span><span class='op'>$</span><span class='va'>centroids</span>, fuzzy <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

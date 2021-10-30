@@ -203,41 +203,42 @@ determined clusters have remained constant for a certain number of iterations...
 <p>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5650075/    ( SEE chapter 2 )</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
-<span class='va'>dat</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>255</span>, <span class='fl'>2500</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, <span class='fl'>100</span>, <span class='fl'>25</span><span class='op'>)</span>
-
-<span class='va'>smt</span> <span class='op'>=</span> <span class='fl'>1.0</span> <span class='op'>-</span> <span class='fu'><a href='distance_matrix.html'>distance_matrix</a></span><span class='op'>(</span><span class='va'>dat</span>, method <span class='op'>=</span> <span class='st'>'euclidean'</span>, upper <span class='op'>=</span> <span class='cn'>TRUE</span>, diagonal <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>smt</span><span class='op'>)</span> <span class='op'>=</span> <span class='fl'>0.0</span>
-
-<span class='va'>ap</span> <span class='op'>=</span> <span class='fu'>AP_affinity_propagation</span><span class='op'>(</span><span class='va'>smt</span>, p <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/vector.html'>as.vector</a></span><span class='op'>(</span><span class='va'>smt</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>ap</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; List of 10
-#&gt;  $ K                  : int 13
-#&gt;  $ N                  : num 100
-#&gt;  $ netsim             : num -41124
-#&gt;  $ dpsim              : num -34361
-#&gt;  $ expref             : num -6763
-#&gt;  $ iterations         : int 200
-#&gt;  $ exemplars          : int [1:13] 0 8 18 26 36 42 64 66 73 75 ...
-#&gt;  $ idx                : num [1, 1:100] 0 73 75 42 66 64 64 18 8 75 ...
-#&gt;  $ clusters           :List of 13
-#&gt;   ..$ 18: int [1:7] 7 18 51 53 68 79 93
-#&gt;   ..$ 64: int [1:7] 5 6 37 44 46 64 78
-#&gt;   ..$ 92: int [1:6] 11 34 40 77 84 92
-#&gt;   ..$ 66: int [1:9] 4 24 31 58 61 66 72 81 83
-#&gt;   ..$ 94: int [1:13] 20 28 32 41 48 63 65 69 82 91 ...
-#&gt;   ..$ 42: int [1:8] 3 16 35 42 49 60 62 99
-#&gt;   ..$ 36: int [1:10] 13 17 19 23 29 30 33 36 85 87
-#&gt;   ..$ 88: int [1:6] 10 55 70 80 88 89
-#&gt;   ..$ 75: int [1:11] 2 9 47 56 57 71 75 86 90 97 ...
-#&gt;   ..$ 8 : int [1:6] 8 14 21 22 45 50
-#&gt;   ..$ 73: int [1:5] 1 25 52 59 73
-#&gt;   ..$ 26: int [1:6] 26 38 39 54 67 76
-#&gt;   ..$ 0 : int [1:6] 0 12 15 27 43 74
-#&gt;  $ clusters_vectorized: int [1:100] 0 73 75 42 66 64 64 18 8 75 ...</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dat</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>255</span>, <span class='fl'>2500</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, <span class='fl'>100</span>, <span class='fl'>25</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>smt</span> <span class='op'>=</span> <span class='fl'>1.0</span> <span class='op'>-</span> <span class='fu'><a href='distance_matrix.html'>distance_matrix</a></span><span class='op'>(</span><span class='va'>dat</span>, method <span class='op'>=</span> <span class='st'>'euclidean'</span>, upper <span class='op'>=</span> <span class='cn'>TRUE</span>, diagonal <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>smt</span><span class='op'>)</span> <span class='op'>=</span> <span class='fl'>0.0</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>ap</span> <span class='op'>=</span> <span class='fu'>AP_affinity_propagation</span><span class='op'>(</span><span class='va'>smt</span>, p <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/vector.html'>as.vector</a></span><span class='op'>(</span><span class='va'>smt</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>ap</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> List of 10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ K                  : int 13</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ N                  : num 100</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ netsim             : num -41124</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ dpsim              : num -34361</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ expref             : num -6763</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ iterations         : int 200</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ exemplars          : int [1:13] 0 8 18 26 36 42 64 66 73 75 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ idx                : num [1, 1:100] 0 73 75 42 66 64 64 18 8 75 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ clusters           :List of 13</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ 18: int [1:7] 7 18 51 53 68 79 93</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ 64: int [1:7] 5 6 37 44 46 64 78</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ 92: int [1:6] 11 34 40 77 84 92</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ 66: int [1:9] 4 24 31 58 61 66 72 81 83</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ 94: int [1:13] 20 28 32 41 48 63 65 69 82 91 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ 42: int [1:8] 3 16 35 42 49 60 62 99</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ 36: int [1:10] 13 17 19 23 29 30 33 36 85 87</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ 88: int [1:6] 10 55 70 80 88 89</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ 75: int [1:11] 2 9 47 56 57 71 75 86 90 97 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ 8 : int [1:6] 8 14 21 22 45 50</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ 73: int [1:5] 1 25 52 59 73</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ 26: int [1:6] 26 38 39 54 67 76</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ 0 : int [1:6] 0 12 15 27 43 74</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ clusters_vectorized: int [1:100] 0 73 75 42 66 64 64 18 8 75 ...</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

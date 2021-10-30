@@ -163,20 +163,21 @@ the columns should be equal to the columns of the data.</p></td>
     <p>Lampros Mouselimis</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># data(dietary_survey_IBS)</span>
-
-<span class='co'># dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]</span>
-
-<span class='co'># dat = center_scale(dat)</span>
-
-<span class='co'># pca_dat = stats::princomp(dat)$scores[, 1:2]</span>
-
-<span class='co'># km = KMeans_rcpp(pca_dat, clusters = 2, num_init = 5, max_iters = 100)</span>
-
-<span class='co'># plot_2d(pca_dat, km$clusters, km$centroids)</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># data(dietary_survey_IBS)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># dat = center_scale(dat)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># pca_dat = stats::princomp(dat)$scores[, 1:2]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># km = KMeans_rcpp(pca_dat, clusters = 2, num_init = 5, max_iters = 100)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot_2d(pca_dat, km$clusters, km$centroids)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

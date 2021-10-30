@@ -239,47 +239,47 @@ The same applies also to the <em>Adjusted_Rsquared</em> criterion which returns 
     <p>Lampros Mouselimis</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>dietary_survey_IBS</span><span class='op'>)</span>
-
-<span class='va'>dat</span> <span class='op'>=</span> <span class='va'>dietary_survey_IBS</span><span class='op'>[</span>, <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>dietary_survey_IBS</span><span class='op'>)</span><span class='op'>]</span>
-
-<span class='va'>dat</span> <span class='op'>=</span> <span class='fu'><a href='center_scale.html'>center_scale</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span>
-
-
-<span class='co'>#-------</span>
-<span class='co'># kmeans</span>
-<span class='co'>#-------</span>
-
-<span class='va'>opt_km</span> <span class='op'>=</span> <span class='fu'>Optimal_Clusters_KMeans</span><span class='op'>(</span><span class='va'>dat</span>, max_clusters <span class='op'>=</span> <span class='fl'>10</span>, criterion <span class='op'>=</span> <span class='st'>"distortion_fK"</span>,
-
-                                 plot_clusters <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'>#------------------</span>
-<span class='co'># mini-batch-kmeans</span>
-<span class='co'>#------------------</span>
-
-
-<span class='va'>params_mbkm</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>batch_size <span class='op'>=</span> <span class='fl'>10</span>, init_fraction <span class='op'>=</span> <span class='fl'>0.3</span>, early_stop_iter <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
-
-<span class='va'>opt_mbkm</span> <span class='op'>=</span> <span class='fu'>Optimal_Clusters_KMeans</span><span class='op'>(</span><span class='va'>dat</span>, max_clusters <span class='op'>=</span> <span class='fl'>10</span>, criterion <span class='op'>=</span> <span class='st'>"distortion_fK"</span>,
-
-                                   plot_clusters <span class='op'>=</span> <span class='cn'>FALSE</span>, mini_batch_params <span class='op'>=</span> <span class='va'>params_mbkm</span><span class='op'>)</span>
-
-
-<span class='co'>#----------------------------</span>
-<span class='co'># non-contiguous search space</span>
-<span class='co'>#----------------------------</span>
-
-<span class='va'>search_space</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>5</span><span class='op'>)</span>
-
-<span class='va'>opt_km</span> <span class='op'>=</span> <span class='fu'>Optimal_Clusters_KMeans</span><span class='op'>(</span><span class='va'>dat</span>, max_clusters <span class='op'>=</span> <span class='va'>search_space</span>,
-
-                                 criterion <span class='op'>=</span> <span class='st'>"variance_explained"</span>,
-
-                                 plot_clusters <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>dietary_survey_IBS</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dat</span> <span class='op'>=</span> <span class='va'>dietary_survey_IBS</span><span class='op'>[</span>, <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>dietary_survey_IBS</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dat</span> <span class='op'>=</span> <span class='fu'><a href='center_scale.html'>center_scale</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#-------</span></span>
+<span class='r-in'><span class='co'># kmeans</span></span>
+<span class='r-in'><span class='co'>#-------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>opt_km</span> <span class='op'>=</span> <span class='fu'>Optimal_Clusters_KMeans</span><span class='op'>(</span><span class='va'>dat</span>, max_clusters <span class='op'>=</span> <span class='fl'>10</span>, criterion <span class='op'>=</span> <span class='st'>"distortion_fK"</span>,</span>
+<span class='r-in'></span>
+<span class='r-in'>                                 plot_clusters <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#------------------</span></span>
+<span class='r-in'><span class='co'># mini-batch-kmeans</span></span>
+<span class='r-in'><span class='co'>#------------------</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>params_mbkm</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>batch_size <span class='op'>=</span> <span class='fl'>10</span>, init_fraction <span class='op'>=</span> <span class='fl'>0.3</span>, early_stop_iter <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>opt_mbkm</span> <span class='op'>=</span> <span class='fu'>Optimal_Clusters_KMeans</span><span class='op'>(</span><span class='va'>dat</span>, max_clusters <span class='op'>=</span> <span class='fl'>10</span>, criterion <span class='op'>=</span> <span class='st'>"distortion_fK"</span>,</span>
+<span class='r-in'></span>
+<span class='r-in'>                                   plot_clusters <span class='op'>=</span> <span class='cn'>FALSE</span>, mini_batch_params <span class='op'>=</span> <span class='va'>params_mbkm</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#----------------------------</span></span>
+<span class='r-in'><span class='co'># non-contiguous search space</span></span>
+<span class='r-in'><span class='co'>#----------------------------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>search_space</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>5</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>opt_km</span> <span class='op'>=</span> <span class='fu'>Optimal_Clusters_KMeans</span><span class='op'>(</span><span class='va'>dat</span>, max_clusters <span class='op'>=</span> <span class='va'>search_space</span>,</span>
+<span class='r-in'></span>
+<span class='r-in'>                                 criterion <span class='op'>=</span> <span class='st'>"variance_explained"</span>,</span>
+<span class='r-in'></span>
+<span class='r-in'>                                 plot_clusters <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
