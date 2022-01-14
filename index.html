@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ClusterR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.5.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.5.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -64,7 +60,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/mlampros/ClusterR/">
+  <a href="https://github.com/mlampros/ClusterR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -83,11 +79,11 @@
   <div class="contents col-md-9">
 
 
-<div id="clusterr" class="section level2">
-<h2 class="hasAnchor">
-<a href="#clusterr" class="anchor"></a>ClusterR</h2>
+<div class="section level2">
+<h2 id="clusterr">ClusterR<a class="anchor" aria-label="anchor" href="#clusterr"></a>
+</h2>
 <p><br></p>
-<p>The ClusterR package consists of Gaussian mixture models, k-means, mini-batch-kmeans, k-medoids and affinity propagation clustering algorithms with the option to plot, validate, predict (new data) and find the optimal number of clusters. The package takes advantage of ‘RcppArmadillo’ to speed up the computationally intensive parts of the functions. More details on the functionality of ClusterR can be found in the <a href="http://mlampros.github.io/2016/09/12/clusterR_package/">blog-post</a>, Vignette and in the package Documentation ( <em>scroll down for information on how to use the</em> <strong>docker image</strong> ) <br><br></p>
+<p>The ClusterR package consists of Gaussian mixture models, k-means, mini-batch-kmeans, k-medoids and affinity propagation clustering algorithms with the option to plot, validate, predict (new data) and find the optimal number of clusters. The package takes advantage of ‘RcppArmadillo’ to speed up the computationally intensive parts of the functions. More details on the functionality of ClusterR can be found in the <a href="http://mlampros.github.io/2016/09/12/clusterR_package/" class="external-link">blog-post</a>, Vignette and in the package Documentation ( <em>scroll down for information on how to use the</em> <strong>docker image</strong> ) <br><br></p>
 <p><strong>UPDATE 16-08-2018</strong></p>
 <p>As of version 1.1.4 the <em>ClusterR</em> package allows R package maintainers to perform <strong>linking between packages at a C++ code (Rcpp) level</strong>. This means that the Rcpp functions of the <em>ClusterR</em> package can be called in the C++ files of another package. In the next lines I’ll give detailed explanations on how this can be done:</p>
 <p><br></p>
@@ -100,14 +96,14 @@
 <p><br></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"ClusterR"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ClusterR"</span><span class="op">)</span>
  </code></pre></div>
 <p><br></p>
 <p>or download the latest version from Github using the <em>remotes</em> package,</p>
 <p><br></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">'mlampros/ClusterR'</span>, upgrade <span class="op">=</span> <span class="st">'always'</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span>, repos <span class="op">=</span> <span class="st">'https://cloud.r-project.org/'</span><span class="op">)</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'mlampros/ClusterR'</span>, upgrade <span class="op">=</span> <span class="st">'always'</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span>, repos <span class="op">=</span> <span class="st">'https://cloud.r-project.org/'</span><span class="op">)</span>
  </code></pre></div>
 <p><br></p>
 <ul>
@@ -173,10 +169,10 @@
 <p><br></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="fu">Rcpp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Rcpp/man/sourceCpp.html">sourceCpp</a></span><span class="op">(</span><span class="st">'example.cpp'</span><span class="op">)</span>              <span class="co"># assuming that the previous Rcpp code is included in 'example.cpp' </span>
+<span class="fu">Rcpp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Rcpp/man/sourceCpp.html" class="external-link">sourceCpp</a></span><span class="op">(</span><span class="st">'example.cpp'</span><span class="op">)</span>              <span class="co"># assuming that the previous Rcpp code is included in 'example.cpp' </span>
              
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">100000</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">1000</span>, ncol <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100000</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">1000</span>, ncol <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="va">mbkm</span> <span class="op">=</span> <span class="fu">mini_batch_kmeans</span><span class="op">(</span><span class="va">dat</span>, clusters <span class="op">=</span> <span class="fl">3</span>, batch_size <span class="op">=</span> <span class="fl">50</span>, max_iters <span class="op">=</span> <span class="fl">100</span>, num_init <span class="op">=</span> <span class="fl">2</span>, 
 
@@ -184,15 +180,15 @@
                          
                          verbose <span class="op">=</span> <span class="cn">T</span>, CENTROIDS <span class="op">=</span> <span class="cn">NULL</span>, tol <span class="op">=</span> <span class="fl">1e-4</span>, tol_optimal_init <span class="op">=</span> <span class="fl">0.5</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
                          
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">mbkm</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mbkm</span><span class="op">)</span>
 </code></pre></div>
 <p><br></p>
 <p>Use the following link to report bugs/issues, <br><br></p>
-<p><a href="https://github.com/mlampros/ClusterR/issues">https://github.com/mlampros/ClusterR/issues</a></p>
+<p><a href="https://github.com/mlampros/ClusterR/issues" class="external-link">https://github.com/mlampros/ClusterR/issues</a></p>
 <p><br></p>
 <p><strong>UPDATE 28-11-2019</strong></p>
 <p><br></p>
-<p><strong>Docker images</strong> of the <em>ClusterR</em> package are available to download from my <a href="https://hub.docker.com/r/mlampros/clusterr">dockerhub</a> account. The images come with <em>Rstudio</em> and the <em>R-development</em> version (latest) installed. The whole process was tested on Ubuntu 18.04. To <strong>pull</strong> &amp; <strong>run</strong> the image do the following,</p>
+<p><strong>Docker images</strong> of the <em>ClusterR</em> package are available to download from my <a href="https://hub.docker.com/r/mlampros/clusterr" class="external-link">dockerhub</a> account. The images come with <em>Rstudio</em> and the <em>R-development</em> version (latest) installed. The whole process was tested on Ubuntu 18.04. To <strong>pull</strong> &amp; <strong>run</strong> the image do the following,</p>
 <p><br></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a></span>
 <span id="cb7-2"><a href="#cb7-2"></a>docker pull mlampros<span class="op">/</span>clusterr<span class="op">:</span>rstudiodev</span>
@@ -211,7 +207,7 @@
 <span id="cb9-2"><a href="#cb9-2"></a>chmod <span class="op">-</span>R <span class="dv">777</span> <span class="op">/</span>home<span class="op">/</span>YOUR_DIR</span>
 <span id="cb9-3"><a href="#cb9-3"></a></span></code></pre></div>
 <p><br></p>
-<p>The <strong>USER</strong> defaults to <em>rstudio</em> but you have to give your <strong>PASSWORD</strong> of preference (see <a href="https://www.rocker-project.org/">www.rocker-project.org</a> for more information).</p>
+<p>The <strong>USER</strong> defaults to <em>rstudio</em> but you have to give your <strong>PASSWORD</strong> of preference (see <a href="https://www.rocker-project.org/" class="external-link">www.rocker-project.org</a> for more information).</p>
 <p><br></p>
 <p>Open your web-browser and depending where the docker image was <em>build / run</em> give,</p>
 <p><br></p>
@@ -225,9 +221,9 @@
 <p><br></p>
 <p>to access the Rstudio console in order to give your username and password.</p>
 <p><br></p>
-<div id="citation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#citation" class="anchor"></a><strong>Citation:</strong>
+<div class="section level3">
+<h3 id="citation">
+<strong>Citation:</strong><a class="anchor" aria-label="anchor" href="#citation"></a>
 </h3>
 <p>If you use the code of this repository in your paper or research please cite both <strong>ClusterR</strong> and the <strong>original articles / software</strong> <code>https://CRAN.R-project.org/package=ClusterR</code>:</p>
 <p><br></p>
@@ -246,58 +242,62 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=ClusterR">https://​cloud.r-project.org/​package=ClusterR</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/mlampros/ClusterR/">https://​github.com/​mlampros/​ClusterR/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/mlampros/ClusterR/issues">https://​github.com/​mlampros/​ClusterR/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
-</ul>
-</div>
-<div class="citation">
-<h2>Citation</h2>
-<ul class="list-unstyled">
-<li><a href="authors.html">Citing ClusterR</a></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Lampros Mouselimis <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/https://orcid.org/0000-0002-8024-1546" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://cloud.r-project.org/package=ClusterR" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/mlampros/ClusterR/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/mlampros/ClusterR/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/mlampros/ClusterR/actions"><img src="https://github.com/mlampros/ClusterR/workflows/tic/badge.svg?branch=master" alt="tic"></a></li>
-<li><a href="https://codecov.io/github/mlampros/ClusterR?branch=master"><img src="https://codecov.io/github/mlampros/ClusterR/coverage.svg?branch=master" alt="codecov.io"></a></li>
-<li><a href="http://cran.r-project.org/package=ClusterR"><img src="http://www.r-pkg.org/badges/version/ClusterR" alt="CRAN_Status_Badge"></a></li>
-<li><a href="http://www.r-pkg.org/pkg/ClusterR"><img src="http://cranlogs.r-pkg.org/badges/grand-total/ClusterR?color=blue" alt="Downloads"></a></li>
-<li><a href="https://www.buymeacoffee.com/VY0x8snyh" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" height="21px"></a></li>
-<li><a href="https://hub.docker.com/r/mlampros/clusterr"><img src="https://img.shields.io/docker/automated/mlampros/clusterr.svg"></a></li>
-<li><a href="https://cran.r-project.org/package=ClusterR"><img src="https://tinyverse.netlify.com/badge/ClusterR" alt="Dependencies"></a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing ClusterR</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Lampros Mouselimis <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/https://orcid.org/0000-0002-8024-1546" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/mlampros/ClusterR/actions" class="external-link"><img src="https://github.com/mlampros/ClusterR/workflows/tic/badge.svg?branch=master" alt="tic"></a></li>
+<li><a href="https://codecov.io/github/mlampros/ClusterR?branch=master" class="external-link"><img src="https://codecov.io/github/mlampros/ClusterR/coverage.svg?branch=master" alt="codecov.io"></a></li>
+<li><a href="http://cran.r-project.org/package=ClusterR" class="external-link"><img src="http://www.r-pkg.org/badges/version/ClusterR" alt="CRAN_Status_Badge"></a></li>
+<li><a href="http://www.r-pkg.org/pkg/ClusterR" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/grand-total/ClusterR?color=blue" alt="Downloads"></a></li>
+<li><a href="https://www.buymeacoffee.com/VY0x8snyh" target="_blank" class="external-link"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" height="21px"></a></li>
+<li><a href="https://hub.docker.com/r/mlampros/clusterr" class="external-link"><img src="https://img.shields.io/docker/automated/mlampros/clusterr.svg"></a></li>
+<li><a href="https://cran.r-project.org/package=ClusterR" class="external-link"><img src="https://tinyverse.netlify.com/badge/ClusterR" alt="Dependencies"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Lampros Mouselimis.</p>
+  <p></p>
+<p>Developed by Lampros Mouselimis.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -305,6 +305,8 @@
 
   
 
+
+  
 
   </body>
 </html>

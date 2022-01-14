@@ -1,7 +1,7 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   the_clusterR_package: the_clusterR_package.html
-last_built: 2021-11-30T04:25Z
+last_built: 2022-01-14T04:26Z
 
