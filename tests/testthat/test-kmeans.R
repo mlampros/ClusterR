@@ -274,7 +274,7 @@ testthat::test_that("in case that the data includes NaN or Inf values, it return
 #######################
 
 test_KMeansCluster <- function(km, nclust) {
-  expect_true(all(c("call", "clusters", "centroids", "total_SSE", "best_initialization", 
+  expect_true(all(c("call", "clusters", "centroids", "total_SSE", "best_initialization",
                     "WCSS_per_cluster", "obs_per_cluster", "between.SS_DIV_total.SS") %in%
                   names(km)))
   expect_is(km$clusters, "numeric")
@@ -347,6 +347,29 @@ testthat::test_that("KMeans_rcpp returns the correct output if CENTROIDS is user
 #                            is.numeric(km$best_initialization) && ncol(km$WCSS_per_cluster) == clust && ncol(km$obs_per_cluster) == clust && inherits(km, "k-means clustering")  )
 # })
 
+
+testthat::test_that("the 'kmeans_pp_init()' function (i.e. the 'kmeans++' initializer) does not return duplicated centroids (see the Github issue https://github.com/mlampros/ClusterR/issues/25)", {
+
+  data = matrix(data = c(0,0,0,1,1,0,1,1,2,2,3,1,4,2,6,2), ncol = 2, byrow = TRUE)
+  runs = 10
+  nansum = sse = rep(NA_real_, runs)
+
+  for (i in 1:runs) {
+
+    L = KMeans_rcpp(data = data,
+                    clusters = 6,
+                    num_init = 10,
+                    max_iters = 100,
+                    initializer = "kmeans++",
+                    seed = 1,                # keep the seed always the same for reproducibility (otherwise it is possible that I receive a slightly worse 'sse' but not higher than 1.333333), fact is I don't want NA's in the 'nansum' vector
+                    verbose = FALSE)
+
+    nansum[i] = sum(is.na(L$centroids))
+    sse[i] = sum(L$WCSS_per_cluster)
+  }
+
+  testthat::expect_true(all(nansum == 0) & !any(is.na(nansum)) & all(sse == 1.0))
+})
 
 
 

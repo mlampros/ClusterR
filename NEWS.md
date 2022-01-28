@@ -1,6 +1,10 @@
-## ClusterR 1.2.5.9000 (development)
+
+## ClusterR 1.2.6
 
 * [#24](https://github.com/mlampros/ClusterR/pull/24) Add S3 classes to ClusteR objects (KMeansCluster, MedoidsCluster and GMMCluster) and add generic `predict()` and `print()` methods.
+* I fixed the issue related to the duplicated centroids of the internal *kmeans_pp_init()* function (see the Github issue: https://github.com/mlampros/ClusterR/issues/25)
+* I added a test case to check for duplicated centroids related to the *kmeans_pp_init()* function
+
 
 ## ClusterR 1.2.5
 
