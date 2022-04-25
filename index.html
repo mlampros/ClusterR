@@ -89,10 +89,8 @@
 <p><br></p>
 <p>Assumming that an R package (‘PackageA’) calls one of the <em>ClusterR</em> Rcpp functions. Then the maintainer of ‘PackageA’ has to :</p>
 <p><br></p>
-<ul>
-<li>
-<strong>1st.</strong> install the <em>ClusterR</em> package to take advantage of the new functionality either from CRAN using,</li>
-</ul>
+<ul><li>
+<strong>1st.</strong> install the <em>ClusterR</em> package to take advantage of the new functionality either from CRAN using,</li></ul>
 <p><br></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
@@ -106,19 +104,15 @@
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'mlampros/ClusterR'</span>, upgrade <span class="op">=</span> <span class="st">'always'</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span>, repos <span class="op">=</span> <span class="st">'https://cloud.r-project.org/'</span><span class="op">)</span>
  </code></pre></div>
 <p><br></p>
-<ul>
-<li>
-<strong>2nd.</strong> update the <strong>DESCRIPTION</strong> file of ‘PackageA’ and especially the <em>LinkingTo</em> field by adding the <em>ClusterR</em> package (besides any other packages),</li>
-</ul>
+<ul><li>
+<strong>2nd.</strong> update the <strong>DESCRIPTION</strong> file of ‘PackageA’ and especially the <em>LinkingTo</em> field by adding the <em>ClusterR</em> package (besides any other packages),</li></ul>
 <p><br></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">LinkingTo</span><span class="op">:</span> <span class="va">ClusterR</span></code></pre></div>
 <p><br></p>
-<ul>
-<li>
-<strong>3rd.</strong> open a <strong>new C++ file</strong> (for instance in Rstudio) and at the top of the file add the following ‘headers’, ‘depends’ and ‘plugins’,</li>
-</ul>
+<ul><li>
+<strong>3rd.</strong> open a <strong>new C++ file</strong> (for instance in Rstudio) and at the top of the file add the following ‘headers’, ‘depends’ and ‘plugins’,</li></ul>
 <p><br></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="co"># include &lt;RcppArmadillo.h&gt;</span></span>
@@ -297,7 +291,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
