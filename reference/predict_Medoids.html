@@ -80,22 +80,37 @@
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>matrix or data frame</p></dd>
+
+
 <dt>MEDOIDS</dt>
 <dd><p>a matrix of initial cluster medoids (data observations). The rows of the MEDOIDS matrix should be equal to the number of clusters and the columns of the MEDOIDS matrix should be equal to the columns of the data.</p></dd>
+
+
 <dt>distance_metric</dt>
 <dd><p>a string specifying the distance method. One of,  <em>euclidean</em>,  <em>manhattan</em>,  <em>chebyshev</em>,  <em>canberra</em>,  <em>braycurtis</em>,  <em>pearson_correlation</em>,  <em>simple_matching_coefficient</em>,  <em>minkowski</em>,  <em>hamming</em>,  <em>jaccard_coefficient</em>,  <em>Rao_coefficient</em>,  <em>mahalanobis</em>, <em>cosine</em></p></dd>
+
+
 <dt>fuzzy</dt>
 <dd><p>either TRUE or FALSE. If TRUE, then probabilities for each cluster will be returned based on the distance between observations and medoids.</p></dd>
+
+
 <dt>minkowski_p</dt>
 <dd><p>a numeric value specifying the minkowski parameter in case that distance_metric = "minkowski"</p></dd>
+
+
 <dt>threads</dt>
 <dd><p>an integer specifying the number of cores to run in parallel. Openmp will be utilized to parallelize the number of initializations (num_init)</p></dd>
+
+
 <dt>object, newdata, ...</dt>
 <dd><p>arguments for the `predict` generic</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a list with the following attributes will be returned : clusters, fuzzy_clusters (if fuzzy = TRUE), dissimilarity.</p>
+    
+
+<p>a list with the following attributes will be returned : clusters, fuzzy_clusters (if fuzzy = TRUE), dissimilarity.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -128,7 +143,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

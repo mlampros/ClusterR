@@ -82,30 +82,53 @@
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>matrix or data frame</p></dd>
+
+
 <dt>clusters</dt>
 <dd><p>the number of clusters</p></dd>
+
+
 <dt>num_init</dt>
 <dd><p>number of times the algorithm will be run with different centroid seeds</p></dd>
+
+
 <dt>max_iters</dt>
 <dd><p>the maximum number of clustering iterations</p></dd>
+
+
 <dt>initializer</dt>
 <dd><p>the method of initialization. One of, <em>optimal_init</em>, <em>quantile_init</em>, <em>kmeans++</em> and <em>random</em>. See details for more information</p></dd>
+
+
 <dt>fuzzy</dt>
 <dd><p>either TRUE or FALSE. If TRUE, then prediction probabilities will be calculated using the distance between observations and centroids</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>either TRUE or FALSE, indicating whether progress is printed during clustering.</p></dd>
+
+
 <dt>CENTROIDS</dt>
 <dd><p>a matrix of initial cluster centroids. The rows of the CENTROIDS matrix should be equal to the number of clusters and the columns should be equal to the columns of the data.</p></dd>
+
+
 <dt>tol</dt>
 <dd><p>a float number. If, in case of an iteration (iteration &gt; 1 and iteration &lt; max_iters) 'tol' is greater than the squared norm of the centroids, then kmeans has converged</p></dd>
+
+
 <dt>tol_optimal_init</dt>
 <dd><p>tolerance value for the 'optimal_init' initializer. The higher this value is, the far appart from each other the centroids are.</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>integer value for random number generator (RNG)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a list with the following attributes: clusters, fuzzy_clusters (if fuzzy = TRUE), centroids, total_SSE, best_initialization, WCSS_per_cluster, obs_per_cluster, between.SS_DIV_total.SS</p>
+    
+
+<p>a list with the following attributes: clusters, fuzzy_clusters (if fuzzy = TRUE), centroids, total_SSE, best_initialization, WCSS_per_cluster, obs_per_cluster, between.SS_DIV_total.SS</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -150,7 +173,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -82,30 +82,53 @@
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>matrix or data frame</p></dd>
+
+
 <dt>clusters</dt>
 <dd><p>the number of clusters</p></dd>
+
+
 <dt>samples</dt>
 <dd><p>number of samples to draw from the data set</p></dd>
+
+
 <dt>sample_size</dt>
 <dd><p>fraction of data to draw in each sample iteration. It should be a float number greater than 0.0 and less or equal to 1.0</p></dd>
+
+
 <dt>distance_metric</dt>
 <dd><p>a string specifying the distance method. One of,  <em>euclidean</em>,  <em>manhattan</em>,  <em>chebyshev</em>,  <em>canberra</em>,  <em>braycurtis</em>,  <em>pearson_correlation</em>,  <em>simple_matching_coefficient</em>,  <em>minkowski</em>,  <em>hamming</em>,  <em>jaccard_coefficient</em>,  <em>Rao_coefficient</em>,  <em>mahalanobis</em>, <em>cosine</em></p></dd>
+
+
 <dt>minkowski_p</dt>
 <dd><p>a numeric value specifying the minkowski parameter in case that distance_metric = "minkowski"</p></dd>
+
+
 <dt>threads</dt>
 <dd><p>an integer specifying the number of cores to run in parallel. Openmp will be utilized to parallelize the number of the different sample draws</p></dd>
+
+
 <dt>swap_phase</dt>
 <dd><p>either TRUE or FALSE. If TRUE then both phases ('build' and 'swap') will take place. The 'swap_phase' is considered more computationally intensive.</p></dd>
+
+
 <dt>fuzzy</dt>
 <dd><p>either TRUE or FALSE. If TRUE, then probabilities for each cluster will be returned based on the distance between observations and medoids</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>either TRUE or FALSE, indicating whether progress is printed during clustering</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>integer value for random number generator (RNG)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a list with the following attributes : medoids, medoid_indices, sample_indices, best_dissimilarity, clusters, fuzzy_probs (if fuzzy = TRUE), clustering_stats, dissimilarity_matrix, silhouette_matrix</p>
+    
+
+<p>a list with the following attributes : medoids, medoid_indices, sample_indices, best_dissimilarity, clusters, fuzzy_probs (if fuzzy = TRUE), clustering_stats, dissimilarity_matrix, silhouette_matrix</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -146,7 +169,7 @@ the 'Cluster_Medoids' function will be applied to each sample draw.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

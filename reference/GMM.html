@@ -80,26 +80,45 @@
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>matrix or data frame</p></dd>
+
+
 <dt>gaussian_comps</dt>
 <dd><p>the number of gaussian mixture components</p></dd>
+
+
 <dt>dist_mode</dt>
 <dd><p>the distance used during the seeding of initial means and k-means clustering. One of, <em>eucl_dist</em>, <em>maha_dist</em>.</p></dd>
+
+
 <dt>seed_mode</dt>
 <dd><p>how the initial means are seeded prior to running k-means and/or EM algorithms. One of, <em>static_subset</em>, <em>random_subset</em>, <em>static_spread</em>, <em>random_spread</em>.</p></dd>
+
+
 <dt>km_iter</dt>
 <dd><p>the number of iterations of the k-means algorithm</p></dd>
+
+
 <dt>em_iter</dt>
 <dd><p>the number of iterations of the EM algorithm</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>either TRUE or FALSE; enable or disable printing of progress during the k-means and EM algorithms</p></dd>
+
+
 <dt>var_floor</dt>
 <dd><p>the variance floor (smallest allowed value) for the diagonal covariances</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>integer value for random number generator (RNG)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a list consisting of the centroids, covariance matrix ( where each row of the matrix represents a diagonal covariance matrix), weights and the log-likelihoods for each gaussian component. In case of Error it returns the error message and the possible causes.</p>
+    
+
+<p>a list consisting of the centroids, covariance matrix ( where each row of the matrix represents a diagonal covariance matrix), weights and the log-likelihoods for each gaussian component. In case of Error it returns the error message and the possible causes.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -141,7 +160,7 @@ The k-means and EM algorithms will run faster on multi-core machines when OpenMP
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
