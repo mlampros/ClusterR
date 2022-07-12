@@ -63,7 +63,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plot_2d</span><span class="op">(</span><span class="va">data</span>, <span class="va">clusters</span>, <span class="va">centroids_medoids</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_2d</span><span class="op">(</span><span class="va">data</span>, <span class="va">clusters</span>, <span class="va">centroids_medoids</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -98,19 +98,19 @@ the columns should be equal to the columns of the data.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># data(dietary_survey_IBS)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># dat = center_scale(dat)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># pca_dat = stats::princomp(dat)$scores[, 1:2]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># km = KMeans_rcpp(pca_dat, clusters = 2, num_init = 5, max_iters = 100)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># plot_2d(pca_dat, km$clusters, km$centroids)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># data(dietary_survey_IBS)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># dat = center_scale(dat)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># pca_dat = stats::princomp(dat)$scores[, 1:2]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># km = KMeans_rcpp(pca_dat, clusters = 2, num_init = 5, max_iters = 100)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot_2d(pca_dat, km$clusters, km$centroids)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
@@ -126,7 +126,7 @@ the columns should be equal to the columns of the data.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -63,7 +63,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">predict_MBatchKMeans</span><span class="op">(</span><span class="va">data</span>, <span class="va">CENTROIDS</span>, fuzzy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predict_MBatchKMeans</span><span class="op">(</span><span class="va">data</span>, <span class="va">CENTROIDS</span>, fuzzy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -97,17 +97,17 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">=</span> <span class="va">dietary_survey_IBS</span><span class="op">[</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="center_scale.html">center_scale</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">MbatchKm</span> <span class="op">=</span> <span class="fu"><a href="MiniBatchKmeans.html">MiniBatchKmeans</a></span><span class="op">(</span><span class="va">dat</span>, clusters <span class="op">=</span> <span class="fl">2</span>, batch_size <span class="op">=</span> <span class="fl">20</span>, num_init <span class="op">=</span> <span class="fl">5</span>, early_stop_iter <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">pr</span> <span class="op">=</span> <span class="fu">predict_MBatchKMeans</span><span class="op">(</span><span class="va">dat</span>, <span class="va">MbatchKm</span><span class="op">$</span><span class="va">centroids</span>, fuzzy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">=</span> <span class="va">dietary_survey_IBS</span><span class="op">[</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="center_scale.html">center_scale</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">MbatchKm</span> <span class="op">=</span> <span class="fu"><a href="MiniBatchKmeans.html">MiniBatchKmeans</a></span><span class="op">(</span><span class="va">dat</span>, clusters <span class="op">=</span> <span class="fl">2</span>, batch_size <span class="op">=</span> <span class="fl">20</span>, num_init <span class="op">=</span> <span class="fl">5</span>, early_stop_iter <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pr</span> <span class="op">=</span> <span class="fu">predict_MBatchKMeans</span><span class="op">(</span><span class="va">dat</span>, <span class="va">MbatchKm</span><span class="op">$</span><span class="va">centroids</span>, fuzzy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -122,7 +122,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -63,20 +63,20 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Optimal_Clusters_Medoids</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">max_clusters</span>,
-  <span class="va">distance_metric</span>,
-  criterion <span class="op">=</span> <span class="st">"dissimilarity"</span>,
-  clara_samples <span class="op">=</span> <span class="fl">0</span>,
-  clara_sample_size <span class="op">=</span> <span class="fl">0</span>,
-  minkowski_p <span class="op">=</span> <span class="fl">1</span>,
-  swap_phase <span class="op">=</span> <span class="cn">TRUE</span>,
-  threads <span class="op">=</span> <span class="fl">1</span>,
-  verbose <span class="op">=</span> <span class="cn">FALSE</span>,
-  plot_clusters <span class="op">=</span> <span class="cn">TRUE</span>,
-  seed <span class="op">=</span> <span class="fl">1</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Optimal_Clusters_Medoids</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">max_clusters</span>,</span>
+<span>  <span class="va">distance_metric</span>,</span>
+<span>  criterion <span class="op">=</span> <span class="st">"dissimilarity"</span>,</span>
+<span>  clara_samples <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  clara_sample_size <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  minkowski_p <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  swap_phase <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  threads <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  plot_clusters <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -149,24 +149,24 @@ silhouette widths belonging to each cluster.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">soybean</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">=</span> <span class="va">soybean</span><span class="op">[</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">soybean</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">opt_md</span> <span class="op">=</span> <span class="fu">Optimal_Clusters_Medoids</span><span class="op">(</span><span class="va">dat</span>, <span class="fl">10</span>, <span class="st">'jaccard_coefficient'</span>, plot_clusters <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#----------------------------</span></span>
-<span class="r-in"><span class="co"># non-contiguous search space</span></span>
-<span class="r-in"><span class="co">#----------------------------</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">search_space</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">opt_md</span> <span class="op">=</span> <span class="fu">Optimal_Clusters_Medoids</span><span class="op">(</span><span class="va">dat</span>, <span class="va">search_space</span>, <span class="st">'jaccard_coefficient'</span>, plot_clusters <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">soybean</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">=</span> <span class="va">soybean</span><span class="op">[</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">soybean</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">opt_md</span> <span class="op">=</span> <span class="fu">Optimal_Clusters_Medoids</span><span class="op">(</span><span class="va">dat</span>, <span class="fl">10</span>, <span class="st">'jaccard_coefficient'</span>, plot_clusters <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#----------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># non-contiguous search space</span></span></span>
+<span class="r-in"><span><span class="co">#----------------------------</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">search_space</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">opt_md</span> <span class="op">=</span> <span class="fu">Optimal_Clusters_Medoids</span><span class="op">(</span><span class="va">dat</span>, <span class="va">search_space</span>, <span class="st">'jaccard_coefficient'</span>, plot_clusters <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -181,7 +181,7 @@ silhouette widths belonging to each cluster.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

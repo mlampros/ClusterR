@@ -93,23 +93,23 @@
 <strong>1st.</strong> install the <em>ClusterR</em> package to take advantage of the new functionality either from CRAN using,</li></ul>
 <p><br></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ClusterR"</span><span class="op">)</span>
- </code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ClusterR"</span><span class="op">)</span></span>
+<span> </span></code></pre></div>
 <p><br></p>
 <p>or download the latest version from Github using the <em>remotes</em> package,</p>
 <p><br></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'mlampros/ClusterR'</span>, upgrade <span class="op">=</span> <span class="st">'always'</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span>, repos <span class="op">=</span> <span class="st">'https://cloud.r-project.org/'</span><span class="op">)</span>
- </code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'mlampros/ClusterR'</span>, upgrade <span class="op">=</span> <span class="st">'always'</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span>, repos <span class="op">=</span> <span class="st">'https://cloud.r-project.org/'</span><span class="op">)</span></span>
+<span> </span></code></pre></div>
 <p><br></p>
 <ul><li>
 <strong>2nd.</strong> update the <strong>DESCRIPTION</strong> file of ‘PackageA’ and especially the <em>LinkingTo</em> field by adding the <em>ClusterR</em> package (besides any other packages),</li></ul>
 <p><br></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">LinkingTo</span><span class="op">:</span> <span class="va">ClusterR</span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="va">LinkingTo</span><span class="op">:</span> <span class="va">ClusterR</span></span></code></pre></div>
 <p><br></p>
 <ul><li>
 <strong>3rd.</strong> open a <strong>new C++ file</strong> (for instance in Rstudio) and at the top of the file add the following ‘headers’, ‘depends’ and ‘plugins’,</li></ul>
@@ -162,20 +162,19 @@
 <p>Then, by opening an R file a user can call the <em>mini_batch_kmeans</em> function using,</p>
 <p><br></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu">Rcpp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Rcpp/man/sourceCpp.html" class="external-link">sourceCpp</a></span><span class="op">(</span><span class="st">'example.cpp'</span><span class="op">)</span>              <span class="co"># assuming that the previous Rcpp code is included in 'example.cpp' </span>
-             
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100000</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">1000</span>, ncol <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
-
-<span class="va">mbkm</span> <span class="op">=</span> <span class="fu">mini_batch_kmeans</span><span class="op">(</span><span class="va">dat</span>, clusters <span class="op">=</span> <span class="fl">3</span>, batch_size <span class="op">=</span> <span class="fl">50</span>, max_iters <span class="op">=</span> <span class="fl">100</span>, num_init <span class="op">=</span> <span class="fl">2</span>, 
-
-                         init_fraction <span class="op">=</span> <span class="fl">1.0</span>, initializer <span class="op">=</span> <span class="st">"kmeans++"</span>, early_stop_iter <span class="op">=</span> <span class="fl">10</span>, 
-                         
-                         verbose <span class="op">=</span> <span class="cn">T</span>, CENTROIDS <span class="op">=</span> <span class="cn">NULL</span>, tol <span class="op">=</span> <span class="fl">1e-4</span>, tol_optimal_init <span class="op">=</span> <span class="fl">0.5</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-                         
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mbkm</span><span class="op">)</span>
-</code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="fu">Rcpp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Rcpp/man/sourceCpp.html" class="external-link">sourceCpp</a></span><span class="op">(</span><span class="st">'example.cpp'</span><span class="op">)</span>              <span class="co"># assuming that the previous Rcpp code is included in 'example.cpp' </span></span>
+<span>             </span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100000</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">1000</span>, ncol <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mbkm</span> <span class="op">=</span> <span class="fu">mini_batch_kmeans</span><span class="op">(</span><span class="va">dat</span>, clusters <span class="op">=</span> <span class="fl">3</span>, batch_size <span class="op">=</span> <span class="fl">50</span>, max_iters <span class="op">=</span> <span class="fl">100</span>, num_init <span class="op">=</span> <span class="fl">2</span>, </span>
+<span></span>
+<span>                         init_fraction <span class="op">=</span> <span class="fl">1.0</span>, initializer <span class="op">=</span> <span class="st">"kmeans++"</span>, early_stop_iter <span class="op">=</span> <span class="fl">10</span>, </span>
+<span>                         </span>
+<span>                         verbose <span class="op">=</span> <span class="cn">T</span>, CENTROIDS <span class="op">=</span> <span class="cn">NULL</span>, tol <span class="op">=</span> <span class="fl">1e-4</span>, tol_optimal_init <span class="op">=</span> <span class="fl">0.5</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>                         </span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mbkm</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
 <p>Use the following link to report bugs/issues, <br><br></p>
 <p><a href="https://github.com/mlampros/ClusterR/issues" class="external-link">https://github.com/mlampros/ClusterR/issues</a></p>
@@ -291,7 +290,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>

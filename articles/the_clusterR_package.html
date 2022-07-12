@@ -81,7 +81,7 @@
       <h1 data-toc-skip>Functionality of the ClusterR package</h1>
                         <h4 data-toc-skip class="author">Lampros Mouselimis</h4>
             
-            <h4 data-toc-skip class="date">2022-06-13</h4>
+            <h4 data-toc-skip class="date">2022-07-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/mlampros/ClusterR/blob/HEAD/vignettes/the_clusterR_package.Rmd" class="external-link"><code>vignettes/the_clusterR_package.Rmd</code></a></small>
       <div class="hidden name"><code>the_clusterR_package.Rmd</code></div>
@@ -105,67 +105,67 @@
 <p><a href="https://brilliant.org/wiki/gaussian-mixture-model/" class="external-link">Gaussian Mixture Models</a> are a probabilistic model for representing normally distributed subpopulations within an overall population. A Gaussian mixture model is parameterized by two types of values, the mixture <em>component weights</em> and the <em>component means</em> and <em>covariances</em> (for the <em>multivariate</em> case). If the number of components is known, expectation maximization is the technique most commonly used to estimate the mixture model’s parameters.<br></p>
 <p>The <strong>GMM</strong> function in the <em>ClusterR</em> package is an R implementation of the <a href="http://arma.sourceforge.net/docs.html#gmm_diag" class="external-link">Armadillo library</a> class for modeling data as a Gaussian Mixture Model (GMM), under the assumption of <em>diagonal</em> covariance matrices. A number of function parameters can be tuned, among others the <em>gaussian_comps</em>, the <em>dist_mode</em> (eucl_dist, maha_dist), the <em>seed_mode</em> (static_subset, random_subset, static_spread, random_spread), the <em>km_iter</em> and the <em>em_iter</em> (more information about the parameters can be found in the package documentation). I’ll illustrate the <em>GMM</em> function using the synthetic data <em>dietary_survey_IBS</em>,</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlampros/ClusterR" class="external-link">ClusterR</a></span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Loading required package: gtools</span></code></pre>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlampros/ClusterR" class="external-link">ClusterR</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Loading required package: gtools</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] 400  43</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 400  43</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">X</span> <span class="op">=</span> <span class="va">dietary_survey_IBS</span><span class="op">[</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span><span class="op">]</span>   <span class="co"># data (excluding the response variable)</span>
-
-<span class="va">y</span> <span class="op">=</span> <span class="va">dietary_survey_IBS</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span><span class="op">]</span>    <span class="co"># the response variable</span>
-
-<span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="../reference/center_scale.html">center_scale</a></span><span class="op">(</span><span class="va">X</span>, mean_center <span class="op">=</span> <span class="cn">T</span>, sd_scale <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>  <span class="co"># centering and scaling the data</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">X</span> <span class="op">=</span> <span class="va">dietary_survey_IBS</span><span class="op">[</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span><span class="op">]</span>   <span class="co"># data (excluding the response variable)</span></span>
+<span></span>
+<span><span class="va">y</span> <span class="op">=</span> <span class="va">dietary_survey_IBS</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span><span class="op">]</span>    <span class="co"># the response variable</span></span>
+<span></span>
+<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="../reference/center_scale.html">center_scale</a></span><span class="op">(</span><span class="va">X</span>, mean_center <span class="op">=</span> <span class="cn">T</span>, sd_scale <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>  <span class="co"># centering and scaling the data</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gmm</span> <span class="op">=</span> <span class="fu"><a href="../reference/GMM.html">GMM</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fl">2</span>, dist_mode <span class="op">=</span> <span class="st">"maha_dist"</span>, seed_mode <span class="op">=</span> <span class="st">"random_subset"</span>, km_iter <span class="op">=</span> <span class="fl">10</span>,
-          em_iter <span class="op">=</span> <span class="fl">10</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>          
-
-<span class="co"># predict centroids, covariance matrix and weights</span>
-<span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">gmm</span>, newdata <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">gmm</span> <span class="op">=</span> <span class="fu"><a href="../reference/GMM.html">GMM</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fl">2</span>, dist_mode <span class="op">=</span> <span class="st">"maha_dist"</span>, seed_mode <span class="op">=</span> <span class="st">"random_subset"</span>, km_iter <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>          em_iter <span class="op">=</span> <span class="fl">10</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>          </span>
+<span></span>
+<span><span class="co"># predict centroids, covariance matrix and weights</span></span>
+<span><span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">gmm</span>, newdata <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
 <p>The <em>GMM</em> function, initially, returns the <em>centroids</em>, the <em>covariance matrix</em> ( where each row of the matrix represents a diagonal covariance matrix), the <em>weights</em> and the <em>log-likelihoods</em> for each gaussian component. Then, the <em>predict</em> function takes the <em>GMM</em> model and returns the most probable clusters.</p>
 <p>In addition to the previous mentioned functions, the <strong>Optimal_Clusters_GMM</strong> can be utilized to estimate the number of clusters of the data using either the <em>AIC</em> (Akaike information) or the <em>BIC</em> (Bayesian information) criterion,</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">opt_gmm</span> <span class="op">=</span> <span class="fu"><a href="../reference/Optimal_Clusters_GMM.html">Optimal_Clusters_GMM</a></span><span class="op">(</span><span class="va">dat</span>, max_clusters <span class="op">=</span> <span class="fl">10</span>, criterion <span class="op">=</span> <span class="st">"BIC"</span>, 
-                               
-                               dist_mode <span class="op">=</span> <span class="st">"maha_dist"</span>, seed_mode <span class="op">=</span> <span class="st">"random_subset"</span>,
-                               
-                               km_iter <span class="op">=</span> <span class="fl">10</span>, em_iter <span class="op">=</span> <span class="fl">10</span>, var_floor <span class="op">=</span> <span class="fl">1e-10</span>, 
-                               
-                               plot_data <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">opt_gmm</span> <span class="op">=</span> <span class="fu"><a href="../reference/Optimal_Clusters_GMM.html">Optimal_Clusters_GMM</a></span><span class="op">(</span><span class="va">dat</span>, max_clusters <span class="op">=</span> <span class="fl">10</span>, criterion <span class="op">=</span> <span class="st">"BIC"</span>, </span>
+<span>                               </span>
+<span>                               dist_mode <span class="op">=</span> <span class="st">"maha_dist"</span>, seed_mode <span class="op">=</span> <span class="st">"random_subset"</span>,</span>
+<span>                               </span>
+<span>                               km_iter <span class="op">=</span> <span class="fl">10</span>, em_iter <span class="op">=</span> <span class="fl">10</span>, var_floor <span class="op">=</span> <span class="fl">1e-10</span>, </span>
+<span>                               </span>
+<span>                               plot_data <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
 <p><img src="Rplot.png"></p>
 <p><br></p>
 <p>In case of model selection, among a specific number of models, the model with the lowest <a href="https://en.wikipedia.org/wiki/Bayesian_information_criterion" class="external-link">BIC</a> should be preferred, which is true here for a number of clusters equal to 2.</p>
 <p>Assuming that true labels are available, then one could use the <strong>external_validation</strong> methods (<em>rand_index</em>, <em>adjusted_rand_index</em>, <em>jaccard_index</em>, <em>fowlkes_Mallows_index</em>, <em>mirkin_metric</em>, <em>purity</em>, <em>entropy</em>, <em>nmi</em> (normalized mutual information) and <em>var_info</em> (variation of information) to validate the output clusters,</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">res</span> <span class="op">=</span> <span class="fu"><a href="../reference/external_validation.html">external_validation</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">$</span><span class="va">class</span>, <span class="va">pr</span><span class="op">$</span><span class="va">cluster_labels</span>, 
-                          
-                          method <span class="op">=</span> <span class="st">"adjusted_rand_index"</span>, summary_stats <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-
-<span class="va">res</span>
-
-<span class="co">##  </span>
-<span class="co">## ---------------------------------------- </span>
-<span class="co">## purity                         : 1 </span>
-<span class="co">## entropy                        : 0 </span>
-<span class="co">## normalized mutual information  : 1 </span>
-<span class="co">## variation of information       : 0 </span>
-<span class="co">## ---------------------------------------- </span>
-<span class="co">## specificity                    : 1 </span>
-<span class="co">## sensitivity                    : 1 </span>
-<span class="co">## precision                      : 1 </span>
-<span class="co">## recall                         : 1 </span>
-<span class="co">## F-measure                      : 1 </span>
-<span class="co">## ---------------------------------------- </span>
-<span class="co">## accuracy OR rand-index         : 1 </span>
-<span class="co">## adjusted-rand-index            : 1 </span>
-<span class="co">## jaccard-index                  : 1 </span>
-<span class="co">## fowlkes-mallows-index          : 1 </span>
-<span class="co">## mirkin-metric                  : 0 </span>
-<span class="co">## ----------------------------------------</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">=</span> <span class="fu"><a href="../reference/external_validation.html">external_validation</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">$</span><span class="va">class</span>, <span class="va">pr</span><span class="op">$</span><span class="va">cluster_labels</span>, </span>
+<span>                          </span>
+<span>                          method <span class="op">=</span> <span class="st">"adjusted_rand_index"</span>, summary_stats <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">res</span></span>
+<span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">## ---------------------------------------- </span></span>
+<span><span class="co">## purity                         : 1 </span></span>
+<span><span class="co">## entropy                        : 0 </span></span>
+<span><span class="co">## normalized mutual information  : 1 </span></span>
+<span><span class="co">## variation of information       : 0 </span></span>
+<span><span class="co">## ---------------------------------------- </span></span>
+<span><span class="co">## specificity                    : 1 </span></span>
+<span><span class="co">## sensitivity                    : 1 </span></span>
+<span><span class="co">## precision                      : 1 </span></span>
+<span><span class="co">## recall                         : 1 </span></span>
+<span><span class="co">## F-measure                      : 1 </span></span>
+<span><span class="co">## ---------------------------------------- </span></span>
+<span><span class="co">## accuracy OR rand-index         : 1 </span></span>
+<span><span class="co">## adjusted-rand-index            : 1 </span></span>
+<span><span class="co">## jaccard-index                  : 1 </span></span>
+<span><span class="co">## fowlkes-mallows-index          : 1 </span></span>
+<span><span class="co">## mirkin-metric                  : 0 </span></span>
+<span><span class="co">## ----------------------------------------</span></span></code></pre></div>
 <p><br></p>
 <p>and if the <em>summary_stats</em> parameter is set to TRUE then it also returns the <em>specificity</em>, <em>sensitivity</em>, <em>precision</em>, <em>recall</em> and <em>F-measure</em> metrics. <br><br></p>
 </div>
@@ -177,19 +177,19 @@
 <p><strong>KMeans_arma</strong> <br></p>
 <p>The <em>KMeans_arma</em> is faster than the KMeans_rcpp function, however, it initially outputs only the centroids for a specific number of clusters. Furthermore, the number of columns of the data should be larger than the number of clusters, otherwise, it raises an error. The clustering will run faster on multi-core machines when OpenMP is enabled (eg. -fopenmp in GCC). The algorithm is initialized once and 10 iterations are typically sufficient for convergence. The initial centroids are seeded using one of <em>keep_existing</em>, <em>static_subset</em>, <em>random_subset</em>, <em>static_spread</em> and <em>random_spread</em>. If the seed_mode equals to keep_existing then the user should supply a matrix of centroids. <br><br> I’ll reduce the dimensions of the dietary_survey_IBS data using PCA and particularly the <em>princomp</em> function of the <em>stats</em> package, so that a 2-dimensional plot of the resulted clusters is possible,</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pca_dat</span> <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/princomp.html" class="external-link">princomp</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">$</span><span class="va">scores</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>
-
-<span class="va">km</span> <span class="op">=</span> <span class="fu"><a href="../reference/KMeans_arma.html">KMeans_arma</a></span><span class="op">(</span><span class="va">pca_dat</span>, clusters <span class="op">=</span> <span class="fl">2</span>, n_iter <span class="op">=</span> <span class="fl">10</span>, seed_mode <span class="op">=</span> <span class="st">"random_subset"</span>, 
-                 
-                 verbose <span class="op">=</span> <span class="cn">T</span>, CENTROIDS <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_KMeans.html">predict_KMeans</a></span><span class="op">(</span><span class="va">pca_dat</span>, <span class="va">km</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">$</span><span class="va">class</span>, <span class="va">pr</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">km</span><span class="op">)</span> <span class="op">=</span> <span class="st">'matrix'</span>
-
-<span class="fu"><a href="../reference/plot_2d.html">plot_2d</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pca_dat</span>, clusters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">pr</span><span class="op">)</span>, centroids_medoids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">km</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pca_dat</span> <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/princomp.html" class="external-link">princomp</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">$</span><span class="va">scores</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">km</span> <span class="op">=</span> <span class="fu"><a href="../reference/KMeans_arma.html">KMeans_arma</a></span><span class="op">(</span><span class="va">pca_dat</span>, clusters <span class="op">=</span> <span class="fl">2</span>, n_iter <span class="op">=</span> <span class="fl">10</span>, seed_mode <span class="op">=</span> <span class="st">"random_subset"</span>, </span>
+<span>                 </span>
+<span>                 verbose <span class="op">=</span> <span class="cn">T</span>, CENTROIDS <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_KMeans.html">predict_KMeans</a></span><span class="op">(</span><span class="va">pca_dat</span>, <span class="va">km</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">$</span><span class="va">class</span>, <span class="va">pr</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">km</span><span class="op">)</span> <span class="op">=</span> <span class="st">'matrix'</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/plot_2d.html">plot_2d</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pca_dat</span>, clusters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">pr</span><span class="op">)</span>, centroids_medoids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">km</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
 <p><img src="Rplot_2d.png"><br><br><br></p>
 <p><strong>KMeans_rcpp</strong> <br></p>
@@ -203,51 +203,51 @@
 </ul>
 <p><br> More details about KMeans_rcpp can be found in the package documentation. I’ll explain the various parameters of the <em>KMeans_rcpp</em> using a <a href="https://en.wikipedia.org/wiki/Vector_quantization" class="external-link">vector quantization</a> example and the OpenImageR package, <br></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlampros/OpenImageR" class="external-link">OpenImageR</a></span><span class="op">)</span>
-
-<span class="va">im</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/readImage.html" class="external-link">readImage</a></span><span class="op">(</span><span class="st">'elephant.jpg'</span><span class="op">)</span>
-
-<span class="co"># first resize the image to reduce the dimensions</span>
-<span class="va">im</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/resizeImage.html" class="external-link">resizeImage</a></span><span class="op">(</span><span class="va">im</span>, <span class="fl">75</span>, <span class="fl">75</span>, method <span class="op">=</span> <span class="st">'bilinear'</span><span class="op">)</span>            
-
-<span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">im</span><span class="op">)</span>                                                <span class="co"># plot the original image</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlampros/OpenImageR" class="external-link">OpenImageR</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">im</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/readImage.html" class="external-link">readImage</a></span><span class="op">(</span><span class="st">'elephant.jpg'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># first resize the image to reduce the dimensions</span></span>
+<span><span class="va">im</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/resizeImage.html" class="external-link">resizeImage</a></span><span class="op">(</span><span class="va">im</span>, <span class="fl">75</span>, <span class="fl">75</span>, method <span class="op">=</span> <span class="st">'bilinear'</span><span class="op">)</span>            </span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">im</span><span class="op">)</span>                                                <span class="co"># plot the original image</span></span></code></pre></div>
 <p><img src="the_clusterR_package_files/figure-html/unnamed-chunk-6-1.png" width="288"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">im2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">im</span>, <span class="fl">3</span>, <span class="va">as.vector</span><span class="op">)</span>                                <span class="co"># vectorize RGB</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">im2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">im</span>, <span class="fl">3</span>, <span class="va">as.vector</span><span class="op">)</span>                                <span class="co"># vectorize RGB</span></span></code></pre></div>
 <p><br></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># perform KMeans_rcpp clustering</span>
-
-<span class="va">km_rc</span> <span class="op">=</span> <span class="fu"><a href="../reference/KMeans_rcpp.html">KMeans_rcpp</a></span><span class="op">(</span><span class="va">im2</span>, clusters <span class="op">=</span> <span class="fl">5</span>, num_init <span class="op">=</span> <span class="fl">5</span>, max_iters <span class="op">=</span> <span class="fl">100</span>, 
-                    initializer <span class="op">=</span> <span class="st">'optimal_init'</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
-
-<span class="va">km_rc</span><span class="op">$</span><span class="va">between.SS_DIV_total.SS</span></code></pre></div>
-<pre><code><span class="co">## [1] 0.9873009</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># perform KMeans_rcpp clustering</span></span>
+<span></span>
+<span><span class="va">km_rc</span> <span class="op">=</span> <span class="fu"><a href="../reference/KMeans_rcpp.html">KMeans_rcpp</a></span><span class="op">(</span><span class="va">im2</span>, clusters <span class="op">=</span> <span class="fl">5</span>, num_init <span class="op">=</span> <span class="fl">5</span>, max_iters <span class="op">=</span> <span class="fl">100</span>, </span>
+<span>                    initializer <span class="op">=</span> <span class="st">'optimal_init'</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">km_rc</span><span class="op">$</span><span class="va">between.SS_DIV_total.SS</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 0.9873009</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">km_rc</span>, newdata <span class="op">=</span> <span class="va">im2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">km_rc</span>, newdata <span class="op">=</span> <span class="va">im2</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
 <p>The attribute <em>between.SS_DIV_total.SS</em> is equal to <em>(total_SSE - sum(WCSS_per_cluster)) / total_SSE</em>. If there is no pattern of clustering then the between sum of squares will be a very small fraction of the total sum of squares, whereas if the <em>between.SS_DIV_total.SS</em> attribute is close to 1.0 then the observations cluster pretty well.</p>
 <p><br></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">getcent</span> <span class="op">=</span> <span class="va">km_rc</span><span class="op">$</span><span class="va">centroids</span>
-
-<span class="va">getclust</span> <span class="op">=</span> <span class="va">km_rc</span><span class="op">$</span><span class="va">clusters</span>
-
-<span class="va">new_im</span> <span class="op">=</span> <span class="va">getcent</span><span class="op">[</span><span class="va">getclust</span>, <span class="op">]</span>     <span class="co"># each observation is associated with the nearby centroid</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">new_im</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">im</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">im</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>        <span class="co"># back-convertion to a 3-dimensional image</span>
-
-<span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">new_im</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">getcent</span> <span class="op">=</span> <span class="va">km_rc</span><span class="op">$</span><span class="va">centroids</span></span>
+<span></span>
+<span><span class="va">getclust</span> <span class="op">=</span> <span class="va">km_rc</span><span class="op">$</span><span class="va">clusters</span></span>
+<span></span>
+<span><span class="va">new_im</span> <span class="op">=</span> <span class="va">getcent</span><span class="op">[</span><span class="va">getclust</span>, <span class="op">]</span>     <span class="co"># each observation is associated with the nearby centroid</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">new_im</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">im</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">im</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>        <span class="co"># back-convertion to a 3-dimensional image</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">new_im</span><span class="op">)</span></span></code></pre></div>
 <p><img src="the_clusterR_package_files/figure-html/unnamed-chunk-8-1.png" width="288"></p>
 <p><br></p>
 <p>As a follow-up one can take advantage of the <strong>Optimal_Clusters_KMeans</strong> function (which indirectly uses KMeans_rcpp) to estimate the optimal number of clusters. The available criteria are <em>variance_explained</em>, <em>WCSSE</em> (within-cluster-sum-of-squared-error), <em>dissimilarity</em>, <em>silhouette</em>, <em>distortion_fK</em>, <em>AIC</em>, <em>BIC</em> and <em>Adjusted_Rsquared</em>. More information on each criterion can be found in the package documentation. <br></p>
 <p>In the next code chunk I’ll use the <em>distortion_fK</em> criterion, which is fully described in the “Selection of K in K-means clustering, Pham., Dimov., Nguyen., (2004)” paper, <br></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">opt</span> <span class="op">=</span> <span class="fu"><a href="../reference/Optimal_Clusters_KMeans.html">Optimal_Clusters_KMeans</a></span><span class="op">(</span><span class="va">im2</span>, max_clusters <span class="op">=</span> <span class="fl">10</span>, plot_clusters <span class="op">=</span> <span class="cn">T</span>,
-                              
-                              criterion <span class="op">=</span> <span class="st">'distortion_fK'</span>, fK_threshold <span class="op">=</span> <span class="fl">0.85</span>,
-                              
-                              initializer <span class="op">=</span> <span class="st">'optimal_init'</span>, tol_optimal_init <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">opt</span> <span class="op">=</span> <span class="fu"><a href="../reference/Optimal_Clusters_KMeans.html">Optimal_Clusters_KMeans</a></span><span class="op">(</span><span class="va">im2</span>, max_clusters <span class="op">=</span> <span class="fl">10</span>, plot_clusters <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                              </span>
+<span>                              criterion <span class="op">=</span> <span class="st">'distortion_fK'</span>, fK_threshold <span class="op">=</span> <span class="fl">0.85</span>,</span>
+<span>                              </span>
+<span>                              initializer <span class="op">=</span> <span class="st">'optimal_init'</span>, tol_optimal_init <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="the_clusterR_package_files/figure-html/unnamed-chunk-9-1.png" width="480"><br></p>
 <p>Values below the fixed threshold (here fK_threshold = 0.85) could be recommended for clustering, however there are multiple optimal clusterings and this highlights the fact that f(K) should only be used to suggest a guide value for the number of clusters and the final decision as to which value to adopt has to be left at the discretion of the user. <br><br></p>
 </div>
@@ -259,68 +259,68 @@
 <p>The parameters of the <strong>MiniBatchKmeans</strong> algorithm are almost the same as for the KMeans_rcpp function in the ClusterR package. The most important differences are the <em>batch_size</em> (the size of the mini batches) and the <em>init_fraction</em> (the percentage of data to use for the initialized centroids, which applies if the initializer equals to ‘kmeans++’ or ‘quantile_init’). <br></p>
 <p>I’ll take advantage of the <em>vector quantization</em> example to show the differences in computation time and output quality between the KMeans_rcpp and MiniBatchKmeans functions, <br></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">im_d</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/readImage.html" class="external-link">readImage</a></span><span class="op">(</span><span class="st">'dog.jpg'</span><span class="op">)</span>
-
-<span class="co"># first resize the image to reduce the dimensions</span>
-<span class="va">im_d</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/resizeImage.html" class="external-link">resizeImage</a></span><span class="op">(</span><span class="va">im_d</span>, <span class="fl">350</span>, <span class="fl">350</span>, method <span class="op">=</span> <span class="st">'bilinear'</span><span class="op">)</span>            
-
-<span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">im_d</span><span class="op">)</span>                                                <span class="co"># plot the original image</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">im_d</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/readImage.html" class="external-link">readImage</a></span><span class="op">(</span><span class="st">'dog.jpg'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># first resize the image to reduce the dimensions</span></span>
+<span><span class="va">im_d</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/resizeImage.html" class="external-link">resizeImage</a></span><span class="op">(</span><span class="va">im_d</span>, <span class="fl">350</span>, <span class="fl">350</span>, method <span class="op">=</span> <span class="st">'bilinear'</span><span class="op">)</span>            </span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">im_d</span><span class="op">)</span>                                                <span class="co"># plot the original image</span></span></code></pre></div>
 <p><img src="the_clusterR_package_files/figure-html/unnamed-chunk-10-1.png" width="288"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">im3</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">im_d</span>, <span class="fl">3</span>, <span class="va">as.vector</span><span class="op">)</span>                                <span class="co"># vectorize RGB</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">im3</span><span class="op">)</span>                                              <span class="co"># initial dimensions of the data</span></code></pre></div>
-<pre><code><span class="co">## [1] 122500      3</span></code></pre>
+<code class="sourceCode R"><span><span class="va">im3</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">im_d</span>, <span class="fl">3</span>, <span class="va">as.vector</span><span class="op">)</span>                                <span class="co"># vectorize RGB</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">im3</span><span class="op">)</span>                                              <span class="co"># initial dimensions of the data</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 122500      3</span></span></code></pre>
 <p><br></p>
 <p>First, we perform a <em>k-means</em> clustering, <br></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">start</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">km_init</span> <span class="op">=</span> <span class="fu"><a href="../reference/KMeans_rcpp.html">KMeans_rcpp</a></span><span class="op">(</span><span class="va">im3</span>, clusters <span class="op">=</span> <span class="fl">5</span>, num_init <span class="op">=</span> <span class="fl">5</span>, max_iters <span class="op">=</span> <span class="fl">100</span>, 
-                      initializer <span class="op">=</span> <span class="st">'kmeans++'</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
-
-<span class="va">end</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span>
-  
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## time to complete : 1.882445 secs</span></code></pre>
+<code class="sourceCode R"><span><span class="va">start</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">km_init</span> <span class="op">=</span> <span class="fu"><a href="../reference/KMeans_rcpp.html">KMeans_rcpp</a></span><span class="op">(</span><span class="va">im3</span>, clusters <span class="op">=</span> <span class="fl">5</span>, num_init <span class="op">=</span> <span class="fl">5</span>, max_iters <span class="op">=</span> <span class="fl">100</span>, </span>
+<span>                      initializer <span class="op">=</span> <span class="st">'kmeans++'</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">end</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span></span>
+<span>  </span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## time to complete : 1.970684 secs</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">getcent_init</span> <span class="op">=</span> <span class="va">km_init</span><span class="op">$</span><span class="va">centroids</span>
-
-<span class="va">getclust_init</span> <span class="op">=</span> <span class="va">km_init</span><span class="op">$</span><span class="va">clusters</span>
-
-<span class="va">new_im_init</span> <span class="op">=</span> <span class="va">getcent_init</span><span class="op">[</span><span class="va">getclust_init</span>, <span class="op">]</span>  <span class="co"># each observation is associated with the nearby centroid</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">new_im_init</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">im_d</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">im_d</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>     <span class="co"># back-convertion to a 3-dimensional image</span>
-
-<span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">new_im_init</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">getcent_init</span> <span class="op">=</span> <span class="va">km_init</span><span class="op">$</span><span class="va">centroids</span></span>
+<span></span>
+<span><span class="va">getclust_init</span> <span class="op">=</span> <span class="va">km_init</span><span class="op">$</span><span class="va">clusters</span></span>
+<span></span>
+<span><span class="va">new_im_init</span> <span class="op">=</span> <span class="va">getcent_init</span><span class="op">[</span><span class="va">getclust_init</span>, <span class="op">]</span>  <span class="co"># each observation is associated with the nearby centroid</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">new_im_init</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">im_d</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">im_d</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>     <span class="co"># back-convertion to a 3-dimensional image</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">new_im_init</span><span class="op">)</span></span></code></pre></div>
 <p><img src="the_clusterR_package_files/figure-html/unnamed-chunk-11-1.png" width="288"></p>
 <p><br></p>
 <p>and then a <em>mini-batch-kmeans</em> clustering, <br></p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">start</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">km_mb</span> <span class="op">=</span> <span class="fu"><a href="../reference/MiniBatchKmeans.html">MiniBatchKmeans</a></span><span class="op">(</span><span class="va">im3</span>, clusters <span class="op">=</span> <span class="fl">5</span>, batch_size <span class="op">=</span> <span class="fl">20</span>, num_init <span class="op">=</span> <span class="fl">5</span>, max_iters <span class="op">=</span> <span class="fl">100</span>, 
-                        init_fraction <span class="op">=</span> <span class="fl">0.2</span>, initializer <span class="op">=</span> <span class="st">'kmeans++'</span>, early_stop_iter <span class="op">=</span> <span class="fl">10</span>,
-                        verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
-
-<span class="va">pr_mb</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">km_mb</span>, newdata <span class="op">=</span> <span class="va">im3</span><span class="op">)</span>
-
-<span class="va">end</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span>
-  
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## time to complete : 1.009235 secs</span></code></pre>
+<code class="sourceCode R"><span><span class="va">start</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">km_mb</span> <span class="op">=</span> <span class="fu"><a href="../reference/MiniBatchKmeans.html">MiniBatchKmeans</a></span><span class="op">(</span><span class="va">im3</span>, clusters <span class="op">=</span> <span class="fl">5</span>, batch_size <span class="op">=</span> <span class="fl">20</span>, num_init <span class="op">=</span> <span class="fl">5</span>, max_iters <span class="op">=</span> <span class="fl">100</span>, </span>
+<span>                        init_fraction <span class="op">=</span> <span class="fl">0.2</span>, initializer <span class="op">=</span> <span class="st">'kmeans++'</span>, early_stop_iter <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>                        verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pr_mb</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">km_mb</span>, newdata <span class="op">=</span> <span class="va">im3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">end</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span></span>
+<span>  </span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## time to complete : 1.030571 secs</span></span></code></pre>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">getcent_mb</span> <span class="op">=</span> <span class="va">km_mb</span><span class="op">$</span><span class="va">centroids</span>
-
-<span class="va">new_im_mb</span> <span class="op">=</span> <span class="va">getcent_mb</span><span class="op">[</span><span class="va">pr_mb</span>, <span class="op">]</span>   <span class="co"># each observation is associated with the nearby centroid</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">new_im_mb</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">im_d</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">im_d</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>     <span class="co"># back-convertion to a 3-dimensional image</span>
-
-<span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">new_im_mb</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">getcent_mb</span> <span class="op">=</span> <span class="va">km_mb</span><span class="op">$</span><span class="va">centroids</span></span>
+<span></span>
+<span><span class="va">new_im_mb</span> <span class="op">=</span> <span class="va">getcent_mb</span><span class="op">[</span><span class="va">pr_mb</span>, <span class="op">]</span>   <span class="co"># each observation is associated with the nearby centroid</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">new_im_mb</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">im_d</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">im_d</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>     <span class="co"># back-convertion to a 3-dimensional image</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">new_im_mb</span><span class="op">)</span></span></code></pre></div>
 <p><img src="the_clusterR_package_files/figure-html/unnamed-chunk-12-1.png" width="288"></p>
 <p><br></p>
 <p>For a slight difference in the output quality, the mini-batch-kmeans returns the output in average more than twice as fast as the classical k-means. <br><br></p>
@@ -335,17 +335,17 @@
 <p><strong>Cluster_Medoids</strong> <br><br></p>
 <p>The <em>Cluster_Medoids</em> function can also take - besides a matrix or data frame - a dissimilarity matrix as input. In the case of the mushroom data, where all the features are categorical (with two or more unique values) it would be meaningful to use the <em>gower</em> distance. The <em>gower</em> distance applies a different function to each predictor depending on its type (numeric, ordered, factor). This dissimilarity measure is implemented in many R packages, among others in the cluster package (<em>daisy</em> function) and in the FD package (<em>gowdis</em> function). I’ll take advantage of the <em>gowdis</em> function of the FD package as it also allows user-defined weights for each separate predictor,</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mushroom</span><span class="op">)</span>
-
-<span class="va">X</span> <span class="op">=</span> <span class="va">mushroom</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span>
-
-<span class="va">y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">mushroom</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>            <span class="co"># convert the labels to numeric</span>
-
-<span class="va">gwd</span> <span class="op">=</span> <span class="fu">FD</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/FD/man/gowdis.html" class="external-link">gowdis</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>           <span class="co"># calculate the 'gower' distance for the factor variables</span>
-
-<span class="va">gwd_mat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">gwd</span><span class="op">)</span>                 <span class="co"># convert the distances to a matrix</span>
-
-<span class="va">cm</span> <span class="op">=</span> <span class="fu"><a href="../reference/Cluster_Medoids.html">Cluster_Medoids</a></span><span class="op">(</span><span class="va">gwd_mat</span>, clusters <span class="op">=</span> <span class="fl">2</span>, swap_phase <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mushroom</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">X</span> <span class="op">=</span> <span class="va">mushroom</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">mushroom</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>            <span class="co"># convert the labels to numeric</span></span>
+<span></span>
+<span><span class="va">gwd</span> <span class="op">=</span> <span class="fu">FD</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/FD/man/gowdis.html" class="external-link">gowdis</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>           <span class="co"># calculate the 'gower' distance for the factor variables</span></span>
+<span></span>
+<span><span class="va">gwd_mat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">gwd</span><span class="op">)</span>                 <span class="co"># convert the distances to a matrix</span></span>
+<span></span>
+<span><span class="va">cm</span> <span class="op">=</span> <span class="fu"><a href="../reference/Cluster_Medoids.html">Cluster_Medoids</a></span><span class="op">(</span><span class="va">gwd_mat</span>, clusters <span class="op">=</span> <span class="fl">2</span>, swap_phase <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
 <table class="table">
 <caption>Non-Weigthed-K-medoids</caption>
@@ -458,17 +458,17 @@
 </table>
 <p><br></p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">weights</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4.626</span>, <span class="fl">38.323</span>, <span class="fl">55.899</span>, <span class="fl">34.028</span>, <span class="fl">169.608</span>, <span class="fl">6.643</span>, <span class="fl">42.08</span>, <span class="fl">57.366</span>, <span class="fl">37.938</span>, 
-            
-            <span class="fl">33.081</span>, <span class="fl">65.105</span>, <span class="fl">18.718</span>, <span class="fl">76.165</span>, <span class="fl">27.596</span>, <span class="fl">26.238</span>, <span class="fl">0.0</span>, <span class="fl">1.507</span>, <span class="fl">37.314</span>, 
-            
-            <span class="fl">32.685</span>, <span class="fl">127.87</span>, <span class="fl">64.019</span>, <span class="fl">44.519</span><span class="op">)</span>
-
-<span class="va">gwd_w</span> <span class="op">=</span> <span class="fu">FD</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/FD/man/gowdis.html" class="external-link">gowdis</a></span><span class="op">(</span><span class="va">X</span>, w <span class="op">=</span> <span class="va">weights</span><span class="op">)</span>       <span class="co"># 'gower' distance using weights</span>
-
-<span class="va">gwd_mat_w</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">gwd_w</span><span class="op">)</span>                 <span class="co"># convert the distances to a matrix</span>
-
-<span class="va">cm_w</span> <span class="op">=</span> <span class="fu"><a href="../reference/Cluster_Medoids.html">Cluster_Medoids</a></span><span class="op">(</span><span class="va">gwd_mat_w</span>, clusters <span class="op">=</span> <span class="fl">2</span>, swap_phase <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">weights</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4.626</span>, <span class="fl">38.323</span>, <span class="fl">55.899</span>, <span class="fl">34.028</span>, <span class="fl">169.608</span>, <span class="fl">6.643</span>, <span class="fl">42.08</span>, <span class="fl">57.366</span>, <span class="fl">37.938</span>, </span>
+<span>            </span>
+<span>            <span class="fl">33.081</span>, <span class="fl">65.105</span>, <span class="fl">18.718</span>, <span class="fl">76.165</span>, <span class="fl">27.596</span>, <span class="fl">26.238</span>, <span class="fl">0.0</span>, <span class="fl">1.507</span>, <span class="fl">37.314</span>, </span>
+<span>            </span>
+<span>            <span class="fl">32.685</span>, <span class="fl">127.87</span>, <span class="fl">64.019</span>, <span class="fl">44.519</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">gwd_w</span> <span class="op">=</span> <span class="fu">FD</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/FD/man/gowdis.html" class="external-link">gowdis</a></span><span class="op">(</span><span class="va">X</span>, w <span class="op">=</span> <span class="va">weights</span><span class="op">)</span>       <span class="co"># 'gower' distance using weights</span></span>
+<span></span>
+<span><span class="va">gwd_mat_w</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">gwd_w</span><span class="op">)</span>                 <span class="co"># convert the distances to a matrix</span></span>
+<span></span>
+<span><span class="va">cm_w</span> <span class="op">=</span> <span class="fu"><a href="../reference/Cluster_Medoids.html">Cluster_Medoids</a></span><span class="op">(</span><span class="va">gwd_mat_w</span>, clusters <span class="op">=</span> <span class="fl">2</span>, swap_phase <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
 <table class="table">
 <caption>Weigthed-K-medoids</caption>
@@ -487,24 +487,24 @@
 <p>The <em>Clara_Medoids</em> function in the ClusterR package follows the same logic by applying the <em>Cluster_Medoids</em> function to each selected sample. The <em>Clara_Medoids</em> takes two additional parameters, the <em>samples</em>, and the <em>sample_size</em>. The first one indicates the number of samples to draw from the data set, while the second one the fraction of the data to draw in each sample iteration (a float number between 0.0 and 1.0). I have to point out that the <em>Clara_Medoids</em> function does not take a dissimilarity matrix as input, as the <em>Cluster_Medoids</em> function does.<br><br></p>
 <p>I’ll apply the <em>Clara_Medoids</em> function to the previously used <em>mushroom</em> data set by using the <em>hamming distance</em> as a dissimilarity metric and I’ll compare the system time and results with those of the <em>Cluster_Medoids</em> function. The <em>hamming distance</em> is appropriate for the <em>mushroom</em> data as it’s applicable to discrete variables and it’s defined as the number of attributes that take different values for two compared instances (<em>Data Mining Algorithms: Explained using R, Pawel Cichosz, 2015, page 318</em>).<br><br></p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cl_X</span> <span class="op">=</span> <span class="va">X</span>        <span class="co"># copy initial data </span>
-
-<span class="co"># the Clara_Medoids function allows only numeric attributes</span>
-<span class="co"># so first convert to numeric</span>
-
-<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">cl_X</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span> <span class="va">cl_X</span><span class="op">[</span>, <span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">cl_X</span><span class="op">[</span>, <span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">}</span>
-
-<span class="va">start</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">cl_f</span> <span class="op">=</span> <span class="fu"><a href="../reference/Clara_Medoids.html">Clara_Medoids</a></span><span class="op">(</span><span class="va">cl_X</span>, clusters <span class="op">=</span> <span class="fl">2</span>, distance_metric <span class="op">=</span> <span class="st">'hamming'</span>, samples <span class="op">=</span> <span class="fl">5</span>, 
-                     sample_size <span class="op">=</span> <span class="fl">0.2</span>, swap_phase <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">F</span>, threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-
-<span class="va">end</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span>
-  
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## time to complete : 2.366695 secs</span></code></pre>
+<code class="sourceCode R"><span><span class="va">cl_X</span> <span class="op">=</span> <span class="va">X</span>        <span class="co"># copy initial data </span></span>
+<span></span>
+<span><span class="co"># the Clara_Medoids function allows only numeric attributes</span></span>
+<span><span class="co"># so first convert to numeric</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">cl_X</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span> <span class="va">cl_X</span><span class="op">[</span>, <span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">cl_X</span><span class="op">[</span>, <span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">}</span></span>
+<span></span>
+<span><span class="va">start</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cl_f</span> <span class="op">=</span> <span class="fu"><a href="../reference/Clara_Medoids.html">Clara_Medoids</a></span><span class="op">(</span><span class="va">cl_X</span>, clusters <span class="op">=</span> <span class="fl">2</span>, distance_metric <span class="op">=</span> <span class="st">'hamming'</span>, samples <span class="op">=</span> <span class="fl">5</span>, </span>
+<span>                     sample_size <span class="op">=</span> <span class="fl">0.2</span>, swap_phase <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">F</span>, threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">end</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span></span>
+<span>  </span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## time to complete : 2.173148 secs</span></span></code></pre>
 <p><br></p>
 <table class="table">
 <caption>hamming-Clara-Medoids</caption>
@@ -519,17 +519,17 @@
 </table>
 <p><br><br></p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">start</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">cl_e</span> <span class="op">=</span> <span class="fu"><a href="../reference/Cluster_Medoids.html">Cluster_Medoids</a></span><span class="op">(</span><span class="va">cl_X</span>, clusters <span class="op">=</span> <span class="fl">2</span>, distance_metric <span class="op">=</span> <span class="st">'hamming'</span>, swap_phase <span class="op">=</span> <span class="cn">TRUE</span>,  
-                       verbose <span class="op">=</span> <span class="cn">F</span>, threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-
-<span class="va">end</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span>
-  
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## time to complete : 14.08652 secs</span></code></pre>
+<code class="sourceCode R"><span><span class="va">start</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cl_e</span> <span class="op">=</span> <span class="fu"><a href="../reference/Cluster_Medoids.html">Cluster_Medoids</a></span><span class="op">(</span><span class="va">cl_X</span>, clusters <span class="op">=</span> <span class="fl">2</span>, distance_metric <span class="op">=</span> <span class="st">'hamming'</span>, swap_phase <span class="op">=</span> <span class="cn">TRUE</span>,  </span>
+<span>                       verbose <span class="op">=</span> <span class="cn">F</span>, threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">end</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span></span>
+<span>  </span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## time to complete : 13.04496 secs</span></span></code></pre>
 <p><br></p>
 <table class="table">
 <caption>hamming-Cluster-Medoids</caption>
@@ -546,17 +546,17 @@
 <p>Using the <em>hamming</em> distance, both the <em>Clara_Medoids</em> and the <em>Cluster_Medoids</em> functions return approximately the same result (comparable also with the <em>gower</em> distance results), only that the <em>Clara_Medoids</em> function outputs more than four times faster than the <em>Cluster_Medoids</em> for this particular data set.<br><br></p>
 <p>By using the object results of the last two code chunks one can also plot the silhouette widths using the <strong>Silhouette_Dissimilarity_Plot </strong> function. Worth mentioning here is that the dissimilarities and silhouette widths of the <em>Clara_Medoids</em> function are based on the best-selected sample and not on the entire data set, as is the case for the <em>Cluster_Medoids</em> function. <br><br></p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Silhouette Plot for the "Clara_Medoids" object</span>
-
-<span class="fu"><a href="../reference/Silhouette_Dissimilarity_Plot.html">Silhouette_Dissimilarity_Plot</a></span><span class="op">(</span><span class="va">cl_f</span>, silhouette <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] TRUE</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Silhouette Plot for the "Clara_Medoids" object</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/Silhouette_Dissimilarity_Plot.html">Silhouette_Dissimilarity_Plot</a></span><span class="op">(</span><span class="va">cl_f</span>, silhouette <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 <p><br></p>
 <p><img src="Rplot_clara.png"><br><br><br></p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Silhouette Plot for the "Cluster_Medoids" object</span>
-
-<span class="fu"><a href="../reference/Silhouette_Dissimilarity_Plot.html">Silhouette_Dissimilarity_Plot</a></span><span class="op">(</span><span class="va">cl_e</span>, silhouette <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] TRUE</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Silhouette Plot for the "Cluster_Medoids" object</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/Silhouette_Dissimilarity_Plot.html">Silhouette_Dissimilarity_Plot</a></span><span class="op">(</span><span class="va">cl_e</span>, silhouette <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 <p><br></p>
 <p><img src="Rplot_cluster.png"><br><br><br></p>
 </div>
@@ -577,7 +577,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>

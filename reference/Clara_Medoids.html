@@ -63,19 +63,19 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Clara_Medoids</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">clusters</span>,
-  <span class="va">samples</span>,
-  <span class="va">sample_size</span>,
-  distance_metric <span class="op">=</span> <span class="st">"euclidean"</span>,
-  minkowski_p <span class="op">=</span> <span class="fl">1</span>,
-  threads <span class="op">=</span> <span class="fl">1</span>,
-  swap_phase <span class="op">=</span> <span class="cn">TRUE</span>,
-  fuzzy <span class="op">=</span> <span class="cn">FALSE</span>,
-  verbose <span class="op">=</span> <span class="cn">FALSE</span>,
-  seed <span class="op">=</span> <span class="fl">1</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Clara_Medoids</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">clusters</span>,</span>
+<span>  <span class="va">samples</span>,</span>
+<span>  <span class="va">sample_size</span>,</span>
+<span>  distance_metric <span class="op">=</span> <span class="st">"euclidean"</span>,</span>
+<span>  minkowski_p <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  threads <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  swap_phase <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fuzzy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -146,15 +146,15 @@ the 'Cluster_Medoids' function will be applied to each sample draw.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">=</span> <span class="va">dietary_survey_IBS</span><span class="op">[</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="center_scale.html">center_scale</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">clm</span> <span class="op">=</span> <span class="fu">Clara_Medoids</span><span class="op">(</span><span class="va">dat</span>, clusters <span class="op">=</span> <span class="fl">3</span>, samples <span class="op">=</span> <span class="fl">5</span>, sample_size <span class="op">=</span> <span class="fl">0.2</span>, swap_phase <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">=</span> <span class="va">dietary_survey_IBS</span><span class="op">[</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="center_scale.html">center_scale</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">clm</span> <span class="op">=</span> <span class="fu">Clara_Medoids</span><span class="op">(</span><span class="va">dat</span>, clusters <span class="op">=</span> <span class="fl">3</span>, samples <span class="op">=</span> <span class="fl">5</span>, sample_size <span class="op">=</span> <span class="fl">0.2</span>, swap_phase <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -169,7 +169,7 @@ the 'Cluster_Medoids' function will be applied to each sample draw.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
