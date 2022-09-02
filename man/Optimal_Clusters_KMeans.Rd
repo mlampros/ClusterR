@@ -134,7 +134,7 @@ opt_km = Optimal_Clusters_KMeans(dat, max_clusters = search_space,
 
 }
 \references{
-https://core.ac.uk/download/pdf/205410925.pdf
+https://www.ee.columbia.edu/~dpwe/papers/PhamDN05-kmeans.pdf
 }
 \author{
 Lampros Mouselimis

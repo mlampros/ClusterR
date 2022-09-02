@@ -627,7 +627,7 @@ print.KMeansCluster <- function(x, ...) {
 #'
 #' @references
 #'
-#' https://core.ac.uk/download/pdf/205410925.pdf
+#' https://www.ee.columbia.edu/~dpwe/papers/PhamDN05-kmeans.pdf
 #'
 #' @importFrom utils txtProgressBar
 #' @importFrom utils setTxtProgressBar

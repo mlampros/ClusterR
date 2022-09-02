@@ -1,4 +1,9 @@
 
+## Cluster 1.2.7
+
+* I updated the references weblink of the *Optimal_Clusters_KMeans()* function (github issue: https://github.com/mlampros/ClusterR/issues/27)
+
+
 ## ClusterR 1.2.6
 
 * [#24](https://github.com/mlampros/ClusterR/pull/24) Add S3 classes to ClusteR objects (KMeansCluster, MedoidsCluster and GMMCluster) and add generic `predict()` and `print()` methods.
