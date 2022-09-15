@@ -1,4 +1,4 @@
-#define ARMA_DONT_PRINT_ERRORS
+# define ARMA_WARN_LEVEL 0
 # include <RcppArmadillo.h>
 // [[Rcpp::depends("RcppArmadillo")]]
 // [[Rcpp::plugins(openmp)]]
@@ -361,7 +361,7 @@ Rcpp::List OptClust(arma::mat& data, arma::rowvec iter_clust, std::string method
 // [[Rcpp::export]]
 Rcpp::List affinity_propagation(arma::mat &s, std::vector<double> p, int maxits = 1000, int convits = 100, double dampfact = 0.9,
                                 bool details = false, double nonoise = 0.0, double eps = 2.2204e-16, bool time = false) {
-  
+
   Affinity_Propagation AFN;
   return AFN.affinity_propagation(s, p, maxits, convits, dampfact, details, nonoise, eps, time);
 }

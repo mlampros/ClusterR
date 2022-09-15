@@ -2,6 +2,8 @@
 ## Cluster 1.2.7
 
 * I updated the references weblink of the *Optimal_Clusters_KMeans()* function (github issue: https://github.com/mlampros/ClusterR/issues/27)
+* I added a deprecation warning to the *'seed'* parameter of the *'Cluster_Medoids'* function (github issue: https://github.com/mlampros/ClusterR/issues/33). This parameter will be removed in version *'1.3.0'*
+* I replaced the *'ARMA_DONT_PRINT_ERRORS'* on the top of the *'/src/export_inst_folder_headers.cpp'* file with *'ARMA_WARN_LEVEL 0'* because support for *'ARMA_DONT_PRINT_ERRORS'* has been removed
 
 
 ## ClusterR 1.2.6
