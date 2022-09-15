@@ -23,7 +23,7 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update && \
  ARG BUILD_DATE
 
  RUN echo "$BUILD_DATE"
- R -e "remotes::install_github('mlampros/ClusterR', upgrade = 'never', dependencies = FALSE, repos = 'https://cloud.r-project.org/')" && \
+ RUN R -e "remotes::install_github('mlampros/ClusterR', upgrade = 'never', dependencies = FALSE, repos = 'https://cloud.r-project.org/')" && \
  apt-get autoremove -y && \
  apt-get clean
 
