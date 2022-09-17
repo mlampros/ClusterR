@@ -2,5 +2,5 @@
 #' @importFrom Rcpp evalCpp
 #' @import gtools
 #' @importFrom utils globalVariables
-#' @importFrom lifecycle badge deprecate_warn
+#' @importFrom lifecycle badge deprecate_warn is_present
 NULL

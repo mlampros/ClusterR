@@ -1110,11 +1110,12 @@ predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
 #'
 Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkowski_p = 1.0, threads = 1, swap_phase = TRUE, fuzzy = FALSE, verbose = FALSE, seed = 1) {
 
-  if (seed != 1) {
+  if (lifecycle::is_present(seed)) {
+
     lifecycle::deprecate_warn(
       when = "1.2.6",
       what = "Cluster_Medoids(seed)",
-      details = "Ability to set a seed value will be dropped in version 1.3.0"
+      details = "The 'seed' parameter will be removed in version 1.3.0"
     )
   }
 

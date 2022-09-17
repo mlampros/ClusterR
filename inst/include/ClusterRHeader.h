@@ -3099,7 +3099,7 @@ namespace clustR {
       // http://www.sthda.com/english/wiki/partitioning-cluster-analysis-quick-start-guide-unsupervised-machine-learning#pam-partitioning-around-medoids
 
       // 1. Split randomly the data sets in multiple subsets with fixed size
-      // 2. Compute PAM algorithm on each subset and choose the corresponding k representative objects (medoids). Assign each observation of the entire dataset to the nearest medoid.
+      // 2. Compute the PAM algorithm on each subset and choose the corresponding k representative objects (medoids). Assign each observation of the entire dataset to the nearest medoid.
       // 3. Calculate the mean (or the sum) of the dissimilarities (for instance 'euclidean' distance) of the observations to their closest medoid. This is used as a measure of the goodness of the clustering.
       // 4. Retain (keep) the sub-dataset for which the mean (or sum) is minimal. A further analysis is carried out on the final partition.
 
@@ -3109,7 +3109,7 @@ namespace clustR {
 
       // Instead of finding representative objects for the entire data set, 'ClaraMedoids' draws a sample of the data set, applies the 'ClusterMedoids' function
       // on the sample and finds the medoids of the sample. The point is that if the sample is drawn in a sufficiently random way the medoids of the sample would
-      // approximate the medoids of the entire data set. To come up with better approximation, 'ClaraMedoids' draws mulitple samples and GIVES THE BEST CLUSTERING
+      // approximate the medoids of the entire data set. To come up with a better approximation, 'ClaraMedoids' draws mulitple samples and GIVES THE BEST CLUSTERING
       // as the OUTPUT. Here, for ACCURACY the QUALITY of a clustering is measured based on the AVERAGE DISSIMILARITY of all objects in the entire data set and NOT
       // ONLY of those objects IN THE SAMPLES. Experiments, indicate that 5 samples of size 40 + 2 * k (i.e. 40 + 2 * number_of_clusters) give satisfactory results.
       //
@@ -3118,7 +3118,8 @@ namespace clustR {
 
                               int threads = 1, bool verbose = false, bool swap_phase = false, bool fuzzy = false, int seed = 1) {
 
-        set_seed(seed);             // R's RNG
+        set_seed(seed);                                                              // R's RNG
+        arma::rowvec set_seed_loop = sample_vec(samples, 0, 1000000, false);         // make sure that the same seed values do not appear in the inner-for-loop (samples) by picking random values based on a big integer (1000000)
 
         int bst_sample = -1;
 
@@ -3133,6 +3134,9 @@ namespace clustR {
         if (verbose) { Rcpp::Rcout << " " << std::endl; }
 
         for (int s = 0; s < samples; s++) {
+
+          int iter_seed = set_seed_loop(s);
+          set_seed(iter_seed);                                    // set the seed also in the inner loop due to the sample
 
           int samp_rows = std::ceil(data.n_rows * sample_size);
 
@@ -3159,17 +3163,17 @@ namespace clustR {
             clr_split = arma::conv_to< arma::uvec >::from(arma::unique(new_idx));
           }
 
-          arma::mat tmp_dat = data.rows(clr_split);                                                                                // use sample data for ClusterMedoids
+          arma::mat tmp_dat = data.rows(clr_split);                                                                                         // use sample data for ClusterMedoids
 
           arma::mat copy_dat = tmp_dat;
 
-          Rcpp::List clM_sblist = ClusterMedoids(tmp_dat, clusters, method, minkowski_p, threads, false, swap_phase, false);
+          Rcpp::List clM_sblist = ClusterMedoids(tmp_dat, clusters, method, minkowski_p, threads, false, swap_phase, false, iter_seed);    // the 'seed' here for 'ClusterMedoids' is 'iter_seed' but it will be removed in version 1.3.0 (deprecation warning)
 
           double local_dissim = Rcpp::as<double> (clM_sblist["cost"]);
 
           arma::uvec local_medoids = Rcpp::as<arma::uvec> (clM_sblist["medoids"]);
 
-          arma::mat tmp_glob = dissim_MEDOIDS(data, method, copy_dat.rows(local_medoids), minkowski_p , threads, 1.0e-6);          // use all data to calculate global dissimilarity
+          arma::mat tmp_glob = dissim_MEDOIDS(data, method, copy_dat.rows(local_medoids), minkowski_p , threads, 1.0e-6);                  // use all data to calculate global dissimilarity
 
           double global_dissimil = 0.0;
 
