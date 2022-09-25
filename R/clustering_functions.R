@@ -1896,7 +1896,7 @@ plot_2d = function(data, clusters, centroids_medoids) {
   if ('data.frame' %in% class(centroids_medoids)) centroids_medoids = as.matrix(centroids_medoids)
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
   if (is.integer(clusters)) clusters = as.numeric(clusters)
-  if (!is.vector(clusters) || class(clusters) != "numeric") stop('CLUSTER should be a numeric vector')
+  if (!is.vector(clusters) || !inherits(clusters, "numeric")) stop('The "clusters" parameter has to be a numeric vector!')
   if (!inherits(centroids_medoids, 'matrix') || nrow(centroids_medoids) != length(unique(clusters)) || ncol(centroids_medoids) != ncol(data))
     stop('centroids_medoids should be a matrix with number of rows equal to the unique labels of clusters and number of columns equal to the number of columns of the data')
 

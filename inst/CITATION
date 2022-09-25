@@ -86,7 +86,7 @@ bibentry(
   author   = c(as.person("D Pham"), as.person("S Dimov"), as.person("C Nguyen")),
   journal  = "Proceedings of the Institution of Mechanical Engineers, Part C: Journal of Mechanical Engineering Science",
   year     = "2004",
-  url      = "https://core.ac.uk/download/pdf/205410925.pdf",
+  url      = "https://www.ee.columbia.edu/~dpwe/papers/PhamDN05-kmeans.pdf",
   doi      = "10.1243/095440605X8298"
 )
 

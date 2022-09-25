@@ -1674,8 +1674,8 @@ namespace clustR {
           loglik2(j) = arma::as_scalar(log_lik_label(0));                                              // assign labels
         }
 
-        return Rcpp::List::create( Rcpp::Named("Log_likelihood_raw") = gaus_mat_log_lik, Rcpp::Named("cluster_proba") = loglik1,
-
+        return Rcpp::List::create( Rcpp::Named("Log_likelihood_raw") = gaus_mat_log_lik,
+                                   Rcpp::Named("cluster_proba") = loglik1,
                                    Rcpp::Named("cluster_labels") = loglik2 );
       }
 
