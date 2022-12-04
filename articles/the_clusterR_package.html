@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ClusterR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.8</span>
       </span>
     </div>
 
@@ -75,13 +75,14 @@
 
       
 
-      </header><script src="the_clusterR_package_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Functionality of the ClusterR package</h1>
-                        <h4 data-toc-skip class="author">Lampros Mouselimis</h4>
+                        <h4 data-toc-skip class="author">Lampros
+Mouselimis</h4>
             
-            <h4 data-toc-skip class="date">2022-10-19</h4>
+            <h4 data-toc-skip class="date">2022-12-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/mlampros/ClusterR/blob/HEAD/vignettes/the_clusterR_package.Rmd" class="external-link"><code>vignettes/the_clusterR_package.Rmd</code></a></small>
       <div class="hidden name"><code>the_clusterR_package.Rmd</code></div>
@@ -90,20 +91,56 @@
 
     
     
-<p><a href="https://en.wikipedia.org/wiki/Cluster_analysis" class="external-link">Cluster analysis</a> or clustering is the task of grouping a set of objects in such a way that objects in the same group (called a cluster) are more similar (in some sense or another) to each other than to those in other groups (clusters). It is the main task of exploratory data mining, and a common technique for statistical data analysis, used in many fields, including machine learning, pattern recognition, image analysis, information retrieval, bioinformatics, data compression, and computer graphics.<br><br> The most prominent examples of clustering algorithms are <em>Connectivity-based clustering</em> (hierarchical clustering), <em>Centroid-based clustering</em> (k-means, k-medoids,…), <em>Distribution-based clustering</em> (Gaussian mixture models) and <em>Density-based clustering</em> (DBSCAN, OPTICS,…). <br><br> The <strong>ClusterR</strong> package consists of centroid-based (k-means, mini-batch-kmeans, k-medoids) and distribution-based (GMM) clustering algorithms. Furthermore, the package offers functions to</p>
+<p><a href="https://en.wikipedia.org/wiki/Cluster_analysis" class="external-link">Cluster
+analysis</a> or clustering is the task of grouping a set of objects in
+such a way that objects in the same group (called a cluster) are more
+similar (in some sense or another) to each other than to those in other
+groups (clusters). It is the main task of exploratory data mining, and a
+common technique for statistical data analysis, used in many fields,
+including machine learning, pattern recognition, image analysis,
+information retrieval, bioinformatics, data compression, and computer
+graphics.<br><br> The most prominent examples of clustering algorithms
+are <em>Connectivity-based clustering</em> (hierarchical clustering),
+<em>Centroid-based clustering</em> (k-means, k-medoids,…),
+<em>Distribution-based clustering</em> (Gaussian mixture models) and
+<em>Density-based clustering</em> (DBSCAN, OPTICS,…). <br><br> The
+<strong>ClusterR</strong> package consists of centroid-based (k-means,
+mini-batch-kmeans, k-medoids) and distribution-based (GMM) clustering
+algorithms. Furthermore, the package offers functions to</p>
 <ul>
 <li>validate the output using the true labels,</li>
-<li>plot the results using either a silhouette or a 2-dimensional plot,</li>
+<li>plot the results using either a silhouette or a 2-dimensional
+plot,</li>
 <li>predict new observations,</li>
-<li>estimate the optimal number of clusters for each algorithm separately. <br>
+<li>estimate the optimal number of clusters for each algorithm
+separately. <br>
 </li>
 </ul>
-<p>The following notes and examples explain the functionality of the clustering algorithms, which are part of the ClusterR package.<br><br></p>
+<p>The following notes and examples explain the functionality of the
+clustering algorithms, which are part of the ClusterR
+package.<br><br></p>
 <div class="section level5">
 <h5 id="gaussian-mixture-models-gmm">Gaussian Mixture Models (GMM)<a class="anchor" aria-label="anchor" href="#gaussian-mixture-models-gmm"></a>
 </h5>
-<p><a href="https://brilliant.org/wiki/gaussian-mixture-model/" class="external-link">Gaussian Mixture Models</a> are a probabilistic model for representing normally distributed subpopulations within an overall population. A Gaussian mixture model is parameterized by two types of values, the mixture <em>component weights</em> and the <em>component means</em> and <em>covariances</em> (for the <em>multivariate</em> case). If the number of components is known, expectation maximization is the technique most commonly used to estimate the mixture model’s parameters.<br></p>
-<p>The <strong>GMM</strong> function in the <em>ClusterR</em> package is an R implementation of the <a href="http://arma.sourceforge.net/docs.html#gmm_diag" class="external-link">Armadillo library</a> class for modeling data as a Gaussian Mixture Model (GMM), under the assumption of <em>diagonal</em> covariance matrices. A number of function parameters can be tuned, among others the <em>gaussian_comps</em>, the <em>dist_mode</em> (eucl_dist, maha_dist), the <em>seed_mode</em> (static_subset, random_subset, static_spread, random_spread), the <em>km_iter</em> and the <em>em_iter</em> (more information about the parameters can be found in the package documentation). I’ll illustrate the <em>GMM</em> function using the synthetic data <em>dietary_survey_IBS</em>,</p>
+<p><a href="https://brilliant.org/wiki/gaussian-mixture-model/" class="external-link">Gaussian
+Mixture Models</a> are a probabilistic model for representing normally
+distributed subpopulations within an overall population. A Gaussian
+mixture model is parameterized by two types of values, the mixture
+<em>component weights</em> and the <em>component means</em> and
+<em>covariances</em> (for the <em>multivariate</em> case). If the number
+of components is known, expectation maximization is the technique most
+commonly used to estimate the mixture model’s parameters.<br></p>
+<p>The <strong>GMM</strong> function in the <em>ClusterR</em> package is
+an R implementation of the <a href="https://arma.sourceforge.net/docs.html#gmm_diag" class="external-link">Armadillo
+library</a> class for modeling data as a Gaussian Mixture Model (GMM),
+under the assumption of <em>diagonal</em> covariance matrices. A number
+of function parameters can be tuned, among others the
+<em>gaussian_comps</em>, the <em>dist_mode</em> (eucl_dist, maha_dist),
+the <em>seed_mode</em> (static_subset, random_subset, static_spread,
+random_spread), the <em>km_iter</em> and the <em>em_iter</em> (more
+information about the parameters can be found in the package
+documentation). I’ll illustrate the <em>GMM</em> function using the
+synthetic data <em>dietary_survey_IBS</em>,</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlampros/ClusterR" class="external-link">ClusterR</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Loading required package: gtools</span></span></code></pre>
@@ -125,8 +162,16 @@
 <span><span class="co"># predict centroids, covariance matrix and weights</span></span>
 <span><span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">gmm</span>, newdata <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
-<p>The <em>GMM</em> function, initially, returns the <em>centroids</em>, the <em>covariance matrix</em> ( where each row of the matrix represents a diagonal covariance matrix), the <em>weights</em> and the <em>log-likelihoods</em> for each gaussian component. Then, the <em>predict</em> function takes the <em>GMM</em> model and returns the most probable clusters.</p>
-<p>In addition to the previous mentioned functions, the <strong>Optimal_Clusters_GMM</strong> can be utilized to estimate the number of clusters of the data using either the <em>AIC</em> (Akaike information) or the <em>BIC</em> (Bayesian information) criterion,</p>
+<p>The <em>GMM</em> function, initially, returns the <em>centroids</em>,
+the <em>covariance matrix</em> ( where each row of the matrix represents
+a diagonal covariance matrix), the <em>weights</em> and the
+<em>log-likelihoods</em> for each gaussian component. Then, the
+<em>predict</em> function takes the <em>GMM</em> model and returns the
+most probable clusters.</p>
+<p>In addition to the previous mentioned functions, the
+<strong>Optimal_Clusters_GMM</strong> can be utilized to estimate the
+number of clusters of the data using either the <em>AIC</em> (Akaike
+information) or the <em>BIC</em> (Bayesian information) criterion,</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">opt_gmm</span> <span class="op">=</span> <span class="fu"><a href="../reference/Optimal_Clusters_GMM.html">Optimal_Clusters_GMM</a></span><span class="op">(</span><span class="va">dat</span>, max_clusters <span class="op">=</span> <span class="fl">10</span>, criterion <span class="op">=</span> <span class="st">"BIC"</span>, </span>
 <span>                               </span>
@@ -138,8 +183,17 @@
 <p><br></p>
 <p><img src="Rplot.png"></p>
 <p><br></p>
-<p>In case of model selection, among a specific number of models, the model with the lowest <a href="https://en.wikipedia.org/wiki/Bayesian_information_criterion" class="external-link">BIC</a> should be preferred, which is true here for a number of clusters equal to 2.</p>
-<p>Assuming that true labels are available, then one could use the <strong>external_validation</strong> methods (<em>rand_index</em>, <em>adjusted_rand_index</em>, <em>jaccard_index</em>, <em>fowlkes_Mallows_index</em>, <em>mirkin_metric</em>, <em>purity</em>, <em>entropy</em>, <em>nmi</em> (normalized mutual information) and <em>var_info</em> (variation of information) to validate the output clusters,</p>
+<p>In case of model selection, among a specific number of models, the
+model with the lowest <a href="https://en.wikipedia.org/wiki/Bayesian_information_criterion" class="external-link">BIC</a>
+should be preferred, which is true here for a number of clusters equal
+to 2.</p>
+<p>Assuming that true labels are available, then one could use the
+<strong>external_validation</strong> methods (<em>rand_index</em>,
+<em>adjusted_rand_index</em>, <em>jaccard_index</em>,
+<em>fowlkes_Mallows_index</em>, <em>mirkin_metric</em>, <em>purity</em>,
+<em>entropy</em>, <em>nmi</em> (normalized mutual information) and
+<em>var_info</em> (variation of information) to validate the output
+clusters,</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">=</span> <span class="fu"><a href="../reference/external_validation.html">external_validation</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">$</span><span class="va">class</span>, <span class="va">pr</span><span class="op">$</span><span class="va">cluster_labels</span>, </span>
 <span>                          </span>
@@ -167,15 +221,46 @@
 <span><span class="co">## mirkin-metric                  : 0 </span></span>
 <span><span class="co">## ----------------------------------------</span></span></code></pre></div>
 <p><br></p>
-<p>and if the <em>summary_stats</em> parameter is set to TRUE then it also returns the <em>specificity</em>, <em>sensitivity</em>, <em>precision</em>, <em>recall</em> and <em>F-measure</em> metrics. <br><br></p>
+<p>and if the <em>summary_stats</em> parameter is set to TRUE then it
+also returns the <em>specificity</em>, <em>sensitivity</em>,
+<em>precision</em>, <em>recall</em> and <em>F-measure</em> metrics.
+<br><br></p>
 </div>
 <div class="section level5">
 <h5 id="k-means">k-means<a class="anchor" aria-label="anchor" href="#k-means"></a>
 </h5>
-<p><a href="https://en.wikipedia.org/wiki/K-means_clustering" class="external-link">k-means</a> clustering is a method of vector quantization, originally from signal processing, that is popular for cluster analysis in data mining. k-means clustering aims to partition <em>n</em> observations into <em>k</em> clusters in which each observation belongs to the cluster with the nearest mean, serving as a prototype of the cluster. This results in a partitioning of the data space into <a href="https://en.wikipedia.org/wiki/Voronoi_diagram" class="external-link">Voronoi</a> cells. The most common algorithm uses an iterative refinement technique. Due to its ubiquity, it is often called the k-means algorithm; it is also referred to as <a href="https://en.wikipedia.org/wiki/Lloyd%27s_algorithm" class="external-link">Lloyd’s algorithm</a>, particularly in the computer science community. <br></p>
-<p>The ClusterR package provides two different k-means functions, the <em>KMeans_arma</em>, which is an R implementation of the k-means armadillo library and the <em>KMeans_rcpp</em> which uses the RcppArmadillo package. Both functions come to the same output results, however, they return different features which I’ll explain in the next code chunks. <br><br></p>
+<p><a href="https://en.wikipedia.org/wiki/K-means_clustering" class="external-link">k-means</a>
+clustering is a method of vector quantization, originally from signal
+processing, that is popular for cluster analysis in data mining. k-means
+clustering aims to partition <em>n</em> observations into <em>k</em>
+clusters in which each observation belongs to the cluster with the
+nearest mean, serving as a prototype of the cluster. This results in a
+partitioning of the data space into <a href="https://en.wikipedia.org/wiki/Voronoi_diagram" class="external-link">Voronoi</a> cells.
+The most common algorithm uses an iterative refinement technique. Due to
+its ubiquity, it is often called the k-means algorithm; it is also
+referred to as <a href="https://en.wikipedia.org/wiki/Lloyd%27s_algorithm" class="external-link">Lloyd’s
+algorithm</a>, particularly in the computer science community. <br></p>
+<p>The ClusterR package provides two different k-means functions, the
+<em>KMeans_arma</em>, which is an R implementation of the k-means
+armadillo library and the <em>KMeans_rcpp</em> which uses the
+RcppArmadillo package. Both functions come to the same output results,
+however, they return different features which I’ll explain in the next
+code chunks. <br><br></p>
 <p><strong>KMeans_arma</strong> <br></p>
-<p>The <em>KMeans_arma</em> is faster than the KMeans_rcpp function, however, it initially outputs only the centroids for a specific number of clusters. Furthermore, the number of columns of the data should be larger than the number of clusters, otherwise, it raises an error. The clustering will run faster on multi-core machines when OpenMP is enabled (eg. -fopenmp in GCC). The algorithm is initialized once and 10 iterations are typically sufficient for convergence. The initial centroids are seeded using one of <em>keep_existing</em>, <em>static_subset</em>, <em>random_subset</em>, <em>static_spread</em> and <em>random_spread</em>. If the seed_mode equals to keep_existing then the user should supply a matrix of centroids. <br><br> I’ll reduce the dimensions of the dietary_survey_IBS data using PCA and particularly the <em>princomp</em> function of the <em>stats</em> package, so that a 2-dimensional plot of the resulted clusters is possible,</p>
+<p>The <em>KMeans_arma</em> is faster than the KMeans_rcpp function,
+however, it initially outputs only the centroids for a specific number
+of clusters. Furthermore, the number of columns of the data should be
+larger than the number of clusters, otherwise, it raises an error. The
+clustering will run faster on multi-core machines when OpenMP is enabled
+(eg. -fopenmp in GCC). The algorithm is initialized once and 10
+iterations are typically sufficient for convergence. The initial
+centroids are seeded using one of <em>keep_existing</em>,
+<em>static_subset</em>, <em>random_subset</em>, <em>static_spread</em>
+and <em>random_spread</em>. If the seed_mode equals to keep_existing
+then the user should supply a matrix of centroids. <br><br> I’ll reduce
+the dimensions of the dietary_survey_IBS data using PCA and particularly
+the <em>princomp</em> function of the <em>stats</em> package, so that a
+2-dimensional plot of the resulted clusters is possible,</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pca_dat</span> <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/princomp.html" class="external-link">princomp</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">$</span><span class="va">scores</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span></span>
 <span></span>
@@ -193,15 +278,30 @@
 <p><br></p>
 <p><img src="Rplot_2d.png"><br><br><br></p>
 <p><strong>KMeans_rcpp</strong> <br></p>
-<p>As stated before the <em>KMeans_rcpp</em> function offers some additional features in comparison to the <em>KMeans_arma</em> function,<br></p>
+<p>As stated before the <em>KMeans_rcpp</em> function offers some
+additional features in comparison to the <em>KMeans_arma</em>
+function,<br></p>
 <ul>
-<li>Besides <em>optimal_init</em>, <em>quantile_init</em>, <em>random</em> and <em>kmeans++</em> initilizations one can specify the centroids using the CENTROIDS parameter</li>
-<li>The running time and convergence of the algorithm can be adjusted using the <em>num_init</em>, <em>max_iters</em> and <em>tol</em> parameters</li>
-<li>If num_init &gt; 1 then KMeans_rcpp returns the attributes of the best initialization using as criterion the within-cluster-sum-of-squared-error</li>
-<li>The algorithm returns the following attributes: <em>clusters</em>, <em>fuzzy_clusters</em> (if fuzzy = TRUE), <em>centroids</em>, <em>total_SSE</em>, <em>best_initialization</em>, <em>WCSS_per_cluster</em>, <em>obs_per_cluster</em>, <em>between.SS_DIV_total.SS</em>
+<li>Besides <em>optimal_init</em>, <em>quantile_init</em>,
+<em>random</em> and <em>kmeans++</em> initilizations one can specify the
+centroids using the CENTROIDS parameter</li>
+<li>The running time and convergence of the algorithm can be adjusted
+using the <em>num_init</em>, <em>max_iters</em> and <em>tol</em>
+parameters</li>
+<li>If num_init &gt; 1 then KMeans_rcpp returns the attributes of the
+best initialization using as criterion the
+within-cluster-sum-of-squared-error</li>
+<li>The algorithm returns the following attributes: <em>clusters</em>,
+<em>fuzzy_clusters</em> (if fuzzy = TRUE), <em>centroids</em>,
+<em>total_SSE</em>, <em>best_initialization</em>,
+<em>WCSS_per_cluster</em>, <em>obs_per_cluster</em>,
+<em>between.SS_DIV_total.SS</em>
 </li>
 </ul>
-<p><br> More details about KMeans_rcpp can be found in the package documentation. I’ll explain the various parameters of the <em>KMeans_rcpp</em> using a <a href="https://en.wikipedia.org/wiki/Vector_quantization" class="external-link">vector quantization</a> example and the OpenImageR package, <br></p>
+<p><br> More details about KMeans_rcpp can be found in the package
+documentation. I’ll explain the various parameters of the
+<em>KMeans_rcpp</em> using a <a href="https://en.wikipedia.org/wiki/Vector_quantization" class="external-link">vector
+quantization</a> example and the OpenImageR package, <br></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlampros/OpenImageR" class="external-link">OpenImageR</a></span><span class="op">)</span></span>
 <span></span>
@@ -226,7 +326,12 @@
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">km_rc</span>, newdata <span class="op">=</span> <span class="va">im2</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
-<p>The attribute <em>between.SS_DIV_total.SS</em> is equal to <em>(total_SSE - sum(WCSS_per_cluster)) / total_SSE</em>. If there is no pattern of clustering then the between sum of squares will be a very small fraction of the total sum of squares, whereas if the <em>between.SS_DIV_total.SS</em> attribute is close to 1.0 then the observations cluster pretty well.</p>
+<p>The attribute <em>between.SS_DIV_total.SS</em> is equal to
+<em>(total_SSE - sum(WCSS_per_cluster)) / total_SSE</em>. If there is no
+pattern of clustering then the between sum of squares will be a very
+small fraction of the total sum of squares, whereas if the
+<em>between.SS_DIV_total.SS</em> attribute is close to 1.0 then the
+observations cluster pretty well.</p>
 <p><br></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">getcent</span> <span class="op">=</span> <span class="va">km_rc</span><span class="op">$</span><span class="va">centroids</span></span>
@@ -240,8 +345,17 @@
 <span><span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">new_im</span><span class="op">)</span></span></code></pre></div>
 <p><img src="the_clusterR_package_files/figure-html/unnamed-chunk-8-1.png" width="288"></p>
 <p><br></p>
-<p>As a follow-up one can take advantage of the <strong>Optimal_Clusters_KMeans</strong> function (which indirectly uses KMeans_rcpp) to estimate the optimal number of clusters. The available criteria are <em>variance_explained</em>, <em>WCSSE</em> (within-cluster-sum-of-squared-error), <em>dissimilarity</em>, <em>silhouette</em>, <em>distortion_fK</em>, <em>AIC</em>, <em>BIC</em> and <em>Adjusted_Rsquared</em>. More information on each criterion can be found in the package documentation. <br></p>
-<p>In the next code chunk I’ll use the <em>distortion_fK</em> criterion, which is fully described in the “Selection of K in K-means clustering, Pham., Dimov., Nguyen., (2004)” paper, <br></p>
+<p>As a follow-up one can take advantage of the
+<strong>Optimal_Clusters_KMeans</strong> function (which indirectly uses
+KMeans_rcpp) to estimate the optimal number of clusters. The available
+criteria are <em>variance_explained</em>, <em>WCSSE</em>
+(within-cluster-sum-of-squared-error), <em>dissimilarity</em>,
+<em>silhouette</em>, <em>distortion_fK</em>, <em>AIC</em>, <em>BIC</em>
+and <em>Adjusted_Rsquared</em>. More information on each criterion can
+be found in the package documentation. <br></p>
+<p>In the next code chunk I’ll use the <em>distortion_fK</em> criterion,
+which is fully described in the “Selection of K in K-means clustering,
+Pham., Dimov., Nguyen., (2004)” paper, <br></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">opt</span> <span class="op">=</span> <span class="fu"><a href="../reference/Optimal_Clusters_KMeans.html">Optimal_Clusters_KMeans</a></span><span class="op">(</span><span class="va">im2</span>, max_clusters <span class="op">=</span> <span class="fl">10</span>, plot_clusters <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>                              </span>
@@ -249,15 +363,31 @@
 <span>                              </span>
 <span>                              initializer <span class="op">=</span> <span class="st">'optimal_init'</span>, tol_optimal_init <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="the_clusterR_package_files/figure-html/unnamed-chunk-9-1.png" width="480"><br></p>
-<p>Values below the fixed threshold (here fK_threshold = 0.85) could be recommended for clustering, however there are multiple optimal clusterings and this highlights the fact that f(K) should only be used to suggest a guide value for the number of clusters and the final decision as to which value to adopt has to be left at the discretion of the user. <br><br></p>
+<p>Values below the fixed threshold (here fK_threshold = 0.85) could be
+recommended for clustering, however there are multiple optimal
+clusterings and this highlights the fact that f(K) should only be used
+to suggest a guide value for the number of clusters and the final
+decision as to which value to adopt has to be left at the discretion of
+the user. <br><br></p>
 </div>
 <div class="section level5">
 <h5 id="mini-batch-kmeans">Mini-batch-kmeans<a class="anchor" aria-label="anchor" href="#mini-batch-kmeans"></a>
 </h5>
 <p><br></p>
-<p><a href="http://www.eecs.tufts.edu/~dsculley/papers/fastkmeans.pdf" class="external-link">Mini-batch-kmeans</a> is a variation of the classical k-means algorithm. It is particularly useful for big data sets because rather than using the whole data (as k-means does) it uses mini-batches from random data samples to optimize the objective function. <br></p>
-<p>The parameters of the <strong>MiniBatchKmeans</strong> algorithm are almost the same as for the KMeans_rcpp function in the ClusterR package. The most important differences are the <em>batch_size</em> (the size of the mini batches) and the <em>init_fraction</em> (the percentage of data to use for the initialized centroids, which applies if the initializer equals to ‘kmeans++’ or ‘quantile_init’). <br></p>
-<p>I’ll take advantage of the <em>vector quantization</em> example to show the differences in computation time and output quality between the KMeans_rcpp and MiniBatchKmeans functions, <br></p>
+<p><a href="http://www.eecs.tufts.edu/~dsculley/papers/fastkmeans.pdf" class="external-link">Mini-batch-kmeans</a>
+is a variation of the classical k-means algorithm. It is particularly
+useful for big data sets because rather than using the whole data (as
+k-means does) it uses mini-batches from random data samples to optimize
+the objective function. <br></p>
+<p>The parameters of the <strong>MiniBatchKmeans</strong> algorithm are
+almost the same as for the KMeans_rcpp function in the ClusterR package.
+The most important differences are the <em>batch_size</em> (the size of
+the mini batches) and the <em>init_fraction</em> (the percentage of data
+to use for the initialized centroids, which applies if the initializer
+equals to ‘kmeans++’ or ‘quantile_init’). <br></p>
+<p>I’ll take advantage of the <em>vector quantization</em> example to
+show the differences in computation time and output quality between the
+KMeans_rcpp and MiniBatchKmeans functions, <br></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">im_d</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/readImage.html" class="external-link">readImage</a></span><span class="op">(</span><span class="st">'dog.jpg'</span><span class="op">)</span></span>
 <span></span>
@@ -284,7 +414,7 @@
 <span><span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span></span>
 <span>  </span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## time to complete : 2.301062 secs</span></span></code></pre>
+<pre><code><span><span class="co">## time to complete : 1.970258 secs</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">getcent_init</span> <span class="op">=</span> <span class="va">km_init</span><span class="op">$</span><span class="va">centroids</span></span>
 <span></span>
@@ -312,7 +442,7 @@
 <span><span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span></span>
 <span>  </span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## time to complete : 1.18398 secs</span></span></code></pre>
+<pre><code><span><span class="co">## time to complete : 1.013525 secs</span></span></code></pre>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">getcent_mb</span> <span class="op">=</span> <span class="va">km_mb</span><span class="op">$</span><span class="va">centroids</span></span>
 <span></span>
@@ -323,17 +453,57 @@
 <span><span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">new_im_mb</span><span class="op">)</span></span></code></pre></div>
 <p><img src="the_clusterR_package_files/figure-html/unnamed-chunk-12-1.png" width="288"></p>
 <p><br></p>
-<p>For a slight difference in the output quality, the mini-batch-kmeans returns the output in average more than twice as fast as the classical k-means. <br><br></p>
+<p>For a slight difference in the output quality, the mini-batch-kmeans
+returns the output in average more than twice as fast as the classical
+k-means. <br><br></p>
 </div>
 <div class="section level5">
 <h5 id="k-medoids">K-Medoids<a class="anchor" aria-label="anchor" href="#k-medoids"></a>
 </h5>
 <p><br></p>
-<p>The <a href="https://en.wikipedia.org/wiki/K-medoids" class="external-link">k-medoids</a> algorithm (Kaufman, L., Rousseeuw, P., 1987) is a clustering algorithm related to the k-means algorithm and the medoid shift algorithm. Both the k-means and k-medoids algorithms are partitional and both attempt to minimize the distance between points labeled to be in a cluster and a point designated as the center of that cluster. In contrast to the k-means algorithm, k-medoids chooses <em>data points as centers</em> (medoids or exemplars) and works with an <em>arbitrary metrics of distances</em> between data points. A useful tool for determining k is the silhouette width. K-medoids is more robust to noise and outliers in comparison to k-means, because it minimizes a sum of pairwise dissimilarities instead of the sum of squared Euclidean distances. A medoid can be defined as the object of a cluster whose average dissimilarity to all the objects in the cluster is minimal, i.e. it is a most centrally located point in the cluster.<br><br> The most common realization of the k-medoid clustering is the Partitioning Around Medoids (PAM) algorithm. PAM proceeds in two phases: BUILD and SWAP. In the BUILD phase, the algorithm searches for a good set of initial medoids and in the SWAP phase all possible swaps between the BUILD-medoids and the observations take place so that there is no further decrease of the objective (Clustering in an Object-Oriented Environment, A.Struyf, M. Hubert, P. Rousseeuw., 1997).<br><br></p>
-<p>In the ClusterR package, the <strong>Cluster_Medoids</strong> and <strong>Clara_Medoids</strong> functions correspond to PAM (partitioning around medoids) and CLARA (clustering large applications) algorithms. <br><br></p>
-<p>In the following code chunk, I’ll make use of the <em>mushroom</em> data to illustrate how k-medoids work with a distance metric other than the euclidean distance. The mushroom data consist of 23 categorical attributes (including the class) and 8124 instances. More information about the data can be found in the package documentation.<br><br></p>
+<p>The <a href="https://en.wikipedia.org/wiki/K-medoids" class="external-link">k-medoids</a>
+algorithm (Kaufman, L., Rousseeuw, P., 1987) is a clustering algorithm
+related to the k-means algorithm and the medoid shift algorithm. Both
+the k-means and k-medoids algorithms are partitional and both attempt to
+minimize the distance between points labeled to be in a cluster and a
+point designated as the center of that cluster. In contrast to the
+k-means algorithm, k-medoids chooses <em>data points as centers</em>
+(medoids or exemplars) and works with an <em>arbitrary metrics of
+distances</em> between data points. A useful tool for determining k is
+the silhouette width. K-medoids is more robust to noise and outliers in
+comparison to k-means, because it minimizes a sum of pairwise
+dissimilarities instead of the sum of squared Euclidean distances. A
+medoid can be defined as the object of a cluster whose average
+dissimilarity to all the objects in the cluster is minimal, i.e. it is a
+most centrally located point in the cluster.<br><br> The most common
+realization of the k-medoid clustering is the Partitioning Around
+Medoids (PAM) algorithm. PAM proceeds in two phases: BUILD and SWAP. In
+the BUILD phase, the algorithm searches for a good set of initial
+medoids and in the SWAP phase all possible swaps between the
+BUILD-medoids and the observations take place so that there is no
+further decrease of the objective (Clustering in an Object-Oriented
+Environment, A.Struyf, M. Hubert, P. Rousseeuw., 1997).<br><br></p>
+<p>In the ClusterR package, the <strong>Cluster_Medoids</strong> and
+<strong>Clara_Medoids</strong> functions correspond to PAM (partitioning
+around medoids) and CLARA (clustering large applications) algorithms.
+<br><br></p>
+<p>In the following code chunk, I’ll make use of the <em>mushroom</em>
+data to illustrate how k-medoids work with a distance metric other than
+the euclidean distance. The mushroom data consist of 23 categorical
+attributes (including the class) and 8124 instances. More information
+about the data can be found in the package documentation.<br><br></p>
 <p><strong>Cluster_Medoids</strong> <br><br></p>
-<p>The <em>Cluster_Medoids</em> function can also take - besides a matrix or data frame - a dissimilarity matrix as input. In the case of the mushroom data, where all the features are categorical (with two or more unique values) it would be meaningful to use the <em>gower</em> distance. The <em>gower</em> distance applies a different function to each predictor depending on its type (numeric, ordered, factor). This dissimilarity measure is implemented in many R packages, among others in the cluster package (<em>daisy</em> function) and in the FD package (<em>gowdis</em> function). I’ll take advantage of the <em>gowdis</em> function of the FD package as it also allows user-defined weights for each separate predictor,</p>
+<p>The <em>Cluster_Medoids</em> function can also take - besides a
+matrix or data frame - a dissimilarity matrix as input. In the case of
+the mushroom data, where all the features are categorical (with two or
+more unique values) it would be meaningful to use the <em>gower</em>
+distance. The <em>gower</em> distance applies a different function to
+each predictor depending on its type (numeric, ordered, factor). This
+dissimilarity measure is implemented in many R packages, among others in
+the cluster package (<em>daisy</em> function) and in the FD package
+(<em>gowdis</em> function). I’ll take advantage of the <em>gowdis</em>
+function of the FD package as it also allows user-defined weights for
+each separate predictor,</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mushroom</span><span class="op">)</span></span>
 <span></span>
@@ -361,7 +531,13 @@
 </tr></tbody>
 </table>
 <p><br></p>
-<p>As mentioned before the <em>gowdis</em> function of the FD package allows the user to give different weights to each separate variable. The weights parameter can be tuned, for example by using <a href="https://www.math.vu.nl/~sbhulai/papers/paper-vandenhoven.pdf" class="external-link">random search</a>, in order to achieve better clustering results. For instance, by using the following weights for each separate variable one can improve both the <em>adjusted-rand-index</em> (external validation) and the <em>average silhouette width</em> (internal validation), <br></p>
+<p>As mentioned before the <em>gowdis</em> function of the FD package
+allows the user to give different weights to each separate variable. The
+weights parameter can be tuned, for example by using <a href="https://www.math.vu.nl/~sbhulai/papers/paper-vandenhoven.pdf" class="external-link">random
+search</a>, in order to achieve better clustering results. For instance,
+by using the following weights for each separate variable one can
+improve both the <em>adjusted-rand-index</em> (external validation) and
+the <em>average silhouette width</em> (internal validation), <br></p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">predictors</th>
@@ -485,9 +661,32 @@
 </table>
 <p><br><br></p>
 <p><strong>Clara_Medoids</strong> <br><br></p>
-<p><a href="https://en.wikibooks.org/wiki/Data_Mining_Algorithms_In_R/Clustering/CLARA" class="external-link">CLARA</a> (CLustering LARge Applications) is an obvious way to cluster larger datasets. Instead of finding medoids for the entire data set - it would be also infeasible to calculate the dissimilarity matrix - CLARA draws a small sample from the data and applies the PAM algorithm to generate an optimal set of medoids for the sample. The quality of the resulting medoids is measured by the average dissimilarity between every object in the entire data set and the medoid of its cluster.<br><br></p>
-<p>The <em>Clara_Medoids</em> function in the ClusterR package follows the same logic by applying the <em>Cluster_Medoids</em> function to each selected sample. The <em>Clara_Medoids</em> takes two additional parameters, the <em>samples</em>, and the <em>sample_size</em>. The first one indicates the number of samples to draw from the data set, while the second one the fraction of the data to draw in each sample iteration (a float number between 0.0 and 1.0). I have to point out that the <em>Clara_Medoids</em> function does not take a dissimilarity matrix as input, as the <em>Cluster_Medoids</em> function does.<br><br></p>
-<p>I’ll apply the <em>Clara_Medoids</em> function to the previously used <em>mushroom</em> data set by using the <em>hamming distance</em> as a dissimilarity metric and I’ll compare the system time and results with those of the <em>Cluster_Medoids</em> function. The <em>hamming distance</em> is appropriate for the <em>mushroom</em> data as it’s applicable to discrete variables and it’s defined as the number of attributes that take different values for two compared instances (<em>Data Mining Algorithms: Explained using R, Pawel Cichosz, 2015, page 318</em>).<br><br></p>
+<p><a href="https://en.wikibooks.org/wiki/Data_Mining_Algorithms_In_R/Clustering/CLARA" class="external-link">CLARA</a>
+(CLustering LARge Applications) is an obvious way to cluster larger
+datasets. Instead of finding medoids for the entire data set - it would
+be also infeasible to calculate the dissimilarity matrix - CLARA draws a
+small sample from the data and applies the PAM algorithm to generate an
+optimal set of medoids for the sample. The quality of the resulting
+medoids is measured by the average dissimilarity between every object in
+the entire data set and the medoid of its cluster.<br><br></p>
+<p>The <em>Clara_Medoids</em> function in the ClusterR package follows
+the same logic by applying the <em>Cluster_Medoids</em> function to each
+selected sample. The <em>Clara_Medoids</em> takes two additional
+parameters, the <em>samples</em>, and the <em>sample_size</em>. The
+first one indicates the number of samples to draw from the data set,
+while the second one the fraction of the data to draw in each sample
+iteration (a float number between 0.0 and 1.0). I have to point out that
+the <em>Clara_Medoids</em> function does not take a dissimilarity matrix
+as input, as the <em>Cluster_Medoids</em> function does.<br><br></p>
+<p>I’ll apply the <em>Clara_Medoids</em> function to the previously used
+<em>mushroom</em> data set by using the <em>hamming distance</em> as a
+dissimilarity metric and I’ll compare the system time and results with
+those of the <em>Cluster_Medoids</em> function. The <em>hamming
+distance</em> is appropriate for the <em>mushroom</em> data as it’s
+applicable to discrete variables and it’s defined as the number of
+attributes that take different values for two compared instances
+(<em>Data Mining Algorithms: Explained using R, Pawel Cichosz, 2015,
+page 318</em>).<br><br></p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cl_X</span> <span class="op">=</span> <span class="va">X</span>        <span class="co"># copy initial data </span></span>
 <span></span>
@@ -506,7 +705,7 @@
 <span><span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span></span>
 <span>  </span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## time to complete : 2.649465 secs</span></span></code></pre>
+<pre><code><span><span class="co">## time to complete : 2.515703 secs</span></span></code></pre>
 <p><br></p>
 <table class="table">
 <caption>hamming-Clara-Medoids</caption>
@@ -531,7 +730,7 @@
 <span><span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span></span>
 <span>  </span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## time to complete : 15.2248 secs</span></span></code></pre>
+<pre><code><span><span class="co">## time to complete : 14.19081 secs</span></span></code></pre>
 <p><br></p>
 <table class="table">
 <caption>hamming-Cluster-Medoids</caption>
@@ -545,8 +744,19 @@
 </tr></tbody>
 </table>
 <p><br><br></p>
-<p>Using the <em>hamming</em> distance, both the <em>Clara_Medoids</em> and the <em>Cluster_Medoids</em> functions return approximately the same result (comparable also with the <em>gower</em> distance results), only that the <em>Clara_Medoids</em> function outputs more than four times faster than the <em>Cluster_Medoids</em> for this particular data set.<br><br></p>
-<p>By using the object results of the last two code chunks one can also plot the silhouette widths using the <strong>Silhouette_Dissimilarity_Plot </strong> function. Worth mentioning here is that the dissimilarities and silhouette widths of the <em>Clara_Medoids</em> function are based on the best-selected sample and not on the entire data set, as is the case for the <em>Cluster_Medoids</em> function. <br><br></p>
+<p>Using the <em>hamming</em> distance, both the <em>Clara_Medoids</em>
+and the <em>Cluster_Medoids</em> functions return approximately the same
+result (comparable also with the <em>gower</em> distance results), only
+that the <em>Clara_Medoids</em> function outputs more than four times
+faster than the <em>Cluster_Medoids</em> for this particular data
+set.<br><br></p>
+<p>By using the object results of the last two code chunks one can also
+plot the silhouette widths using the
+<strong>Silhouette_Dissimilarity_Plot </strong> function. Worth
+mentioning here is that the dissimilarities and silhouette widths of the
+<em>Clara_Medoids</em> function are based on the best-selected sample
+and not on the entire data set, as is the case for the
+<em>Cluster_Medoids</em> function. <br><br></p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Silhouette Plot for the "Clara_Medoids" object</span></span>
 <span></span>

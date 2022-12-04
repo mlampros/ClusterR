@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ClusterR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.8</span>
       </span>
     </div>
 
@@ -89,8 +89,10 @@
 <p><br></p>
 <p>Assumming that an R package (‘PackageA’) calls one of the <em>ClusterR</em> Rcpp functions. Then the maintainer of ‘PackageA’ has to :</p>
 <p><br></p>
-<ul><li>
-<strong>1st.</strong> install the <em>ClusterR</em> package to take advantage of the new functionality either from CRAN using,</li></ul>
+<ul>
+<li>
+<strong>1st.</strong> install the <em>ClusterR</em> package to take advantage of the new functionality either from CRAN using,</li>
+</ul>
 <p><br></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -104,60 +106,64 @@
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'mlampros/ClusterR'</span>, upgrade <span class="op">=</span> <span class="st">'always'</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span>, repos <span class="op">=</span> <span class="st">'https://cloud.r-project.org/'</span><span class="op">)</span></span>
 <span> </span></code></pre></div>
 <p><br></p>
-<ul><li>
-<strong>2nd.</strong> update the <strong>DESCRIPTION</strong> file of ‘PackageA’ and especially the <em>LinkingTo</em> field by adding the <em>ClusterR</em> package (besides any other packages),</li></ul>
+<ul>
+<li>
+<strong>2nd.</strong> update the <strong>DESCRIPTION</strong> file of ‘PackageA’ and especially the <em>LinkingTo</em> field by adding the <em>ClusterR</em> package (besides any other packages),</li>
+</ul>
 <p><br></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">LinkingTo</span><span class="op">:</span> <span class="va">ClusterR</span></span></code></pre></div>
 <p><br></p>
-<ul><li>
-<strong>3rd.</strong> open a <strong>new C++ file</strong> (for instance in Rstudio) and at the top of the file add the following ‘headers’, ‘depends’ and ‘plugins’,</li></ul>
+<ul>
+<li>
+<strong>3rd.</strong> open a <strong>new C++ file</strong> (for instance in Rstudio) and at the top of the file add the following ‘headers’, ‘depends’ and ‘plugins’,</li>
+</ul>
 <p><br></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="co"># include &lt;RcppArmadillo.h&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="co"># include &lt;ClusterRHeader.h&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="co"># include &lt;affinity_propagation.h&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="op">/</span><span class="er">/</span><span class="st"> </span>[[Rcpp<span class="op">::</span><span class="kw">depends</span>(<span class="st">"RcppArmadillo"</span>)]]</span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="op">/</span><span class="er">/</span><span class="st"> </span>[[Rcpp<span class="op">::</span><span class="kw">depends</span>(ClusterR)]]</span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="op">/</span><span class="er">/</span><span class="st"> </span>[[Rcpp<span class="op">::</span><span class="kw">plugins</span>(cpp11)]]</span>
-<span id="cb4-8"><a href="#cb4-8"></a></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># include &lt;RcppArmadillo.h&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># include &lt;ClusterRHeader.h&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># include &lt;affinity_propagation.h&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> [[Rcpp<span class="sc">::</span><span class="fu">depends</span>(<span class="st">"RcppArmadillo"</span>)]]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> [[Rcpp<span class="sc">::</span><span class="fu">depends</span>(ClusterR)]]</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> [[Rcpp<span class="sc">::</span><span class="fu">plugins</span>(cpp11)]]</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 <p><br></p>
 <p>The available functions can be found in the following files: <strong>inst/include/ClusterRHeader.h</strong> and <strong>inst/include/affinity_propagation.h</strong></p>
 <p><br></p>
 <p>A <em>complete minimal example</em> would be :</p>
 <p><br></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># include &lt;RcppArmadillo.h&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># include &lt;ClusterRHeader.h&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co"># include &lt;affinity_propagation.h&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="op">/</span><span class="er">/</span><span class="st"> </span>[[Rcpp<span class="op">::</span><span class="kw">depends</span>(<span class="st">"RcppArmadillo"</span>)]]</span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="op">/</span><span class="er">/</span><span class="st"> </span>[[Rcpp<span class="op">::</span><span class="kw">depends</span>(ClusterR)]]</span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="op">/</span><span class="er">/</span><span class="st"> </span>[[Rcpp<span class="op">::</span><span class="kw">plugins</span>(cpp11)]]</span>
-<span id="cb5-7"><a href="#cb5-7"></a></span>
-<span id="cb5-8"><a href="#cb5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9"></a>using namespace clustR;</span>
-<span id="cb5-10"><a href="#cb5-10"></a></span>
-<span id="cb5-11"><a href="#cb5-11"></a></span>
-<span id="cb5-12"><a href="#cb5-12"></a><span class="op">/</span><span class="er">/</span><span class="st"> </span>[[Rcpp<span class="op">::</span>export]]</span>
-<span id="cb5-13"><a href="#cb5-13"></a>Rcpp<span class="op">::</span>List <span class="kw">mini_batch_kmeans</span>(arma<span class="op">::</span>mat<span class="op">&amp;</span><span class="st"> </span>data, int clusters, int batch_size, int max_iters, int <span class="dt">num_init =</span> <span class="dv">1</span>, </span>
-<span id="cb5-14"><a href="#cb5-14"></a></span>
-<span id="cb5-15"><a href="#cb5-15"></a>                            double <span class="dt">init_fraction =</span> <span class="fl">1.0</span>, std<span class="op">::</span>string <span class="dt">initializer =</span> <span class="st">"kmeans++"</span>,</span>
-<span id="cb5-16"><a href="#cb5-16"></a>                            </span>
-<span id="cb5-17"><a href="#cb5-17"></a>                            int <span class="dt">early_stop_iter =</span> <span class="dv">10</span>, bool <span class="dt">verbose =</span> false, </span>
-<span id="cb5-18"><a href="#cb5-18"></a>                            </span>
-<span id="cb5-19"><a href="#cb5-19"></a>                            Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericMatrix<span class="op">&gt;</span><span class="st"> </span><span class="dt">CENTROIDS =</span> R_NilValue, </span>
-<span id="cb5-20"><a href="#cb5-20"></a>                            </span>
-<span id="cb5-21"><a href="#cb5-21"></a>                            double <span class="dt">tol =</span> <span class="fl">1e-4</span>, double <span class="dt">tol_optimal_init =</span> <span class="fl">0.5</span>, int <span class="dt">seed =</span> <span class="dv">1</span>) {</span>
-<span id="cb5-22"><a href="#cb5-22"></a></span>
-<span id="cb5-23"><a href="#cb5-23"></a>  ClustHeader clust_header;</span>
-<span id="cb5-24"><a href="#cb5-24"></a></span>
-<span id="cb5-25"><a href="#cb5-25"></a>  return <span class="kw">clust_header.mini_batch_kmeans</span>(data, clusters, batch_size, max_iters, num_init, init_fraction, </span>
-<span id="cb5-26"><a href="#cb5-26"></a>  </span>
-<span id="cb5-27"><a href="#cb5-27"></a>                                        initializer, early_stop_iter, verbose, CENTROIDS, tol, </span>
-<span id="cb5-28"><a href="#cb5-28"></a>                                        </span>
-<span id="cb5-29"><a href="#cb5-29"></a>                                        tol_optimal_init, seed);</span>
-<span id="cb5-30"><a href="#cb5-30"></a>}</span>
-<span id="cb5-31"><a href="#cb5-31"></a></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># include &lt;RcppArmadillo.h&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># include &lt;ClusterRHeader.h&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># include &lt;affinity_propagation.h&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> [[Rcpp<span class="sc">::</span><span class="fu">depends</span>(<span class="st">"RcppArmadillo"</span>)]]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> [[Rcpp<span class="sc">::</span><span class="fu">depends</span>(ClusterR)]]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> [[Rcpp<span class="sc">::</span><span class="fu">plugins</span>(cpp11)]]</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>using namespace clustR;</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> [[Rcpp<span class="sc">::</span>export]]</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="sc">::</span>List <span class="fu">mini_batch_kmeans</span>(arma<span class="sc">::</span>mat<span class="sc">&amp;</span> data, int clusters, int batch_size, int max_iters, int <span class="at">num_init =</span> <span class="dv">1</span>, </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                            double <span class="at">init_fraction =</span> <span class="fl">1.0</span>, std<span class="sc">::</span>string <span class="at">initializer =</span> <span class="st">"kmeans++"</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>                            </span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>                            int <span class="at">early_stop_iter =</span> <span class="dv">10</span>, bool <span class="at">verbose =</span> false, </span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                            </span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>                            Rcpp<span class="sc">::</span>Nullable<span class="sc">&lt;</span>Rcpp<span class="sc">::</span>NumericMatrix<span class="sc">&gt;</span> <span class="at">CENTROIDS =</span> R_NilValue, </span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>                            </span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>                            double <span class="at">tol =</span> <span class="fl">1e-4</span>, double <span class="at">tol_optimal_init =</span> <span class="fl">0.5</span>, int <span class="at">seed =</span> <span class="dv">1</span>) {</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  ClustHeader clust_header;</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  return <span class="fu">clust_header.mini_batch_kmeans</span>(data, clusters, batch_size, max_iters, num_init, init_fraction, </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>                                        initializer, early_stop_iter, verbose, CENTROIDS, tol, </span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>                                        </span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>                                        tol_optimal_init, seed);</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 <p><br></p>
 <p>Then, by opening an R file a user can call the <em>mini_batch_kmeans</em> function using,</p>
 <p><br></p>
@@ -183,22 +189,22 @@
 <p><br></p>
 <p><strong>Docker images</strong> of the <em>ClusterR</em> package are available to download from my <a href="https://hub.docker.com/r/mlampros/clusterr" class="external-link">dockerhub</a> account. The images come with <em>Rstudio</em> and the <em>R-development</em> version (latest) installed. The whole process was tested on Ubuntu 18.04. To <strong>pull</strong> &amp; <strong>run</strong> the image do the following,</p>
 <p><br></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a></span>
-<span id="cb7-2"><a href="#cb7-2"></a>docker pull mlampros<span class="op">/</span>clusterr<span class="op">:</span>rstudiodev</span>
-<span id="cb7-3"><a href="#cb7-3"></a></span>
-<span id="cb7-4"><a href="#cb7-4"></a>docker run <span class="op">-</span>d <span class="op">--</span>name rstudio_dev <span class="op">-</span>e USER=rstudio <span class="op">-</span>e PASSWORD=give_here_your_password <span class="op">--</span>rm <span class="op">-</span>p <span class="dv">8787</span><span class="op">:</span><span class="dv">8787</span> mlampros<span class="op">/</span>clusterr<span class="op">:</span>rstudiodev</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>docker pull mlampros<span class="sc">/</span>clusterr<span class="sc">:</span>rstudiodev</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>docker run <span class="sc">-</span>d <span class="sc">--</span>name rstudio_dev <span class="sc">-</span>e USER<span class="ot">=</span>rstudio <span class="sc">-</span>e PASSWORD<span class="ot">=</span>give_here_your_password <span class="sc">--</span>rm <span class="sc">-</span>p <span class="dv">8787</span><span class="sc">:</span><span class="dv">8787</span> mlampros<span class="sc">/</span>clusterr<span class="sc">:</span>rstudiodev</span></code></pre></div>
 <p><br></p>
 <p>The user can also <strong>bind</strong> a home directory / folder to the image to use its files by specifying the <strong>-v</strong> command,</p>
 <p><br></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a></span>
-<span id="cb8-2"><a href="#cb8-2"></a>docker run <span class="op">-</span>d <span class="op">--</span>name rstudio_dev <span class="op">-</span>e USER=rstudio <span class="op">-</span>e PASSWORD=give_here_your_password <span class="op">--</span>rm <span class="op">-</span>p <span class="dv">8787</span><span class="op">:</span><span class="dv">8787</span> <span class="op">-</span>v <span class="op">/</span>home<span class="op">/</span>YOUR_DIR<span class="op">:</span><span class="er">/</span>home<span class="op">/</span>rstudio<span class="op">/</span>YOUR_DIR mlampros<span class="op">/</span>clusterr<span class="op">:</span>rstudiodev</span>
-<span id="cb8-3"><a href="#cb8-3"></a></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>docker run <span class="sc">-</span>d <span class="sc">--</span>name rstudio_dev <span class="sc">-</span>e USER<span class="ot">=</span>rstudio <span class="sc">-</span>e PASSWORD<span class="ot">=</span>give_here_your_password <span class="sc">--</span>rm <span class="sc">-</span>p <span class="dv">8787</span><span class="sc">:</span><span class="dv">8787</span> <span class="sc">-</span>v <span class="sc">/</span>home<span class="sc">/</span>YOUR_DIR<span class="sc">:</span><span class="er">/</span>home<span class="sc">/</span>rstudio<span class="sc">/</span>YOUR_DIR mlampros<span class="sc">/</span>clusterr<span class="sc">:</span>rstudiodev</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 <p><br></p>
 <p>In the latter case you might have first give permission privileges for write access to <strong>YOUR_DIR</strong> directory (not necessarily) using,</p>
 <p><br></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a></span>
-<span id="cb9-2"><a href="#cb9-2"></a>chmod <span class="op">-</span>R <span class="dv">777</span> <span class="op">/</span>home<span class="op">/</span>YOUR_DIR</span>
-<span id="cb9-3"><a href="#cb9-3"></a></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>chmod <span class="sc">-</span>R <span class="dv">777</span> <span class="sc">/</span>home<span class="sc">/</span>YOUR_DIR</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 <p><br></p>
 <p>The <strong>USER</strong> defaults to <em>rstudio</em> but you have to give your <strong>PASSWORD</strong> of preference (see <a href="https://rocker-project.org/" class="external-link">https://rocker-project.org/</a> for more information).</p>
 <p><br></p>
@@ -206,11 +212,11 @@
 <p><br></p>
 <p><strong>1st. Option</strong> on your personal computer,</p>
 <p><br></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>http<span class="op">:</span><span class="er">//</span><span class="dv">0</span>.<span class="dv">0</span>.<span class="fl">0.0</span><span class="op">:</span><span class="dv">8787</span> </span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>http<span class="sc">:</span><span class="er">//</span><span class="dv">0</span>.<span class="dv">0</span>.<span class="fl">0.0</span><span class="sc">:</span><span class="dv">8787</span> </span></code></pre></div>
 <p><br></p>
 <p><strong>2nd. Option</strong> on a cloud instance,</p>
 <p><br></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>http<span class="op">:</span><span class="er">//</span>Public DNS<span class="op">:</span><span class="dv">8787</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>http<span class="sc">:</span><span class="er">//</span>Public DNS<span class="sc">:</span><span class="dv">8787</span></span></code></pre></div>
 <p><br></p>
 <p>to access the Rstudio console in order to give your username and password.</p>
 <p><br></p>
@@ -220,13 +226,13 @@
 </h3>
 <p>If you use the code of this repository in your paper or research please cite both <strong>ClusterR</strong> and the <strong>original articles / software</strong> <code>https://CRAN.R-project.org/package=ClusterR</code>:</p>
 <p><br></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="op">@</span>Manual{,</span>
-<span id="cb12-2"><a href="#cb12-2"></a>  title =<span class="st"> </span>{{ClusterR}<span class="op">:</span><span class="st"> </span>Gaussian Mixture Models, K<span class="op">-</span>Means, Mini<span class="op">-</span>Batch<span class="op">-</span>Kmeans, K<span class="op">-</span>Medoids and Affinity Propagation Clustering},</span>
-<span id="cb12-3"><a href="#cb12-3"></a>  author =<span class="st"> </span>{Lampros Mouselimis},</span>
-<span id="cb12-4"><a href="#cb12-4"></a>  year =<span class="st"> </span>{<span class="dv">2022</span>},</span>
-<span id="cb12-5"><a href="#cb12-5"></a>  note =<span class="st"> </span>{R package version <span class="dv">1</span>.<span class="fl">2.7</span>},</span>
-<span id="cb12-6"><a href="#cb12-6"></a>  url =<span class="st"> </span>{https<span class="op">:</span><span class="er">//</span>CRAN.R<span class="op">-</span>project.org<span class="op">/</span>package=ClusterR},</span>
-<span id="cb12-7"><a href="#cb12-7"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="sc">@</span>Manual{,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  title <span class="ot">=</span> {{ClusterR}<span class="sc">:</span> Gaussian Mixture Models, K<span class="sc">-</span>Means, Mini<span class="sc">-</span>Batch<span class="sc">-</span>Kmeans, K<span class="sc">-</span>Medoids and Affinity Propagation Clustering},</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  author <span class="ot">=</span> {Lampros Mouselimis},</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  year <span class="ot">=</span> {<span class="dv">2022</span>},</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  note <span class="ot">=</span> {R package version <span class="dv">1</span>.<span class="fl">2.8</span>},</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>CRAN.R<span class="sc">-</span>project.org<span class="sc">/</span>package<span class="ot">=</span>ClusterR},</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p><br></p>
 </div>
 </div>
