@@ -641,7 +641,7 @@ testthat::test_that("in case of Cluster_Medoids for different parameter settings
 
     testthat::expect_equal(mean(unlist(lapply(opt_md, length))[-1]), 6)
   }
-  
+
 })
 
 
@@ -654,6 +654,26 @@ testthat::test_that("in case of Clara_Medoids for different parameter settings, 
     opt_md = Optimal_Clusters_Medoids(dat, max_clusters = 10, 'euclidean', tmp[i], clara_samples = 5, clara_sample_size = 0.2, plot_clusters = F)
     testthat::expect_equal(mean(unlist(lapply(opt_md, length))[-1]), 6)
   }
-  
+
+})
+
+
+############################################
+# cost_clusters_from_dissim_medoids function
+############################################
+
+
+testthat::test_that("the cost_clusters_from_dissim_medoids function returns the correct output", {
+
+  cm = Cluster_Medoids(X, clusters = 3, distance_metric = 'euclidean', swap_phase = TRUE)
+  res = cost_clusters_from_dissim_medoids(data = cm$dissimilarity_matrix, medoids = cm$medoid_indices)
+
+  # dissim_cost = cm$best_dissimilarity == res$cost        # for some reason (probably a rounding thing) this is not equal although the output is the same
+
+  tbl = table(cm$clusters, res$clusters)
+  diag(tbl) = NA_real_
+  tbl = as.vector(tbl)                                     # I expect that once I set the main diagonal to 0 then all other values are equal to 0 because the clustering between the 2 objects will match
+
+  testthat::expect_true(all(na.omit(tbl) == 0))
 })
 

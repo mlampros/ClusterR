@@ -1,10 +1,17 @@
 
+## Cluster 1.2.8
+
+* I added the *cost_clusters_from_dissim_medoids()* function
+* I added an alternative 'build' phase Rcpp function that corresponds to the exact algorithm for comparison purposes (see the function *'updated_BUILD()'* in the 'inst/include/ClusterRHeader.h' file). I didn't see any differences compared to the existing 'build' phase in the *'Cluster_Medoids()'* function.
+* I updated the documentation of the *'Cluster_Medoids()'* function by mentioning that it is an approximate and not the exact *'partition around medoids'* function
+
+
 ## Cluster 1.2.7
 
 * I updated the references weblink of the *Optimal_Clusters_KMeans()* function (github issue: https://github.com/mlampros/ClusterR/issues/27)
-* I added a deprecation warning to the *'seed'* parameter of the *'Cluster_Medoids'* function (github issue: https://github.com/mlampros/ClusterR/issues/33). This parameter will be removed in version *'1.3.0'*
+* I added a deprecation warning to the *'seed'* parameter of the *'Cluster_Medoids()'* function (github issue: https://github.com/mlampros/ClusterR/issues/33). This parameter will be removed in version *'1.3.0'*
 * I replaced the *'ARMA_DONT_PRINT_ERRORS'* on the top of the *'/src/export_inst_folder_headers.cpp'* file with *'ARMA_WARN_LEVEL 0'* because support for *'ARMA_DONT_PRINT_ERRORS'* has been removed
-* I fixed a bug in the *'ClaraMedoids'* Rcpp function (*/inst/ClusterRHeader.h* file) related to the *'seed'* parameter (github issue: https://github.com/mlampros/ClusterR/issues/35)
+* I fixed a bug in the *'ClaraMedoids()'* Rcpp function (*/inst/ClusterRHeader.h* file) related to the *'seed'* parameter (github issue: https://github.com/mlampros/ClusterR/issues/35)
 
 
 ## ClusterR 1.2.6

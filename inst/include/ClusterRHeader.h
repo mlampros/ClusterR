@@ -2703,6 +2703,7 @@ namespace clustR {
 
       // the 'ClusterMedoids' function should accept either a matrix or a dissimilarity matrix
       // the dissimilarity matrix in comparison to a single matrix will have nrows == ncols AND diagonal == 0.0 [ it should be also a matrix ]
+      // Be aware this function is not the exact but the "approximate partition around medoids" algorithm
       //
 
       Rcpp::List ClusterMedoids(arma::mat& data, int clusters, std::string method, double minkowski_p = 1.0, int threads = 1, bool verbose = false, bool swap_phase = false,
@@ -3423,6 +3424,142 @@ namespace clustR {
         }
 
         return medoids_object;
+      }
+
+
+      //==================== cluster Medoids (added code snippets to answer https://github.com/mlampros/ClusterR/issues/39) ====================
+
+
+      // R's setdiff() in RcppArmadillo using std::set_difference() [see: https://stackoverflow.com/a/41237778/8302386]
+      //
+
+      arma::uvec std_setdiff(arma::uvec& x, arma::uvec& y) {
+
+        std::vector<int> a = arma::conv_to< std::vector<int> >::from(arma::sort(x));
+        std::vector<int> b = arma::conv_to< std::vector<int> >::from(arma::sort(y));
+        std::vector<int> out;
+
+        std::set_difference(a.begin(), a.end(), b.begin(), b.end(),
+                            std::inserter(out, out.end()));
+
+        return arma::conv_to<arma::uvec>::from(out);
+      }
+
+
+      // Function that computes:
+      //     - the clusters
+      //     - the total dissimilarity cost
+      // using the distance matrix and the medoids
+      //
+
+      Rcpp::List dissimilarity_cost_clusters(arma::mat& dissim_mat,
+                                             arma::uvec& medoids) {
+
+        arma::mat subs_dissim = dissim_mat.cols(medoids);
+        arma::ucolvec medoid_idxs = arma::index_min(subs_dissim, 1);
+
+        double total_cost = 0.0;
+        for (arma::uword t = 0; t < medoid_idxs.n_elem; t++) {
+          total_cost += subs_dissim(t, medoid_idxs(t));
+        }
+
+        arma::uvec clusters_out = medoids(medoid_idxs);
+
+        return Rcpp::List::create(Rcpp::Named("cost") = total_cost,
+                                  Rcpp::Named("clusters") = clusters_out);
+      }
+
+
+      // Attempt to implement the "build" phase of the "partition around medoids" algorithm based on
+      //        - the algorithm description of the "Finding Groups in Data" book, 1990 (Kaufman, Rousseeuw)
+      //        - the algorithm description in https://www.cs.umb.edu/cs738/pam1.pdf (the PAM Clustering Algorithm), see also "inst/papers_references/the_pam_clustering_algorithm.pdf"
+      // However, I observed that still it doesn't return the optimal results compared to the "build" phase inside the "ClusterMedoids()" function (of this file)
+      // The only difference is that the "updated_BUILD()" function returns also the "Contribution" or 'Total Gain" as described in the algorithm
+      //
+
+      Rcpp::List updated_BUILD(arma::mat& dissim_mat,
+                               arma::uword k,
+                               bool verbose = false,
+                               int seed = 1) {
+        set_seed(seed);
+        arma::vec init_meds(k);                          // I could use here 'arma::uvec' and avoid the conversion later using 'arma::conv_to<arma::uvec>::from()' however '.fill(arma::datum::nan)' does not work with integers (see: https://github.com/RcppCore/RcppArmadillo/issues/399)
+        init_meds.fill(arma::datum::nan);
+        arma::rowvec init_cost = arma::sum(dissim_mat, 0);
+        arma::uword med1 = arma::index_min(init_cost);
+        init_meds(0) = med1;
+        arma::uword NCOLS = dissim_mat.n_cols;
+        arma::uvec col_idxs = arma::regspace<arma::uvec>(0, 1, NCOLS - 1);
+        arma::rowvec end_indices_vec(NCOLS);
+        end_indices_vec.fill(med1);
+        double total_gain = 0.0;
+
+        if (verbose) {
+          Rcpp::Rcout << " " << std::endl; Rcpp::Rcout << "medoid " << med1 + 1 << " was added. Sum of Distances of the first Medoid to the other objects  --> " << init_cost(med1) << std::endl;
+        }
+
+        arma::uvec idx_meds_wo_nas, unq_meds_wo_nas, remaining_col_idxs, remaining_candidate_idxs, candidate_idx_uvec;
+        arma::mat S, D_s_all;
+        arma::uword nonselected_idx, candidate_idx, most_similar_idx, idx_gain;
+        arma::vec diff_dissims;
+        double D_s, D_i, CONTRIBUTE;
+
+        for (unsigned int item_k = 1; item_k < k; item_k++) {                             // start with index 1 because the first medoid is already computed
+
+          idx_meds_wo_nas = arma::find_finite(init_meds);                                 // unique medoids by removing the NA's (this vector will have at least 1 medoid which is the first medoid)
+          arma::uvec init_meds_uvec = arma::conv_to<arma::uvec>::from(init_meds);
+          unq_meds_wo_nas = init_meds_uvec(idx_meds_wo_nas);
+          S = dissim_mat.cols(unq_meds_wo_nas);                                           // S corresponds to the selected medoids
+          remaining_col_idxs = std_setdiff(col_idxs, unq_meds_wo_nas);                    // O - S = U
+          arma::vec candidates_GAIN(NCOLS, arma::fill::zeros);
+
+          for (unsigned int i = 0; i < remaining_col_idxs.n_elem; i++) {                  // I  [ i in U ]  ( consider i from unselected )
+
+            candidate_idx = remaining_col_idxs(i);
+            candidate_idx_uvec = { candidate_idx };
+            remaining_candidate_idxs = std_setdiff(remaining_col_idxs, candidate_idx_uvec);
+
+            for (unsigned int j = 0; j < remaining_candidate_idxs.n_elem; j++) {          // J  [ j in (U - i) ]  ( consider j from (unselected - i) )
+
+              nonselected_idx = remaining_candidate_idxs(j);
+              D_s_all = S.row(nonselected_idx);
+              most_similar_idx = D_s_all.index_min();
+              D_s = arma::as_scalar(D_s_all.col(most_similar_idx));                       // dissimilarity to the closest object in S
+              D_i = dissim_mat(candidate_idx, nonselected_idx);                           // dissimilarity between object i and object j
+
+              diff_dissims = {D_s - D_i, 0.0};
+              CONTRIBUTE = arma::max(diff_dissims);
+
+              if (D_s > D_i) {
+                candidates_GAIN(candidate_idx) += CONTRIBUTE;
+              }
+            }
+          }
+
+          idx_gain = candidates_GAIN.index_max();
+          init_meds(item_k) = col_idxs(idx_gain);
+          total_gain += candidates_GAIN(idx_gain);
+
+          if (verbose) {
+            Rcpp::Rcout << "medoid " << col_idxs(idx_gain) + 1 << " was added. Contribution to Gain  --> " << candidates_GAIN(idx_gain) << "    Total Gain (build phase)  --> " << total_gain << std::endl;
+          }
+        }
+
+        arma::uvec init_meds_uvec = arma::conv_to<arma::uvec>::from(init_meds);
+        Rcpp::List cost_clusts_obj = dissimilarity_cost_clusters(dissim_mat, init_meds_uvec);
+        double total_cost = Rcpp::as<double>(cost_clusts_obj["cost"]);
+        arma::uvec clusters = Rcpp::as<arma::uvec>(cost_clusts_obj["clusters"]);
+
+        if (verbose) {
+          Rcpp::Rcout << " " << std::endl; Rcpp::Rcout << " ========================================================================= " << std::endl;
+          Rcpp::Rcout << " --- end of build phase ---> " << " Total Gain: " << total_gain << "  dissimilarity: " << total_cost << std::endl;
+          Rcpp::Rcout << " ========================================================================= " << std::endl;
+          Rcpp::Rcout << "Appending objects to medoids (clustering)" << std::endl;
+        }
+
+        return Rcpp::List::create(Rcpp::Named("medoids") = init_meds,
+                                  Rcpp::Named("cost") = total_cost,
+                                  Rcpp::Named("gain") = total_gain,
+                                  Rcpp::Named("clusters") = clusters);
       }
 
 

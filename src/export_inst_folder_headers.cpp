@@ -353,6 +353,19 @@ Rcpp::List OptClust(arma::mat& data, arma::rowvec iter_clust, std::string method
 }
 
 
+
+// compute the cost and clusters based on the dissimilarity matrix and medoids
+//
+
+// [[Rcpp::export]]
+Rcpp::List cost_clusters_from_dis_meds(arma::mat& dissim_mat,
+                                       arma::uvec& medoids) {
+  ClustHeader CRH;
+
+  return CRH.dissimilarity_cost_clusters(dissim_mat, medoids);
+}
+
+
 //============================================ affinity propagation ===================================================================================
 
 // affinity propagation algorithm

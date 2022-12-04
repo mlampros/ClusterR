@@ -1078,6 +1078,33 @@ predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
 }
 
 
+#' Compute the cost and clusters based on an input dissimilarity matrix and medoids
+#'
+#' @param data a dissimilarity matrix, where the main diagonal equals 0.0 and the number of rows equals the number of columns
+#' @param medoids a vector of output medoids of the 'Cluster_Medoids', 'Clara_Medoids' or any other 'partition around medoids' function
+#' @return a list object that includes the cost and the clusters
+#' @author Lampros Mouselimis
+#' @export
+#' @examples
+#'
+#' data(dietary_survey_IBS)
+#' dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]
+#' dat = center_scale(dat)
+#'
+#' cm = Cluster_Medoids(dat, clusters = 3, distance_metric = 'euclidean', swap_phase = TRUE)
+#' res = cost_clusters_from_dissim_medoids(data = cm$dissimilarity_matrix, medoids = cm$medoid_indices)
+#'
+#' # cm$best_dissimilarity == res$cost
+#' # table(cm$clusters, res$clusters)
+
+cost_clusters_from_dissim_medoids = function(data, medoids) {
+  if (nrow(data) != ncol(data)) stop("I expect that the input data object is a dissimilarity matrix where the number of rows equals the number of columns!")
+  if (!inherits(medoids, c('numeric', 'integer'))) stop("I expect the 'medoids' input object to be a numeric vector!")
+  res_clust = cost_clusters_from_dis_meds(dissim_mat = data,
+                                          medoids = medoids - 1)                     # adjust the medoids indexing to the Cpp-indexing by subtracting 1
+  return(list(cost = res_clust$cost, clusters = as.vector(res_clust$clusters)))
+}
+
 
 #' Partitioning around medoids
 #'
@@ -1093,8 +1120,8 @@ predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
 #' @return a list with the following attributes: medoids, medoid_indices, best_dissimilarity, dissimilarity_matrix, clusters, fuzzy_probs (if fuzzy = TRUE), silhouette_matrix, clustering_stats
 #' @author Lampros Mouselimis
 #' @details
-#' The Cluster_Medoids function is implemented in the same way as the 'pam' (partitioning around medoids) algorithm (Kaufman and Rousseeuw(1990)). In comparison to k-means
-#' clustering, the function Cluster_Medoids is more robust, because it minimizes the sum of unsquared dissimilarities. Moreover, it doesn't need initial guesses for the cluster centers.
+#' Due to the fact that I didn't have access to the book 'Finding Groups in Data, Kaufman and Rousseeuw, 1990' (which includes the exact algorithm) I implemented the 'Cluster_Medoids' function based on the paper 'Clustering in an Object-Oriented Environment' (see 'References').
+#' Therefore, the 'Cluster_Medoids' function is an approximate implementation and not an exact one. Furthermore, in comparison to k-means clustering, the function 'Cluster_Medoids' is more robust, because it minimizes the sum of unsquared dissimilarities. Moreover, it doesn't need initial guesses for the cluster centers.
 #' @references
 #' Anja Struyf, Mia Hubert, Peter J. Rousseeuw, (Feb. 1997), Clustering in an Object-Oriented Environment, Journal of Statistical Software, Vol 1, Issue 4
 #' @export
@@ -1108,6 +1135,7 @@ predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
 #'
 #' cm = Cluster_Medoids(dat, clusters = 3, distance_metric = 'euclidean', swap_phase = TRUE)
 #'
+
 Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkowski_p = 1.0, threads = 1, swap_phase = TRUE, fuzzy = FALSE, verbose = FALSE, seed = 1) {
 
   if (lifecycle::is_present(seed)) {

@@ -327,6 +327,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cost_clusters_from_dis_meds
+Rcpp::List cost_clusters_from_dis_meds(arma::mat& dissim_mat, arma::uvec& medoids);
+RcppExport SEXP _ClusterR_cost_clusters_from_dis_meds(SEXP dissim_matSEXP, SEXP medoidsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type dissim_mat(dissim_matSEXP);
+    Rcpp::traits::input_parameter< arma::uvec& >::type medoids(medoidsSEXP);
+    rcpp_result_gen = Rcpp::wrap(cost_clusters_from_dis_meds(dissim_mat, medoids));
+    return rcpp_result_gen;
+END_RCPP
+}
 // affinity_propagation
 Rcpp::List affinity_propagation(arma::mat& s, std::vector<double> p, int maxits, int convits, double dampfact, bool details, double nonoise, double eps, bool time);
 RcppExport SEXP _ClusterR_affinity_propagation(SEXP sSEXP, SEXP pSEXP, SEXP maxitsSEXP, SEXP convitsSEXP, SEXP dampfactSEXP, SEXP detailsSEXP, SEXP nonoiseSEXP, SEXP epsSEXP, SEXP timeSEXP) {

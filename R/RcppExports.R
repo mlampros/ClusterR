@@ -77,6 +77,10 @@ OptClust <- function(data, iter_clust, method, clara = FALSE, samples = 5L, samp
     .Call(`_ClusterR_OptClust`, data, iter_clust, method, clara, samples, sample_size, minkowski_p, criterion, threads, swap_phase, verbose, seed)
 }
 
+cost_clusters_from_dis_meds <- function(dissim_mat, medoids) {
+    .Call(`_ClusterR_cost_clusters_from_dis_meds`, dissim_mat, medoids)
+}
+
 affinity_propagation <- function(s, p, maxits = 1000L, convits = 100L, dampfact = 0.9, details = FALSE, nonoise = 0.0, eps = 2.2204e-16, time = FALSE) {
     .Call(`_ClusterR_affinity_propagation`, s, p, maxits, convits, dampfact, details, nonoise, eps, time)
 }
