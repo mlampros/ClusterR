@@ -226,7 +226,6 @@ tryCatch_optimal_clust_GMM <- function(data, max_clusters, dist_mode, seed_mode,
 
 
 Optimal_Clusters_GMM = function(data, max_clusters, criterion = "AIC", dist_mode = 'eucl_dist', seed_mode = 'random_subset',
-
                                 km_iter = 10, em_iter = 5, verbose = FALSE, var_floor = 1e-10, plot_data = TRUE, seed = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
@@ -313,8 +312,6 @@ Optimal_Clusters_GMM = function(data, max_clusters, criterion = "AIC", dist_mode
     }
 
     res = as.vector(gmm)
-
-    class(res) = c("GMMCluster", 'Gaussian Mixture Models')
 
     return(res)
   }
