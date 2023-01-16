@@ -1204,15 +1204,16 @@ namespace clustR {
 
 
       // compute the silhouette width (including the clusters and intra cluster dissimilarity)
+      // reference for the 'silhouette_global_average':
+      //           https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html#sklearn.metrics.silhouette_score
       //
 
       Rcpp::List silhouette_clusters(arma::mat& data, arma::vec CLUSTER) {
 
-        clustR::ClustHeader clust_header;
-        Rcpp::List obj_clust = clust_header.evaluation_rcpp(data, CLUSTER, true);
+        Rcpp::List obj_clust = evaluation_rcpp(data, CLUSTER, true);
 
         arma::rowvec clust_vec = Rcpp::as<arma::rowvec>(obj_clust["clusters"]);
-        arma::rowvec unq_items = arma::unique(clust_vec) - 1;                             // adjust indexing to C++ (the unique clusters are sorted in ascending order 0,1,2 etc.)
+        arma::rowvec unq_items = arma::unique(clust_vec) - 1;            // adjust indexing to C++ (the unique clusters are sorted in ascending order 0,1,2 etc.)
         arma::uword num_clusts = unq_items.n_elem;
 
         Rcpp::List clust_idx = Rcpp::as<Rcpp::List>(obj_clust["cluster_indices"]);
@@ -1242,9 +1243,9 @@ namespace clustR {
           avg_silh[i] = silh_avg_iter;
 
           // rbind() the matrices
-          arma::mat silh_vec2mat = arma::conv_to<arma::mat>::from(dat_iter_silh);       // convert first current iteration's silhouette vector to matrix
+          arma::mat silh_vec2mat = arma::conv_to<arma::mat>::from(dat_iter_silh);     // convert first current iteration's silhouette vector to matrix
 
-          if (i == 0) {                                                                 // overwrite in iteration 0, then rbind()
+          if (i == 0) {                                                               // overwrite in iteration 0, then rbind()
             clust_mt = dat_iter_clust;
             disim_mt = dat_iter_disim;
             silh_mt = silh_vec2mat;
@@ -1262,10 +1263,11 @@ namespace clustR {
                                                              Rcpp::Named("avg_silhouette") = avg_silh);
 
         arma::mat clust_disim_silh = arma::join_horiz(clust_mt, disim_mt.t(), silh_mt.t());                 // transpose the matrices that I joint horizontal to come to the matrix
+        double global_mean = arma::mean(silh_mt.row(0));
 
         Rcpp::List dat_out = Rcpp::List::create(Rcpp::Named("silhouette_matrix") = clust_disim_silh,
-                                                Rcpp::Named("silhouette_summary") = df_summary);
-
+                                                Rcpp::Named("silhouette_summary") = df_summary,
+                                                Rcpp::Named("silhouette_global_average") = global_mean);
         return dat_out;
       }
 

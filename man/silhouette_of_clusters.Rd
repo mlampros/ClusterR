@@ -12,7 +12,7 @@ silhouette_of_clusters(data, clusters)
 \item{clusters}{a numeric vector which corresponds to the pre-computed clusters (see the example section for more details). The size of the 'clusters' vector must be equal to the number of rows of the input data}
 }
 \value{
-a list object where the first sublist is the silhouette summary and the second sublist is the silhouette matrix
+a list object where the first sublist is the 'silhouette summary', the second sublist is the 'silhouette matrix' and the third sublist is the 'global average silhouette' (based on the silhouette values of all observations)
 }
 \description{
 Silhouette width based on pre-computed clusters
@@ -20,9 +20,7 @@ Silhouette width based on pre-computed clusters
 \examples{
 
 data(dietary_survey_IBS)
-
 dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]
-
 dat = center_scale(dat)
 
 clusters = 2
@@ -38,6 +36,9 @@ silh_summary = silh_km$silhouette_summary
 
 # silhouette matrix (including cluster & dissimilarity)
 silh_mtrx = silh_km$silhouette_matrix
+
+# global average silhouette
+glob_avg = silh_km$silhouette_global_average
 
 }
 \author{

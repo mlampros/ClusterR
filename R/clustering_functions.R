@@ -573,15 +573,13 @@ print.KMeansCluster <- function(x, ...) {
 #'
 #' @param data a matrix or a data frame
 #' @param clusters a numeric vector which corresponds to the pre-computed clusters (see the example section for more details). The size of the 'clusters' vector must be equal to the number of rows of the input data
-#' @return a list object where the first sublist is the silhouette summary and the second sublist is the silhouette matrix
+#' @return a list object where the first sublist is the 'silhouette summary', the second sublist is the 'silhouette matrix' and the third sublist is the 'global average silhouette' (based on the silhouette values of all observations)
 #' @author Lampros Mouselimis
 #' @export
 #' @examples
 #'
 #' data(dietary_survey_IBS)
-#'
 #' dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]
-#'
 #' dat = center_scale(dat)
 #'
 #' clusters = 2
@@ -597,6 +595,9 @@ print.KMeansCluster <- function(x, ...) {
 #'
 #' # silhouette matrix (including cluster & dissimilarity)
 #' silh_mtrx = silh_km$silhouette_matrix
+#'
+#' # global average silhouette
+#' glob_avg = silh_km$silhouette_global_average
 #'
 
 silhouette_of_clusters = function(data, clusters) {
@@ -825,8 +826,7 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
       }
       else {
         silh_out = silhouette_of_clusters(data = data, clusters = as.vector(km$clusters))
-        silh_summary = silh_out$silhouette_summary
-        vec_out[COUNT] = mean(silh_summary$avg_silhouette)
+        vec_out[COUNT] = silh_out$silhouette_global_average          # https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html#sklearn.metrics.silhouette_score
       }
     }
 
