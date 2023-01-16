@@ -638,7 +638,7 @@ silhouette_of_clusters = function(data, clusters) {
 #'
 #' \strong{dissimilarity}      : the average intra-cluster-dissimilarity of all clusters (the distance metric defaults to euclidean)
 #'
-#' \strong{silhouette}         : the average silhouette width of all clusters for each iteration of the 'Optimal_Clusters_KMeans()' function (the distance metric defaults to euclidean). To compute the silhouette width for each cluster separately see the
+#' \strong{silhouette}         : the average silhouette width where first the average per cluster silhouette is computed and then the global average (the distance metric defaults to euclidean). To compute the silhouette width for each cluster separately see the 'silhouette_of_clusters()' function
 #'
 #' \strong{distortion_fK}      : this criterion is based on the following paper, 'Selection of K in K-means clustering' (https://www.ee.columbia.edu/~dpwe/papers/PhamDN05-kmeans.pdf)
 #'
@@ -821,16 +821,12 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
     if (criterion == "silhouette") {
 
       if (i == 1) {
-
-        vec_out[COUNT] = 0.0}
-
+        vec_out[COUNT] = 0.0
+      }
       else {
-
-        eval_km = evaluation_rcpp(data, as.vector(km$clusters), TRUE)
-
-        tmp_silh = mean(stats::na.omit(unlist(lapply(eval_km$silhouette, mean))))
-
-        vec_out[COUNT] = tmp_silh
+        silh_out = silhouette_of_clusters(data = data, clusters = as.vector(km$clusters))
+        silh_summary = silh_out$silhouette_summary
+        vec_out[COUNT] = mean(silh_summary$avg_silhouette)
       }
     }
 

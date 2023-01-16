@@ -1,10 +1,10 @@
 
-
 ## Cluster 1.3.0
 
 * I updated the documentation of the *'Optimal_Clusters_KMeans()'* function related to the *'silhouette'* metric (see issue: https://github.com/mlampros/ClusterR/issues/42)
 * I added the R *'silhouette_of_clusters()'* and Rcpp *'silhouette_clusters()'* functions which return the clusters, intra_cluster_dissimilarity and silhouette width for pre-computed clusters
 * I added a test case for the R *'silhouette_of_clusters()'* function in the 'test-kmeans.R' file
+* I modified the *'Optimal_Clusters_KMeans()'* function for the case when criterion is set to *"silhouette"* (see issue: https://github.com/mlampros/ClusterR/issues/42)
 
 
 ## Cluster 1.2.9
