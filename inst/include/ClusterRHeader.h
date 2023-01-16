@@ -1083,7 +1083,7 @@ namespace clustR {
 
         Rcpp::Function permutations = gtools["permutations"];            // the permutations-function is necessary to calculate the minimum distance of each observation to the nearest cluster using as permutation pairs of the clusters
 
-        Rcpp::NumericMatrix idx = permutations(unq_values.n_elem, 2);
+        Rcpp::NumericMatrix idx = permutations(unq_values.n_elem, Rcpp::_["r"] = 2);
 
         arma::mat IDX = Rcpp_2arma_mat(idx) - 1;                         // subtract 1 from each cell, because gtools::permutations is an R function and indexing in cpp begins from 0
 
@@ -1203,7 +1203,71 @@ namespace clustR {
       }
 
 
+      // compute the silhouette width (including the clusters and intra cluster dissimilarity)
+      //
 
+      Rcpp::List silhouette_clusters(arma::mat& data, arma::vec CLUSTER) {
+
+        clustR::ClustHeader clust_header;
+        Rcpp::List obj_clust = clust_header.evaluation_rcpp(data, CLUSTER, true);
+
+        arma::rowvec clust_vec = Rcpp::as<arma::rowvec>(obj_clust["clusters"]);
+        arma::rowvec unq_items = arma::unique(clust_vec) - 1;                             // adjust indexing to C++ (the unique clusters are sorted in ascending order 0,1,2 etc.)
+        arma::uword num_clusts = unq_items.n_elem;
+
+        Rcpp::List clust_idx = Rcpp::as<Rcpp::List>(obj_clust["cluster_indices"]);
+        Rcpp::List clust_disim = Rcpp::as<Rcpp::List>(obj_clust["INTRA_cluster_dissimilarity"]);
+        Rcpp::List clust_silh = Rcpp::as<Rcpp::List>(obj_clust["silhouette"]);
+
+        Rcpp::NumericVector unq_clusters_order(num_clusts), clusters_size(num_clusts), avg_disim(num_clusts), avg_silh(num_clusts);
+        arma::mat clust_mt, disim_mt, silh_mt;
+
+        Rcpp::List clusters_lst(num_clusts);
+        for (arma::uword i = 0; i < num_clusts; i++) {
+          arma::uvec idx_iter_clust = Rcpp::as<arma::uvec>(clust_idx[i]);
+
+          arma::mat dat_iter_clust = clust_vec(idx_iter_clust);                           // clusters (based on indices), returns a matrix (1-row-matrix)
+          arma::uword unq_clust = arma::as_scalar(arma::unique(dat_iter_clust));
+
+          arma::mat dat_iter_disim = Rcpp::as<arma::mat>(clust_disim[i]);                 // cluster-dissimilarities (based on indices), returns a matrix
+          double disim_avg_iter = arma::mean(dat_iter_disim.row(0));
+
+          arma::rowvec dat_iter_silh = Rcpp::as<arma::rowvec>(clust_silh[i]);             // cluster-silhouette (based on indices), returns a vector
+          double silh_avg_iter = arma::mean(dat_iter_silh);
+
+          clusters_lst[i] = dat_iter_clust;
+          unq_clusters_order[i] = unq_clust;
+          clusters_size[i] = idx_iter_clust.n_elem;
+          avg_disim[i] = disim_avg_iter;
+          avg_silh[i] = silh_avg_iter;
+
+          // rbind() the matrices
+          arma::mat silh_vec2mat = arma::conv_to<arma::mat>::from(dat_iter_silh);       // convert first current iteration's silhouette vector to matrix
+
+          if (i == 0) {                                                                 // overwrite in iteration 0, then rbind()
+            clust_mt = dat_iter_clust;
+            disim_mt = dat_iter_disim;
+            silh_mt = silh_vec2mat;
+          }
+          else {
+            clust_mt = arma::join_vert(clust_mt, dat_iter_clust);                       // clusters         ( !! join_vert() )
+            disim_mt = arma::join_horiz(disim_mt, dat_iter_disim);                      // dissimilarities  ( !! join_horiz() )
+            silh_mt = arma::join_horiz(silh_mt, silh_vec2mat);                          // silhouette       ( !! join_horiz() )
+          }
+        }
+
+        Rcpp::DataFrame df_summary = Rcpp::DataFrame::create(Rcpp::Named("cluster") = unq_clusters_order,
+                                                             Rcpp::Named("size") = clusters_size,
+                                                             Rcpp::Named("avg_intra_dissim") = avg_disim,
+                                                             Rcpp::Named("avg_silhouette") = avg_silh);
+
+        arma::mat clust_disim_silh = arma::join_horiz(clust_mt, disim_mt.t(), silh_mt.t());                 // transpose the matrices that I joint horizontal to come to the matrix
+
+        Rcpp::List dat_out = Rcpp::List::create(Rcpp::Named("silhouette_matrix") = clust_disim_silh,
+                                                Rcpp::Named("silhouette_summary") = df_summary);
+
+        return dat_out;
+      }
 
 
       //============================================ mini-batch-k-means ===================================================================================

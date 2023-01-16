@@ -62,7 +62,7 @@ Optimal number of Clusters for Kmeans or Mini-Batch-Kmeans
 
 \strong{dissimilarity}      : the average intra-cluster-dissimilarity of all clusters (the distance metric defaults to euclidean)
 
-\strong{silhouette}         : the average silhouette width of all clusters (the distance metric defaults to euclidean)
+\strong{silhouette}         : the average silhouette width of all clusters for each iteration of the 'Optimal_Clusters_KMeans()' function (the distance metric defaults to euclidean). To compute the silhouette width for each cluster separately see the
 
 \strong{distortion_fK}      : this criterion is based on the following paper, 'Selection of K in K-means clustering' (https://www.ee.columbia.edu/~dpwe/papers/PhamDN05-kmeans.pdf)
 

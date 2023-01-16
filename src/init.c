@@ -28,6 +28,7 @@ extern SEXP _ClusterR_predict_MGausDPDF(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_Predict_mini_batch_kmeans(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_preferenceRange(SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_SCALE(SEXP, SEXP, SEXP);
+extern SEXP _ClusterR_silhouette_clusters(SEXP, SEXP);
 extern SEXP _ClusterR_split_rcpp_lst(SEXP);
 extern SEXP _ClusterR_validate_centroids(SEXP, SEXP, SEXP);
 
@@ -52,6 +53,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_ClusterR_Predict_mini_batch_kmeans",   (DL_FUNC) &_ClusterR_Predict_mini_batch_kmeans,    4},
     {"_ClusterR_preferenceRange",             (DL_FUNC) &_ClusterR_preferenceRange,              3},
     {"_ClusterR_SCALE",                       (DL_FUNC) &_ClusterR_SCALE,                        3},
+    {"_ClusterR_silhouette_clusters",         (DL_FUNC) &_ClusterR_silhouette_clusters,          2},
     {"_ClusterR_split_rcpp_lst",              (DL_FUNC) &_ClusterR_split_rcpp_lst,               1},
     {"_ClusterR_validate_centroids",          (DL_FUNC) &_ClusterR_validate_centroids,           3},
     {NULL, NULL, 0}

@@ -129,6 +129,17 @@ Rcpp::List evaluation_rcpp(arma::mat& data, arma::vec CLUSTER, bool silhouette =
 }
 
 
+// compute the silhouette width (including the clusters and intra cluster dissimilarity)
+//
+
+// [[Rcpp::export]]
+Rcpp::List silhouette_clusters(arma::mat& data, arma::vec CLUSTER) {
+
+  ClustHeader CRH;
+
+  return CRH.silhouette_clusters(data, CLUSTER);
+}
+
 
 //============================================ mini-batch-k-means ===================================================================================
 

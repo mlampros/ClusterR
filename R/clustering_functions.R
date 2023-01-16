@@ -567,6 +567,51 @@ print.KMeansCluster <- function(x, ...) {
       "SS:", x$total_SSE, "=", WSSE, "(WSS) +", BSSE, "(BSS)\n")
 }
 
+
+
+#' Silhouette width based on pre-computed clusters
+#'
+#' @param data a matrix or a data frame
+#' @param clusters a numeric vector which corresponds to the pre-computed clusters (see the example section for more details). The size of the 'clusters' vector must be equal to the number of rows of the input data
+#' @return a list object where the first sublist is the silhouette summary and the second sublist is the silhouette matrix
+#' @author Lampros Mouselimis
+#' @export
+#' @examples
+#'
+#' data(dietary_survey_IBS)
+#'
+#' dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]
+#'
+#' dat = center_scale(dat)
+#'
+#' clusters = 2
+#'
+#' # compute k-means
+#' km = KMeans_rcpp(dat, clusters = clusters, num_init = 5, max_iters = 100, initializer = 'kmeans++')
+#'
+#' # compute the silhouette width
+#' silh_km = silhouette_of_clusters(data = dat, clusters = km$clusters)
+#'
+#' # silhouette summary
+#' silh_summary = silh_km$silhouette_summary
+#'
+#' # silhouette matrix (including cluster & dissimilarity)
+#' silh_mtrx = silh_km$silhouette_matrix
+#'
+
+silhouette_of_clusters = function(data, clusters) {
+
+  if ('data.frame' %in% class(data)) data = as.matrix(data)
+  if (!inherits(data, 'matrix')) stop('the "data" parameter must be either a matrix or a data frame!')
+  if (!inherits(clusters, c('numeric', 'integer'))) stop('the "clusters" parameter must be either of type numeric or of type integer!')
+  if (nrow(data) != length(clusters)) stop("I expect that the number of observations of the 'clusters' parameter is equal to the number of rows of the input 'data'!")
+
+  silh_lst = silhouette_clusters(data, clusters)
+  colnames(silh_lst[["silhouette_matrix"]]) = c('cluster', 'intra_cluster_dissim', 'silhouette')
+  return(silh_lst)
+}
+
+
 #' Optimal number of Clusters for Kmeans or Mini-Batch-Kmeans
 #'
 #' @param data matrix or data frame
@@ -593,7 +638,7 @@ print.KMeansCluster <- function(x, ...) {
 #'
 #' \strong{dissimilarity}      : the average intra-cluster-dissimilarity of all clusters (the distance metric defaults to euclidean)
 #'
-#' \strong{silhouette}         : the average silhouette width of all clusters (the distance metric defaults to euclidean)
+#' \strong{silhouette}         : the average silhouette width of all clusters for each iteration of the 'Optimal_Clusters_KMeans()' function (the distance metric defaults to euclidean). To compute the silhouette width for each cluster separately see the
 #'
 #' \strong{distortion_fK}      : this criterion is based on the following paper, 'Selection of K in K-means clustering' (https://www.ee.columbia.edu/~dpwe/papers/PhamDN05-kmeans.pdf)
 #'

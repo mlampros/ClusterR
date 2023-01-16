@@ -704,6 +704,35 @@ testthat::test_that("max_clusters-vector for 'BIC'", {
 })
 
 
+
+#####################################################
+# test-case for the 'silhouette_of_clusters' function
+#####################################################
+
+
+testthat::test_that("'silhouette_of_clusters' function returns the correct output", {
+
+  clusters = 2
+  km = KMeans_rcpp(data = X, clusters = clusters, num_init = 5, max_iters = 100, initializer = 'kmeans++')
+  silh = silhouette_of_clusters(data = X, clusters = km$clusters)
+
+  # receive summary per cluster
+  silh_summary_from_matrix = lapply(1:clusters, function(x) {
+    IDX = which(as.vector(silh$silhouette_matrix[, 'cluster']) == x)
+    clust_subs = silh$silhouette_matrix[IDX, , drop = F]
+    data.frame(list(cluster = unique(clust_subs[, 'cluster']),
+                    size = nrow(clust_subs),
+                    avg_intra_dissim = mean(clust_subs[, 'intra_cluster_dissim'], na.rm = TRUE),
+                    avg_silhouette = mean(clust_subs[, 'silhouette'], na.rm = TRUE)))
+  })
+
+  silh_summary_from_matrix = do.call(rbind, silh_summary_from_matrix)
+  silh_summary = silh$silhouette_summary
+
+  testthat::expect_true( all.equal(silh_summary_from_matrix, silh_summary, tolerance = sqrt(.Machine$double.eps))  )
+})
+
+
 ################################
 # error handling MiniBatchKmeans
 ################################

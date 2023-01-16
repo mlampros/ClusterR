@@ -1,4 +1,12 @@
 
+
+## Cluster 1.3.0
+
+* I updated the documentation of the *'Optimal_Clusters_KMeans()'* function related to the *'silhouette'* metric (see issue: https://github.com/mlampros/ClusterR/issues/42)
+* I added the R *'silhouette_of_clusters()'* and Rcpp *'silhouette_clusters()'* functions which return the clusters, intra_cluster_dissimilarity and silhouette width for pre-computed clusters
+* I added a test case for the R *'silhouette_of_clusters()'* function in the 'test-kmeans.R' file
+
+
 ## Cluster 1.2.9
 
 * The pull request #41 removed the class *'Gaussian Mixture Models'* from the *'Optimal_Clusters_GMM()'* function and I adjusted the tests related to the *'Optimal_Clusters_GMM()'* function so that no errors are raised (see issue: https://github.com/mlampros/ClusterR/issues/40)

@@ -113,6 +113,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// silhouette_clusters
+Rcpp::List silhouette_clusters(arma::mat& data, arma::vec CLUSTER);
+RcppExport SEXP _ClusterR_silhouette_clusters(SEXP dataSEXP, SEXP CLUSTERSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type CLUSTER(CLUSTERSEXP);
+    rcpp_result_gen = Rcpp::wrap(silhouette_clusters(data, CLUSTER));
+    return rcpp_result_gen;
+END_RCPP
+}
 // mini_batch_kmeans
 Rcpp::List mini_batch_kmeans(arma::mat& data, int clusters, int batch_size, int max_iters, int num_init, double init_fraction, std::string initializer, int early_stop_iter, bool verbose, Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS, double tol, double tol_optimal_init, int seed);
 RcppExport SEXP _ClusterR_mini_batch_kmeans(SEXP dataSEXP, SEXP clustersSEXP, SEXP batch_sizeSEXP, SEXP max_itersSEXP, SEXP num_initSEXP, SEXP init_fractionSEXP, SEXP initializerSEXP, SEXP early_stop_iterSEXP, SEXP verboseSEXP, SEXP CENTROIDSSEXP, SEXP tolSEXP, SEXP tol_optimal_initSEXP, SEXP seedSEXP) {

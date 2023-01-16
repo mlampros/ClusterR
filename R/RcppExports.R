@@ -29,6 +29,10 @@ evaluation_rcpp <- function(data, CLUSTER, silhouette = FALSE) {
     .Call(`_ClusterR_evaluation_rcpp`, data, CLUSTER, silhouette)
 }
 
+silhouette_clusters <- function(data, CLUSTER) {
+    .Call(`_ClusterR_silhouette_clusters`, data, CLUSTER)
+}
+
 mini_batch_kmeans <- function(data, clusters, batch_size, max_iters, num_init = 1L, init_fraction = 1.0, initializer = "kmeans++", early_stop_iter = 10L, verbose = FALSE, CENTROIDS = NULL, tol = 1e-4, tol_optimal_init = 0.5, seed = 1L) {
     .Call(`_ClusterR_mini_batch_kmeans`, data, clusters, batch_size, max_iters, num_init, init_fraction, initializer, early_stop_iter, verbose, CENTROIDS, tol, tol_optimal_init, seed)
 }
