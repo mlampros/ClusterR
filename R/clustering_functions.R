@@ -1154,7 +1154,7 @@ cost_clusters_from_dissim_medoids = function(data, medoids) {
 #' @param swap_phase either TRUE or FALSE. If TRUE then both phases ('build' and 'swap') will take place. The 'swap_phase' is considered more computationally intensive.
 #' @param fuzzy either TRUE or FALSE. If TRUE, then probabilities for each cluster will be returned based on the distance between observations and medoids
 #' @param verbose either TRUE or FALSE, indicating whether progress is printed during clustering
-#' @param seed `r lifecycle::badge("deprecated")` `seed` (integer value for random number generator (RNG)) is no longer supported and will be removed in version 1.3.0
+#' @param seed `r lifecycle::badge("deprecated")` `seed` (integer value for random number generator (RNG)) is no longer supported and will be removed in version 1.4.0
 #' @return a list with the following attributes: medoids, medoid_indices, best_dissimilarity, dissimilarity_matrix, clusters, fuzzy_probs (if fuzzy = TRUE), silhouette_matrix, clustering_stats
 #' @author Lampros Mouselimis
 #' @details
@@ -1181,7 +1181,7 @@ Cluster_Medoids = function(data, clusters, distance_metric = 'euclidean', minkow
     lifecycle::deprecate_warn(
       when = "1.2.6",
       what = "Cluster_Medoids(seed)",
-      details = "The 'seed' parameter will be removed in version 1.3.0"
+      details = "The 'seed' parameter will be removed in version 1.4.0"
     )
   }
 

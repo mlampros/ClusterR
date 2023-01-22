@@ -5,6 +5,8 @@
 * I added the R *'silhouette_of_clusters()'* and Rcpp *'silhouette_clusters()'* functions which return the clusters, intra_cluster_dissimilarity and silhouette width for pre-computed clusters
 * I added a test case for the R *'silhouette_of_clusters()'* function in the 'test-kmeans.R' file
 * I modified the *'Optimal_Clusters_KMeans()'* function for the case when criterion is set to *"silhouette"* (see issue: https://github.com/mlampros/ClusterR/issues/42)
+* I added the *'PERMUTATIONS_2D()'* Rcpp function which replaces the call to *Rcpp::Environment gtools("package:gtools")*
+* I removed the *gtools* R package as a dependency of the *ClusterR* package
 
 
 ## Cluster 1.2.9
@@ -22,7 +24,7 @@
 ## Cluster 1.2.7
 
 * I updated the references weblink of the *Optimal_Clusters_KMeans()* function (github issue: https://github.com/mlampros/ClusterR/issues/27)
-* I added a deprecation warning to the *'seed'* parameter of the *'Cluster_Medoids()'* function (github issue: https://github.com/mlampros/ClusterR/issues/33). This parameter will be removed in version *'1.3.0'*
+* I added a deprecation warning to the *'seed'* parameter of the *'Cluster_Medoids()'* function (github issue: https://github.com/mlampros/ClusterR/issues/33). This parameter will be removed in version *'1.4.0'*
 * I replaced the *'ARMA_DONT_PRINT_ERRORS'* on the top of the *'/src/export_inst_folder_headers.cpp'* file with *'ARMA_WARN_LEVEL 0'* because support for *'ARMA_DONT_PRINT_ERRORS'* has been removed
 * I fixed a bug in the *'ClaraMedoids()'* Rcpp function (*/inst/ClusterRHeader.h* file) related to the *'seed'* parameter (github issue: https://github.com/mlampros/ClusterR/issues/35)
 

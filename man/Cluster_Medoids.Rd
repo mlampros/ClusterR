@@ -33,7 +33,7 @@ Cluster_Medoids(
 
 \item{verbose}{either TRUE or FALSE, indicating whether progress is printed during clustering}
 
-\item{seed}{`r lifecycle::badge("deprecated")` `seed` (integer value for random number generator (RNG)) is no longer supported and will be removed in version 1.3.0}
+\item{seed}{`r lifecycle::badge("deprecated")` `seed` (integer value for random number generator (RNG)) is no longer supported and will be removed in version 1.4.0}
 }
 \value{
 a list with the following attributes: medoids, medoid_indices, best_dissimilarity, dissimilarity_matrix, clusters, fuzzy_probs (if fuzzy = TRUE), silhouette_matrix, clustering_stats

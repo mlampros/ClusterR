@@ -1060,15 +1060,36 @@ namespace clustR {
       }
 
 
+      // 2-dimensional permutations [ returns a 2-column matrix ]
+      //
 
-      // convert Rcpp::NumericMatrix to armadillo matrix
-      // [ http://stackoverflow.com/questions/31691130/conversion-of-r-matrices-to-armadillo-is-really-slow ]
+      arma::mat PERMUTATIONS_2D(arma::uword UNQ_CLUSTERS) {
+        arma::uword REPLICATE = UNQ_CLUSTERS - 1;
+        arma::mat FIRST_COL(REPLICATE, 1);
+        arma::mat SECOND_COL(UNQ_CLUSTERS, 1);
+        for (arma::uword j = 0; j < UNQ_CLUSTERS; j++) {
+          SECOND_COL(j, 0) = j;
+        }
 
-      arma::mat Rcpp_2arma_mat(Rcpp::NumericMatrix x) {
+        arma::mat res_first_col, res_second_col;
 
-        arma::mat res = Rcpp::as<arma::mat>(x);
+        for (arma::uword i = 0; i < UNQ_CLUSTERS; i++) {
+          FIRST_COL.fill(i);
+          arma::mat SECOND_COL_ITER(SECOND_COL);                // copy the matrix in the current iteration
+          SECOND_COL_ITER.shed_row(i);                          // remove row
 
-        return(res);
+          if (i == 0) {
+            res_first_col = FIRST_COL;
+            res_second_col = SECOND_COL_ITER;
+          }
+          else {
+            res_first_col = arma::join_vert(res_first_col, FIRST_COL);
+            res_second_col = arma::join_vert(res_second_col, SECOND_COL_ITER);
+          }
+        }
+
+        arma::mat perm_mt = arma::join_horiz(res_first_col, res_second_col);
+        return perm_mt;
       }
 
 
@@ -1078,15 +1099,7 @@ namespace clustR {
       Rcpp::List SILHOUETTE_metric(arma::mat& data, arma::vec CLUSTER, Rcpp::List tmp_clust, Rcpp::List in_cluster_dist) {
 
         arma::vec unq_values = arma::unique(CLUSTER);
-
-        Rcpp::Environment gtools("package:gtools");
-
-        Rcpp::Function permutations = gtools["permutations"];            // the permutations-function is necessary to calculate the minimum distance of each observation to the nearest cluster using as permutation pairs of the clusters
-
-        Rcpp::NumericMatrix idx = permutations(unq_values.n_elem, Rcpp::_["r"] = 2);
-
-        arma::mat IDX = Rcpp_2arma_mat(idx) - 1;                         // subtract 1 from each cell, because gtools::permutations is an R function and indexing in cpp begins from 0
-
+        arma::mat IDX = PERMUTATIONS_2D(unq_values.n_elem);
         Rcpp::List OUT_cluster_dist(IDX.n_rows);                         // calculate the average-outer-cluster-distances
 
         for (unsigned int t = 0; t < IDX.n_rows; t++) {
@@ -3234,7 +3247,7 @@ namespace clustR {
 
           arma::mat copy_dat = tmp_dat;
 
-          Rcpp::List clM_sblist = ClusterMedoids(tmp_dat, clusters, method, minkowski_p, threads, false, swap_phase, false, iter_seed);    // the 'seed' here for 'ClusterMedoids' is 'iter_seed' but it will be removed in version 1.3.0 (deprecation warning)
+          Rcpp::List clM_sblist = ClusterMedoids(tmp_dat, clusters, method, minkowski_p, threads, false, swap_phase, false, iter_seed);    // the 'seed' here for 'ClusterMedoids' is 'iter_seed' but it will be removed in version 1.4.0 (deprecation warning)
 
           double local_dissim = Rcpp::as<double> (clM_sblist["cost"]);
 
