@@ -142,20 +142,19 @@ information about the parameters can be found in the package
 documentation). I’ll illustrate the <em>GMM</em> function using the
 synthetic data <em>dietary_survey_IBS</em>,</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlampros/ClusterR" class="external-link">ClusterR</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Loading required package: gtools</span></span></code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlampros/ClusterR" class="external-link">ClusterR</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 400  43</span></span></code></pre>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">X</span> <span class="op">=</span> <span class="va">dietary_survey_IBS</span><span class="op">[</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span><span class="op">]</span>   <span class="co"># data (excluding the response variable)</span></span>
 <span></span>
 <span><span class="va">y</span> <span class="op">=</span> <span class="va">dietary_survey_IBS</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">)</span><span class="op">]</span>    <span class="co"># the response variable</span></span>
 <span></span>
 <span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="../reference/center_scale.html">center_scale</a></span><span class="op">(</span><span class="va">X</span>, mean_center <span class="op">=</span> <span class="cn">T</span>, sd_scale <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>  <span class="co"># centering and scaling the data</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gmm</span> <span class="op">=</span> <span class="fu"><a href="../reference/GMM.html">GMM</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fl">2</span>, dist_mode <span class="op">=</span> <span class="st">"maha_dist"</span>, seed_mode <span class="op">=</span> <span class="st">"random_subset"</span>, km_iter <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>          em_iter <span class="op">=</span> <span class="fl">10</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>          </span>
 <span></span>
@@ -172,7 +171,7 @@ most probable clusters.</p>
 <strong>Optimal_Clusters_GMM</strong> can be utilized to estimate the
 number of clusters of the data using either the <em>AIC</em> (Akaike
 information) or the <em>BIC</em> (Bayesian information) criterion,</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">opt_gmm</span> <span class="op">=</span> <span class="fu"><a href="../reference/Optimal_Clusters_GMM.html">Optimal_Clusters_GMM</a></span><span class="op">(</span><span class="va">dat</span>, max_clusters <span class="op">=</span> <span class="fl">10</span>, criterion <span class="op">=</span> <span class="st">"BIC"</span>, </span>
 <span>                               </span>
 <span>                               dist_mode <span class="op">=</span> <span class="st">"maha_dist"</span>, seed_mode <span class="op">=</span> <span class="st">"random_subset"</span>,</span>
@@ -194,7 +193,7 @@ to 2.</p>
 <em>entropy</em>, <em>nmi</em> (normalized mutual information) and
 <em>var_info</em> (variation of information) to validate the output
 clusters,</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">=</span> <span class="fu"><a href="../reference/external_validation.html">external_validation</a></span><span class="op">(</span><span class="va">dietary_survey_IBS</span><span class="op">$</span><span class="va">class</span>, <span class="va">pr</span><span class="op">$</span><span class="va">cluster_labels</span>, </span>
 <span>                          </span>
 <span>                          method <span class="op">=</span> <span class="st">"adjusted_rand_index"</span>, summary_stats <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
@@ -261,7 +260,7 @@ then the user should supply a matrix of centroids. <br><br> I’ll reduce
 the dimensions of the dietary_survey_IBS data using PCA and particularly
 the <em>princomp</em> function of the <em>stats</em> package, so that a
 2-dimensional plot of the resulted clusters is possible,</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pca_dat</span> <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/princomp.html" class="external-link">princomp</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">$</span><span class="va">scores</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span></span>
 <span></span>
 <span><span class="va">km</span> <span class="op">=</span> <span class="fu"><a href="../reference/KMeans_arma.html">KMeans_arma</a></span><span class="op">(</span><span class="va">pca_dat</span>, clusters <span class="op">=</span> <span class="fl">2</span>, n_iter <span class="op">=</span> <span class="fl">10</span>, seed_mode <span class="op">=</span> <span class="st">"random_subset"</span>, </span>
@@ -302,7 +301,7 @@ within-cluster-sum-of-squared-error</li>
 documentation. I’ll explain the various parameters of the
 <em>KMeans_rcpp</em> using a <a href="https://en.wikipedia.org/wiki/Vector_quantization" class="external-link">vector
 quantization</a> example and the OpenImageR package, <br></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlampros/OpenImageR" class="external-link">OpenImageR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">im</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/readImage.html" class="external-link">readImage</a></span><span class="op">(</span><span class="st">'elephant.jpg'</span><span class="op">)</span></span>
@@ -312,10 +311,10 @@ quantization</a> example and the OpenImageR package, <br></p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">im</span><span class="op">)</span>                                                <span class="co"># plot the original image</span></span></code></pre></div>
 <p><img src="the_clusterR_package_files/figure-html/unnamed-chunk-6-1.png" width="288"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">im2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">im</span>, <span class="fl">3</span>, <span class="va">as.vector</span><span class="op">)</span>                                <span class="co"># vectorize RGB</span></span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># perform KMeans_rcpp clustering</span></span>
 <span></span>
 <span><span class="va">km_rc</span> <span class="op">=</span> <span class="fu"><a href="../reference/KMeans_rcpp.html">KMeans_rcpp</a></span><span class="op">(</span><span class="va">im2</span>, clusters <span class="op">=</span> <span class="fl">5</span>, num_init <span class="op">=</span> <span class="fl">5</span>, max_iters <span class="op">=</span> <span class="fl">100</span>, </span>
@@ -323,7 +322,7 @@ quantization</a> example and the OpenImageR package, <br></p>
 <span></span>
 <span><span class="va">km_rc</span><span class="op">$</span><span class="va">between.SS_DIV_total.SS</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.9873009</span></span></code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">km_rc</span>, newdata <span class="op">=</span> <span class="va">im2</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
 <p>The attribute <em>between.SS_DIV_total.SS</em> is equal to
@@ -333,7 +332,7 @@ small fraction of the total sum of squares, whereas if the
 <em>between.SS_DIV_total.SS</em> attribute is close to 1.0 then the
 observations cluster pretty well.</p>
 <p><br></p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">getcent</span> <span class="op">=</span> <span class="va">km_rc</span><span class="op">$</span><span class="va">centroids</span></span>
 <span></span>
 <span><span class="va">getclust</span> <span class="op">=</span> <span class="va">km_rc</span><span class="op">$</span><span class="va">clusters</span></span>
@@ -356,7 +355,7 @@ be found in the package documentation. <br></p>
 <p>In the next code chunk I’ll use the <em>distortion_fK</em> criterion,
 which is fully described in the “Selection of K in K-means clustering,
 Pham., Dimov., Nguyen., (2004)” paper, <br></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">opt</span> <span class="op">=</span> <span class="fu"><a href="../reference/Optimal_Clusters_KMeans.html">Optimal_Clusters_KMeans</a></span><span class="op">(</span><span class="va">im2</span>, max_clusters <span class="op">=</span> <span class="fl">10</span>, plot_clusters <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>                              </span>
 <span>                              criterion <span class="op">=</span> <span class="st">'distortion_fK'</span>, fK_threshold <span class="op">=</span> <span class="fl">0.85</span>,</span>
@@ -388,7 +387,7 @@ equals to ‘kmeans++’ or ‘quantile_init’). <br></p>
 <p>I’ll take advantage of the <em>vector quantization</em> example to
 show the differences in computation time and output quality between the
 KMeans_rcpp and MiniBatchKmeans functions, <br></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">im_d</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/readImage.html" class="external-link">readImage</a></span><span class="op">(</span><span class="st">'dog.jpg'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># first resize the image to reduce the dimensions</span></span>
@@ -396,14 +395,14 @@ KMeans_rcpp and MiniBatchKmeans functions, <br></p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/OpenImageR/man/imageShow.html" class="external-link">imageShow</a></span><span class="op">(</span><span class="va">im_d</span><span class="op">)</span>                                                <span class="co"># plot the original image</span></span></code></pre></div>
 <p><img src="the_clusterR_package_files/figure-html/unnamed-chunk-10-1.png" width="288"></p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">im3</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">im_d</span>, <span class="fl">3</span>, <span class="va">as.vector</span><span class="op">)</span>                                <span class="co"># vectorize RGB</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">im3</span><span class="op">)</span>                                              <span class="co"># initial dimensions of the data</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 122500      3</span></span></code></pre>
 <p><br></p>
 <p>First, we perform a <em>k-means</em> clustering, <br></p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">start</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">km_init</span> <span class="op">=</span> <span class="fu"><a href="../reference/KMeans_rcpp.html">KMeans_rcpp</a></span><span class="op">(</span><span class="va">im3</span>, clusters <span class="op">=</span> <span class="fl">5</span>, num_init <span class="op">=</span> <span class="fl">5</span>, max_iters <span class="op">=</span> <span class="fl">100</span>, </span>
@@ -414,8 +413,8 @@ KMeans_rcpp and MiniBatchKmeans functions, <br></p>
 <span><span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span></span>
 <span>  </span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## time to complete : 2.682618 secs</span></span></code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">## time to complete : 2.569879 secs</span></span></code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">getcent_init</span> <span class="op">=</span> <span class="va">km_init</span><span class="op">$</span><span class="va">centroids</span></span>
 <span></span>
 <span><span class="va">getclust_init</span> <span class="op">=</span> <span class="va">km_init</span><span class="op">$</span><span class="va">clusters</span></span>
@@ -428,7 +427,7 @@ KMeans_rcpp and MiniBatchKmeans functions, <br></p>
 <p><img src="the_clusterR_package_files/figure-html/unnamed-chunk-11-1.png" width="288"></p>
 <p><br></p>
 <p>and then a <em>mini-batch-kmeans</em> clustering, <br></p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">start</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">km_mb</span> <span class="op">=</span> <span class="fu"><a href="../reference/MiniBatchKmeans.html">MiniBatchKmeans</a></span><span class="op">(</span><span class="va">im3</span>, clusters <span class="op">=</span> <span class="fl">5</span>, batch_size <span class="op">=</span> <span class="fl">20</span>, num_init <span class="op">=</span> <span class="fl">5</span>, max_iters <span class="op">=</span> <span class="fl">100</span>, </span>
@@ -442,8 +441,8 @@ KMeans_rcpp and MiniBatchKmeans functions, <br></p>
 <span><span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span></span>
 <span>  </span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## time to complete : 1.102611 secs</span></span></code></pre>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">## time to complete : 1.041481 secs</span></span></code></pre>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">getcent_mb</span> <span class="op">=</span> <span class="va">km_mb</span><span class="op">$</span><span class="va">centroids</span></span>
 <span></span>
 <span><span class="va">new_im_mb</span> <span class="op">=</span> <span class="va">getcent_mb</span><span class="op">[</span><span class="va">pr_mb</span>, <span class="op">]</span>   <span class="co"># each observation is associated with the nearby centroid</span></span>
@@ -504,7 +503,7 @@ the cluster package (<em>daisy</em> function) and in the FD package
 (<em>gowdis</em> function). I’ll take advantage of the <em>gowdis</em>
 function of the FD package as it also allows user-defined weights for
 each separate predictor,</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mushroom</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">X</span> <span class="op">=</span> <span class="va">mushroom</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
@@ -517,7 +516,7 @@ each separate predictor,</p>
 <span></span>
 <span><span class="va">cm</span> <span class="op">=</span> <span class="fu"><a href="../reference/Cluster_Medoids.html">Cluster_Medoids</a></span><span class="op">(</span><span class="va">gwd_mat</span>, clusters <span class="op">=</span> <span class="fl">2</span>, swap_phase <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: The `seed` argument of `Cluster_Medoids()` is deprecated as of ClusterR 1.2.6.</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> The 'seed' parameter will be removed in version 1.3.0</span></span></code></pre>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> The 'seed' parameter will be removed in version 1.4.0</span></span></code></pre>
 <p><br></p>
 <table class="table">
 <caption>Non-Weigthed-K-medoids</caption>
@@ -635,7 +634,7 @@ the <em>average silhouette width</em> (internal validation), <br></p>
 </tbody>
 </table>
 <p><br></p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">weights</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4.626</span>, <span class="fl">38.323</span>, <span class="fl">55.899</span>, <span class="fl">34.028</span>, <span class="fl">169.608</span>, <span class="fl">6.643</span>, <span class="fl">42.08</span>, <span class="fl">57.366</span>, <span class="fl">37.938</span>, </span>
 <span>            </span>
 <span>            <span class="fl">33.081</span>, <span class="fl">65.105</span>, <span class="fl">18.718</span>, <span class="fl">76.165</span>, <span class="fl">27.596</span>, <span class="fl">26.238</span>, <span class="fl">0.0</span>, <span class="fl">1.507</span>, <span class="fl">37.314</span>, </span>
@@ -687,7 +686,7 @@ applicable to discrete variables and it’s defined as the number of
 attributes that take different values for two compared instances
 (<em>Data Mining Algorithms: Explained using R, Pawel Cichosz, 2015,
 page 318</em>).<br><br></p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cl_X</span> <span class="op">=</span> <span class="va">X</span>        <span class="co"># copy initial data </span></span>
 <span></span>
 <span><span class="co"># the Clara_Medoids function allows only numeric attributes</span></span>
@@ -705,7 +704,7 @@ page 318</em>).<br><br></p>
 <span><span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span></span>
 <span>  </span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## time to complete : 2.755133 secs</span></span></code></pre>
+<pre><code><span><span class="co">## time to complete : 2.655059 secs</span></span></code></pre>
 <p><br></p>
 <table class="table">
 <caption>hamming-Clara-Medoids</caption>
@@ -719,7 +718,7 @@ page 318</em>).<br><br></p>
 </tr></tbody>
 </table>
 <p><br><br></p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">start</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cl_e</span> <span class="op">=</span> <span class="fu"><a href="../reference/Cluster_Medoids.html">Cluster_Medoids</a></span><span class="op">(</span><span class="va">cl_X</span>, clusters <span class="op">=</span> <span class="fl">2</span>, distance_metric <span class="op">=</span> <span class="st">'hamming'</span>, swap_phase <span class="op">=</span> <span class="cn">TRUE</span>,  </span>
@@ -730,7 +729,7 @@ page 318</em>).<br><br></p>
 <span><span class="va">t</span> <span class="op">=</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span></span>
 <span>  </span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'time to complete :'</span>, <span class="va">t</span>, <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">$</span><span class="va">units</span>, <span class="st">'\n'</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## time to complete : 15.60793 secs</span></span></code></pre>
+<pre><code><span><span class="co">## time to complete : 14.81337 secs</span></span></code></pre>
 <p><br></p>
 <table class="table">
 <caption>hamming-Cluster-Medoids</caption>
@@ -757,14 +756,14 @@ mentioning here is that the dissimilarities and silhouette widths of the
 <em>Clara_Medoids</em> function are based on the best-selected sample
 and not on the entire data set, as is the case for the
 <em>Cluster_Medoids</em> function. <br><br></p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Silhouette Plot for the "Clara_Medoids" object</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/Silhouette_Dissimilarity_Plot.html">Silhouette_Dissimilarity_Plot</a></span><span class="op">(</span><span class="va">cl_f</span>, silhouette <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 <p><br></p>
 <p><img src="Rplot_clara.png"><br><br><br></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Silhouette Plot for the "Cluster_Medoids" object</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/Silhouette_Dissimilarity_Plot.html">Silhouette_Dissimilarity_Plot</a></span><span class="op">(</span><span class="va">cl_e</span>, silhouette <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
