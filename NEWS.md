@@ -1,4 +1,9 @@
 
+## Cluster 1.3.1
+
+* I fixed a mistake related to a potential warning of the *'Optimal_Clusters_GMM()'* function (see issue: https://github.com/mlampros/ClusterR/issues/45)
+
+
 ## Cluster 1.3.0
 
 * I updated the documentation of the *'Optimal_Clusters_KMeans()'* function related to the *'silhouette'* metric (see issue: https://github.com/mlampros/ClusterR/issues/42)

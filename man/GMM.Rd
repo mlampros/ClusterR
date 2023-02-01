@@ -59,7 +59,6 @@ dat = as.matrix(dietary_survey_IBS[, -ncol(dietary_survey_IBS)])
 dat = center_scale(dat)
 
 gmm = GMM(dat, 2, "maha_dist", "random_subset", 10, 10)
-
 }
 \references{
 http://arma.sourceforge.net/docs.html

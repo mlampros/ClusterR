@@ -55,8 +55,16 @@ tryCatch_GMM <- function(data, gaussian_comps, dist_mode, seed_mode, km_iter, em
 #' dat = center_scale(dat)
 #'
 #' gmm = GMM(dat, 2, "maha_dist", "random_subset", 10, 10)
-#'
-GMM = function(data, gaussian_comps = 1, dist_mode = 'eucl_dist', seed_mode = 'random_subset', km_iter = 10, em_iter = 5, verbose = FALSE, var_floor = 1e-10, seed = 1) {
+
+GMM = function(data,
+               gaussian_comps = 1,
+               dist_mode = 'eucl_dist',
+               seed_mode = 'random_subset',
+               km_iter = 10,
+               em_iter = 5,
+               verbose = FALSE,
+               var_floor = 1e-10,
+               seed = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
@@ -224,9 +232,17 @@ tryCatch_optimal_clust_GMM <- function(data, max_clusters, dist_mode, seed_mode,
 #' opt_gmm = Optimal_Clusters_GMM(dat, search_space, criterion = "AIC", plot_data = FALSE)
 #'
 
-
-Optimal_Clusters_GMM = function(data, max_clusters, criterion = "AIC", dist_mode = 'eucl_dist', seed_mode = 'random_subset',
-                                km_iter = 10, em_iter = 5, verbose = FALSE, var_floor = 1e-10, plot_data = TRUE, seed = 1) {
+Optimal_Clusters_GMM = function(data,
+                                max_clusters,
+                                criterion = "AIC",
+                                dist_mode = 'eucl_dist',
+                                seed_mode = 'random_subset',
+                                km_iter = 10,
+                                em_iter = 5,
+                                verbose = FALSE,
+                                var_floor = 1e-10,
+                                plot_data = TRUE,
+                                seed = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
@@ -245,14 +261,19 @@ Optimal_Clusters_GMM = function(data, max_clusters, criterion = "AIC", dist_mode
 
   if (length(max_clusters) != 1) {
     plot_data = FALSE                       # set "plot_data" to FALSE if the "max_clusters" parameter is not of length 1
-    if (ncol(data) < max(max_clusters) && verbose) { warning("the number of columns of the data should be larger than the maximum value of 'max_clusters'", call. = F); cat(" ", '\n') }
+    if (nrow(data) < max(max_clusters) && verbose) {
+      warning("the number of rows of the data should be larger than the maximum value of 'max_clusters'", call. = F)
+      cat(" ", '\n')
+    }
   }
   else {
-    if (ncol(data) < max_clusters && verbose) { warning("the number of columns of the data should be larger than 'max_clusters'", call. = F); cat(" ", '\n') }
+    if (nrow(data) < max_clusters && verbose) {
+      warning("the number of rows of the data should be larger than 'max_clusters'", call. = F)
+      cat(" ", '\n')
+    }
   }
 
   flag_non_finite = check_NaN_Inf(data)
-
   if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values")
 
   if (length(max_clusters) == 1) {
@@ -267,52 +288,35 @@ Optimal_Clusters_GMM = function(data, max_clusters, criterion = "AIC", dist_mode
   gmm = tryCatch_optimal_clust_GMM(data, pass_vector, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed)
 
   if ('Error' %in% names(gmm)) {
-
     return(gmm)
-
-  } else {
-
+  }
+  else {
     if (plot_data) {
-
       if (grDevices::dev.cur() != 1) {
-
         grDevices::dev.off()                          # reset par()
       }
 
       vec_out = as.vector(gmm)
-
       tmp_VAL = as.vector(stats::na.omit(vec_out))
 
       if (length(which(is.na(vec_out))) > 0) {
-
         x_dis = (1:length(vec_out))[-which(is.na(vec_out))]
-
-        y_dis = vec_out[-which(is.na(vec_out))]}
-
+        y_dis = vec_out[-which(is.na(vec_out))]
+      }
       else {
-
         x_dis = 1:length(vec_out)
-
         y_dis = vec_out
       }
 
       y_MAX = max(tmp_VAL)
-
       graphics::plot(x = x_dis, y = y_dis, type = 'l', xlab = 'clusters', ylab = criterion, col = 'blue', lty = 3, axes = FALSE)
-
       graphics::axis(1, at = seq(1, length(vec_out) , by = 1))
-
       graphics::axis(2, at = seq(round(min(tmp_VAL) - round(summary(y_MAX)[['Max.']]) / 10), y_MAX + round(summary(y_MAX)[['Max.']]) / 10, by = round((summary(tmp_VAL)['Max.'] - summary(tmp_VAL)['Min.']) / 5)), las = 1, cex.axis = 0.8)
-
-      graphics::abline(h = seq(round(min(tmp_VAL) - round(summary(y_MAX)[['Max.']]) / 10), y_MAX + round(summary(y_MAX)[['Max.']]) / 10, by = round((summary(tmp_VAL)['Max.'] - summary(tmp_VAL)['Min.']) / 5)), v = seq(1, length(vec_out) , by = 1),
-
-             col = "gray", lty = 3)
-
+      graphics::abline(h = seq(round(min(tmp_VAL) - round(summary(y_MAX)[['Max.']]) / 10), y_MAX + round(summary(y_MAX)[['Max.']]) / 10, by = round((summary(tmp_VAL)['Max.'] - summary(tmp_VAL)['Min.']) / 5)), v = seq(1, length(vec_out) , by = 1), col = "gray", lty = 3)
       graphics::text(x = 1:length(vec_out), y = vec_out, labels = round(vec_out, 1), cex = 0.8, font = 2)
     }
 
     res = as.vector(gmm)
-
     return(res)
   }
 }
@@ -375,7 +379,13 @@ tryCatch_KMEANS_arma <- function(data, clusters, n_iter, verbose, seed_mode, CEN
 #'
 #' km = KMeans_arma(dat, clusters = 2, n_iter = 10, "random_subset")
 #'
-KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset", verbose = FALSE, CENTROIDS = NULL, seed = 1) {
+KMeans_arma = function(data,
+                       clusters,
+                       n_iter = 10,
+                       seed_mode = "random_subset",
+                       verbose = FALSE,
+                       CENTROIDS = NULL,
+                       seed = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
@@ -390,7 +400,6 @@ KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset",
     stop('CENTROIDS should be a matrix with number of rows equal to the number of clusters and number of columns equal to the number of columns of the data')
 
   flag_non_finite = check_NaN_Inf(data)
-
   if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values")
 
   res = tryCatch_KMEANS_arma(data, clusters, n_iter, verbose, seed_mode, CENTROIDS, seed)
@@ -456,9 +465,17 @@ KMeans_arma = function(data, clusters, n_iter = 10, seed_mode = "random_subset",
 #'
 #' km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'kmeans++')
 #'
-KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initializer = 'kmeans++', fuzzy = FALSE,
-
-                       verbose = FALSE, CENTROIDS = NULL, tol = 1e-4, tol_optimal_init = 0.3, seed = 1) {
+KMeans_rcpp = function(data,
+                       clusters,
+                       num_init = 1,
+                       max_iters = 100,
+                       initializer = 'kmeans++',
+                       fuzzy = FALSE,
+                       verbose = FALSE,
+                       CENTROIDS = NULL,
+                       tol = 1e-4,
+                       tol_optimal_init = 0.3,
+                       seed = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
@@ -474,7 +491,6 @@ KMeans_rcpp = function(data, clusters, num_init = 1, max_iters = 100, initialize
   if (tol_optimal_init <= 0.0) stop('tol_optimal_init should be a float number greater than 0.0')
 
   flag_non_finite = check_NaN_Inf(data)
-
   if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values")
 
   res = KMEANS_rcpp(data, clusters, num_init, max_iters, initializer, fuzzy, verbose, CENTROIDS, tol, eps = 1.0e-6, tol_optimal_init, seed)
@@ -722,11 +738,19 @@ silhouette_of_clusters = function(data, clusters) {
 #'
 
 
-Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_explained", fK_threshold = 0.85, num_init = 1, max_iters = 200,
-
-                                   initializer = 'kmeans++', tol = 1e-4, plot_clusters = TRUE, verbose = FALSE, tol_optimal_init = 0.3,
-
-                                   seed = 1, mini_batch_params = NULL) {
+Optimal_Clusters_KMeans = function(data,
+                                   max_clusters,
+                                   criterion = "variance_explained",
+                                   fK_threshold = 0.85,
+                                   num_init = 1,
+                                   max_iters = 200,
+                                   initializer = 'kmeans++',
+                                   tol = 1e-4,
+                                   plot_clusters = TRUE,
+                                   verbose = FALSE,
+                                   tol_optimal_init = 0.3,
+                                   seed = 1,
+                                   mini_batch_params = NULL) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
@@ -758,7 +782,6 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
   if (length(max_clusters) != 1) plot_clusters = FALSE                       # set "plot_clusters" to FALSE if the "max_clusters" parameter is not of length 1
 
   flag_non_finite = check_NaN_Inf(data)
-
   if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values")
 
   LEN_CLUST = ITER_CLUST = NA
@@ -771,22 +794,18 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
   }
 
   vec_out = rep(NA, LEN_CLUST)
-
   if (verbose) { cat("", '\n'); pb = utils::txtProgressBar(min = 1, max = LEN_CLUST, style = 3); cat("", '\n') }
 
   COUNT = 1
   for (i in ITER_CLUST) {
 
     if (is.null(mini_batch_params)) {
-
       km = KMEANS_rcpp(data, i, num_init, max_iters, initializer, FALSE, FALSE, NULL, tol, 1.0e-6, tol_optimal_init, seed)
     }
 
     else {
-
-      km = MiniBatchKmeans(data, i, mini_batch_params[["batch_size"]], num_init, max_iters, mini_batch_params[["init_fraction"]], initializer,
-
-                                     mini_batch_params[["early_stop_iter"]], FALSE, NULL, tol, tol_optimal_init, seed)
+      km = MiniBatchKmeans(data, i, mini_batch_params[["batch_size"]], num_init, max_iters, mini_batch_params[["init_fraction"]],
+                           initializer, mini_batch_params[["early_stop_iter"]], FALSE, NULL, tol, tol_optimal_init, seed)
 
       tmp_cent = km$centroids
       km["centroids"] = NULL
@@ -795,27 +814,21 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
       if (criterion %in% c("dissimilarity", "silhouette", "BIC")) {        # in these cases call also the 'predict_MBatchKMeans' function to receive the clusters
 
         km_preds = predict_MBatchKMeans(data, tmp_cent, FALSE)
-
         km[["clusters"]] = as.vector(km_preds)
       }
     }
 
     if (criterion == "variance_explained") {
-
       vec_out[COUNT] = sum(stats::na.omit(as.vector(km$WCSS_per_cluster))) / km$total_SSE
     }
 
     if (criterion == "WCSSE") {
-
       vec_out[COUNT] = sum(stats::na.omit(as.vector(km$WCSS_per_cluster)))
     }
 
     if (criterion == "dissimilarity") {
-
       eval_km = evaluation_rcpp(data, as.vector(km$clusters), FALSE)
-
       tmp_dis = mean(stats::na.omit(unlist(lapply(eval_km$INTRA_cluster_dissimilarity, mean))))
-
       vec_out[COUNT] = tmp_dis
     }
 
@@ -831,41 +844,29 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
     }
 
     if (criterion == "distortion_fK") {
-
       vec_out[COUNT] = sum(stats::na.omit(as.vector(km$WCSS_per_cluster)))
     }
 
     if (criterion == "AIC") {                             # http://stackoverflow.com/questions/15839774/how-to-calculate-bic-for-k-means-clustering-in-r
-
       m = ncol(km$centers)
-
       k = nrow(km$centers)
-
       D = sum(stats::na.omit(km$WCSS_per_cluster))
-
       vec_out[COUNT] = D + 2.0 * m * k
     }
 
     if (criterion == "BIC") {                             # http://stackoverflow.com/questions/15839774/how-to-calculate-bic-for-k-means-clustering-in-r
-
       m = ncol(km$centers)
-
       k = nrow(km$centers)
-
       n = length(km$clusters)
-
       D = sum(stats::na.omit(km$WCSS_per_cluster))
-
       vec_out[COUNT] = D + log(n) * m * k
     }
 
     if (criterion == 'Adjusted_Rsquared') {
-
       vec_out[COUNT] = sum(stats::na.omit(km$WCSS_per_cluster))
     }
 
     if (verbose) { utils::setTxtProgressBar(pb, COUNT) }
-
     COUNT = COUNT + 1
   }
 
@@ -884,96 +885,67 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
   if (criterion %in% c('variance_explained', 'WCSSE', 'dissimilarity', 'silhouette', 'AIC', 'BIC', 'Adjusted_Rsquared')) {
 
     if (plot_clusters) {
-
       tmp_VAL = as.vector(stats::na.omit(vec_out))
 
       if (length(which(is.na(vec_out))) > 0) {
-
         x_dis = (1:length(vec_out))[-which(is.na(vec_out))]
-
-        y_dis = vec_out[-which(is.na(vec_out))]}
-
+        y_dis = vec_out[-which(is.na(vec_out))]
+      }
       else {
-
         x_dis = 1:length(vec_out)
-
         y_dis = vec_out
       }
 
       y_MAX = max(tmp_VAL)
-
       graphics::plot(x = x_dis, y = y_dis, type = 'l', xlab = 'clusters', ylab = criterion, col = 'blue', lty = 3, axes = FALSE)
-
       graphics::axis(1, at = seq(1, length(vec_out) , by = 1))
 
       if (criterion == 'silhouette') {
-
         graphics::axis(2, at = seq(0, y_MAX + 0.05, by = 0.05 ), las = 1, cex.axis = 0.8)
-
-        graphics::abline(h = seq(0.0, max(as.vector(stats::na.omit(vec_out))), 0.05), v = seq(1, length(vec_out) , by = 1), col = "gray", lty = 3)}
-
+        graphics::abline(h = seq(0.0, max(as.vector(stats::na.omit(vec_out))), 0.05), v = seq(1, length(vec_out) , by = 1), col = "gray", lty = 3)
+      }
       else {
-
         tmp_summary = round(summary(y_MAX)[['Max.']])
-
         out_max_summary = ifelse(tmp_summary == 0, 1, tmp_summary)
-
         graphics::axis(2, at = seq(0, y_MAX + out_max_summary / 10, by = out_max_summary / 10), las = 1, cex.axis = 0.8)
-
         graphics::abline(h = seq(0.0, max(as.vector(stats::na.omit(vec_out))), out_max_summary / 10), v = seq(1, length(vec_out) , by = 1), col = "gray", lty = 3)
       }
 
       if (criterion %in% c("variance_explained", "Adjusted_Rsquared", "dissimilarity", "silhouette")) {
-
-        graphics::text(x = 1:length(vec_out), y = vec_out, labels = round(vec_out, 2), cex = 0.8, font = 2) }
-
+        graphics::text(x = 1:length(vec_out), y = vec_out, labels = round(vec_out, 2), cex = 0.8, font = 2)
+      }
       else {
-
         graphics::text(x = 1:length(vec_out), y = vec_out, labels = round(vec_out, 1), cex = 0.8, font = 2)
       }
     }
   }
 
   else {                                                              # "distortion_fK"
-
     if (length(max_clusters) != 1) {
       fK_vec = "The 'distortion_fK' criterion can not be computed if the length of the 'max_clusters' parameter is greater than 1. See the details for more information!"
     }
     else {
       f_K = opt_clust_fK(vec_out, ncol(data), fK_threshold)
-
       fK_vec = as.vector(f_K$fK_evaluation)
     }
 
     if (plot_clusters) {
-
       if (length(which(is.na(fK_vec))) > 0) {
-
         x_fk = (1:length(fK_vec))[-which(is.na(fK_vec))]
-
-        y_fk = fK_vec[-which(is.na(fK_vec))]}
-
+        y_fk = fK_vec[-which(is.na(fK_vec))]
+      }
       else {
-
         x_fk = 1:length(fK_vec)
-
         y_fk = fK_vec
       }
 
       graphics::par(oma = c(0, 2, 0, 0))
-
       graphics::plot(y_fk, type = 'l', xlab = 'clusters', ylab = 'f(K)', col = 'green', axes = FALSE)
-
       graphics::axis(1, at = x_fk)
-
       graphics::axis(2, at = seq(0, max(y_fk) + 0.1, by = round(summary(y_fk)[['Max.']]) / 10), las = 1, cex.axis = 0.8)
-
       graphics::abline(h = seq(0.0, max(y_fk), round(summary(y_fk)[['Max.']]) / 10), v = seq(1, length(y_fk) , by = 1), col = "gray", lty = 3)
-
       graphics::abline(h = fK_threshold, col = 'blue', lty = 3)
-
       graphics::mtext("threshold", side = 2, line = 2, at = fK_threshold, las = 1, cex = 0.9)
-
       graphics::text(x = x_fk, y = y_fk, labels = round(y_fk,2), cex = 0.8, font = 2)
     }
   }
@@ -1033,9 +1005,19 @@ Optimal_Clusters_KMeans = function(data, max_clusters, criterion = "variance_exp
 #'
 
 
-MiniBatchKmeans = function(data, clusters, batch_size = 10, num_init = 1, max_iters = 100, init_fraction = 1.0, initializer = 'kmeans++',
-
-                           early_stop_iter = 10, verbose = FALSE, CENTROIDS = NULL, tol = 1e-4, tol_optimal_init = 0.3, seed = 1) {
+MiniBatchKmeans = function(data,
+                           clusters,
+                           batch_size = 10,
+                           num_init = 1,
+                           max_iters = 100,
+                           init_fraction = 1.0,
+                           initializer = 'kmeans++',
+                           early_stop_iter = 10,
+                           verbose = FALSE,
+                           CENTROIDS = NULL,
+                           tol = 1e-4,
+                           tol_optimal_init = 0.3,
+                           seed = 1) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
@@ -1053,7 +1035,6 @@ MiniBatchKmeans = function(data, clusters, batch_size = 10, num_init = 1, max_it
   if (tol_optimal_init <= 0.0) stop('tol_optimal_init should be a float number greater than 0.0')
 
   flag_non_finite = check_NaN_Inf(data)
-
   if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values")
 
   res = mini_batch_kmeans(data, clusters, batch_size, max_iters, num_init, init_fraction, initializer, early_stop_iter, verbose, CENTROIDS, tol, tol_optimal_init, seed)
@@ -1098,19 +1079,15 @@ predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
   if (!is.logical(fuzzy)) stop('fuzzy should be either TRUE or FALSE')
 
   flag_non_finite = check_NaN_Inf(data)
-
   if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values")
 
   res = Predict_mini_batch_kmeans(data, CENTROIDS, fuzzy, eps = 1.0e-6)
 
   if (fuzzy) {
-
-    return(structure(list(clusters = as.vector(res$clusters + 1), fuzzy_clusters = res$fuzzy_clusters), class = "k-means clustering"))}
-
+    return(structure(list(clusters = as.vector(res$clusters + 1), fuzzy_clusters = res$fuzzy_clusters), class = "k-means clustering"))
+  }
   else {
-
     tmp_res = as.vector(res$clusters + 1)
-
     return(tmp_res)
   }
 }
@@ -2217,52 +2194,42 @@ external_validation = function(true_labels, clusters, method = "adjusted_rand_in
   # }
 
   if (method == "rand_index") {                                # http://stats.stackexchange.com/questions/89030/rand-index-calculation
-
     return((tp + tn) / (tp + fp + fn + tn))
   }
 
   if (method == "adjusted_rand_index") {
-
     return((tp - prod_comb) / (mean_comb - prod_comb))         # https://github.com/scikit-learn/scikit-learn/blob/51a765a/sklearn/metrics/cluster/supervised.py#L90
   }
 
   if (method == "jaccard_index") {
-
     return(tp / (tp + fp + fn))                                # http://www.cs.ucsb.edu/~veronika/MAE/wagner07comparingclusterings.pdf
   }
 
   if (method == "fowlkes_mallows_index") {
-
     return(sqrt((tp / ((tp + fp))) * (tp / (tp + fn))))        # https://en.wikipedia.org/wiki/Fowlkes%E2%80%93Mallows_index
   }
 
   if (method == "mirkin_metric") {
-
     return(2.0 * (fp + fn))                                    # http://www.cs.ucsb.edu/~veronika/MAE/wagner07comparingclusterings.pdf
   }
 
   if (method == 'purity') {                                    # http://bioinformatics.oxfordjournals.org/content/23/12/1495.full.pdf+html [ page 1498 ]
-
     return(res_purity)
   }
 
   if (method == 'entropy') {                                   # http://bioinformatics.oxfordjournals.org/content/23/12/1495.full.pdf+html [ page 1498 ]
-
     return(res_entropy)
   }
 
   if (method == 'nmi') {                                       # http://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-clustering-1.html, http://stackoverflow.com/questions/35709562/how-to-calculate-clustering-entropy-a-working-example-or-software-code
-
     return(NMI)
   }
 
   if (method == 'var_info') {                                  # http://www.stat.washington.edu/mmp/Papers/compare-colt.pdf, http://www.cs.ucsb.edu/~veronika/MAE/wagner07comparingclusterings.pdf
-
     return(VAR_INFO)
   }
 
   if (method == 'nvi') {                                       # http://jmlr.csail.mit.edu/papers/volume11/vinh10a/vinh10a.pdf
-
     return(NVI)
   }
 }

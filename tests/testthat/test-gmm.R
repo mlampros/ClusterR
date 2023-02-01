@@ -542,10 +542,9 @@ testthat::test_that("in case that the verbose parameter is not logical, it retur
 })
 
 
-# testthat::test_that("in case that max_clusters is greater than the number of the columns and verbose is TRUE, it returns a warning", {
+# testthat::test_that("in case that max_clusters is greater than the number of rows and verbose is TRUE, it returns a warning", {
 #
-#   testthat::expect_warning( Optimal_Clusters_GMM(X, ncol(X) + 1, dist_mode = 'eucl_dist', criterion = "BIC", seed_mode = 'random_subset', km_iter = 5,
-#
+#   testthat::expect_warning( Optimal_Clusters_GMM(X, nrow(X) + 1, dist_mode = 'eucl_dist', criterion = "BIC", seed_mode = 'random_subset', km_iter = 5,#
 #                                                  em_iter = 5, plot_data = F, verbose = T) )
 # })
 
