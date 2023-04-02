@@ -72,7 +72,8 @@
 <span>  em_iter <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  var_floor <span class="op">=</span> <span class="fl">1e-10</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">1</span></span>
+<span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  full_covariance_matrices <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -112,6 +113,10 @@
 
 <dt>seed</dt>
 <dd><p>integer value for random number generator (RNG)</p></dd>
+
+
+<dt>full_covariance_matrices</dt>
+<dd><p>a boolean. If FALSE "diagonal" covariance matrices (i.e. in each covariance matrix, all entries outside the main diagonal are assumed to be zero) otherwise "full" covariance matrices will be returned. Be aware in case of "full" covariance matrices a cube (3-dimensional) rather than a matrix for the output "covariance_matrices" value will be returned.</p></dd>
 
 </dl></div>
     <div id="value">
