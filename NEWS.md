@@ -2,6 +2,7 @@
 ## Cluster 1.3.1
 
 * I fixed a mistake related to a potential warning of the *'Optimal_Clusters_GMM()'* function (see issue: https://github.com/mlampros/ClusterR/issues/45)
+* I modified the *'GMM()'* function by adding the *'full_covariance_matrices'* parameter (see issue: https://github.com/mlampros/ClusterR/issues/48)
 
 
 ## Cluster 1.3.0

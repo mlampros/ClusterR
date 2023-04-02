@@ -13,7 +13,8 @@ tryCatch_GMM(
   em_iter,
   verbose,
   var_floor,
-  seed
+  seed,
+  full_covariance_matrices
 )
 }
 \description{

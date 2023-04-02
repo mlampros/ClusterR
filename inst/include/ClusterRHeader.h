@@ -157,7 +157,6 @@ namespace clustR {
         int idx = 0;
 
         for (unsigned int i = 0; i < x.n_elem; i++) {
-
           if (x(i) < out) {
             out = x(i);
             idx = i;
@@ -715,17 +714,17 @@ namespace clustR {
 
             for (unsigned int i = 0; i < data.n_rows; i++) {
 
-              arma::vec tmp_vec = WCSS(arma::conv_to< arma::rowvec >::from(data.row(i)), conv);              // returns a rowvec with the WSSE for each cluster
+              arma::rowvec tmp_row = data.row(i);                                              // current row
+              arma::vec tmp_vec = WCSS(arma::conv_to< arma::rowvec >::from(tmp_row), conv);    // vector where each item corresponds to the WCSS betw. the row and the current centroids
 
               if (fuzzy) {
                 soft_CLUSTERS.row(i) = arma::conv_to< arma::rowvec >::from(tmp_vec);
               }
 
-              int tmp_idx = MinMat(tmp_vec);                         // returns the index of the tmp_vec with the lowest WSSE
-              arma::rowvec tmp_row = data.row(i);
-              total_WSSE(tmp_idx) += tmp_vec(tmp_idx);                // assigns to total_WSSE the minimum cost
-              num_obs(tmp_idx) += 1;                                 // number of observations in each cluster
-              new_centroids.row(tmp_idx) +=  tmp_row;                // adds to the corresponding row of the tmp_clusters matrix the row of the data, so that the new centroids can be calculated
+              int tmp_idx = MinMat(tmp_vec);                         // returns the index of the tmp_vec with the lowest WSSE, that means this row (or observation) will be assigned to this cluster (centroid)
+              total_WSSE(tmp_idx) += tmp_vec(tmp_idx);               // assigns to total_WSSE the minimum cost
+              num_obs(tmp_idx) += 1;                                 // append this observation to the corresponding cluster
+              new_centroids.row(tmp_idx) += tmp_row;                 // adds to the corresponding row of the tmp_clusters matrix the row of the data, so that the new centroids can be calculated
               CLUSTERS(i) = tmp_idx;
             }
 
@@ -1488,6 +1487,56 @@ namespace clustR {
       //============================================ Gaussian Mixture Models (GMM) =========================================================================
 
 
+      // secondary function used in 'GMM_arma()'
+      //
+
+      template<class T>
+      T GMM_arma_covariance_type(T model,
+                                 arma::mat& data,
+                                 int gaussian_comps,
+                                 std::string dist_mode,
+                                 std::string seed_mode,
+                                 int km_iter,
+                                 int em_iter,
+                                 bool verbose,
+                                 double var_floor = 1e-10,
+                                 int seed = 1) {
+        bool status;
+
+        if (seed_mode == "static_subset" && dist_mode == "eucl_dist") {
+          status = model.learn(data.t(), gaussian_comps, arma::eucl_dist, arma::static_subset, km_iter, em_iter, var_floor, verbose);
+        }
+        else if (seed_mode == "random_subset" && dist_mode == "eucl_dist") {
+          status = model.learn(data.t(), gaussian_comps, arma::eucl_dist, arma::random_subset, km_iter, em_iter, var_floor, verbose);
+        }
+        else if (seed_mode == "static_spread" && dist_mode == "eucl_dist") {
+          status = model.learn(data.t(), gaussian_comps, arma::eucl_dist, arma::static_spread, km_iter, em_iter, var_floor, verbose);
+        }
+        else if (seed_mode == "random_spread" && dist_mode == "eucl_dist") {
+          status = model.learn(data.t(), gaussian_comps, arma::eucl_dist, arma::random_spread, km_iter, em_iter, var_floor, verbose);
+        }
+        else if (seed_mode == "static_subset" && dist_mode == "maha_dist") {
+          status = model.learn(data.t(), gaussian_comps, arma::maha_dist, arma::static_subset, km_iter, em_iter, var_floor, verbose);
+        }
+        else if (seed_mode == "random_subset" && dist_mode == "maha_dist") {
+          status = model.learn(data.t(), gaussian_comps, arma::maha_dist, arma::random_subset, km_iter, em_iter, var_floor, verbose);
+        }
+        else if (seed_mode == "static_spread" && dist_mode == "maha_dist") {
+          status = model.learn(data.t(), gaussian_comps, arma::maha_dist, arma::static_spread, km_iter, em_iter, var_floor, verbose);
+        }
+        else if (seed_mode == "random_spread" && dist_mode == "maha_dist") {
+          status = model.learn(data.t(), gaussian_comps, arma::maha_dist, arma::random_spread, km_iter, em_iter, var_floor, verbose);
+        }
+        else {
+          Rcpp::stop("Invalid seed_mode OR dist_mode. Valid 'seed_modes' are : 'static_subset', 'random_subset', 'static_spread' and 'random_spread'. Valid 'dist_modes' are : 'eucl_dist' and 'maha_dist'.");
+        }
+
+        // if(status == false) {
+        //   Rcpp::Rcout << "learning failed" << std::endl;
+        // }
+
+        return model;
+      }
 
 
       // the GMM_arma returns the centroids, covariance matrix and the weights. If openmp exists then it uses all available threads
@@ -1495,90 +1544,92 @@ namespace clustR {
       // seed_mode is one of : "static_subset", "random_subset", "static_spread", "random_spread"  [ I excluded the "keep_existing" seed_mode ] -- user-defined parameter setting is not enabled
       //
 
-      Rcpp::List GMM_arma(arma::mat& data, int gaussian_comps, std::string dist_mode, std::string seed_mode, int km_iter, int em_iter,
-
-                          bool verbose, double var_floor = 1e-10, int seed = 1) {
+      // [[Rcpp::export]]
+      Rcpp::List GMM_arma(arma::mat& data,
+                          int gaussian_comps,
+                          std::string dist_mode,
+                          std::string seed_mode,
+                          int km_iter,
+                          int em_iter,
+                          bool verbose,
+                          double var_floor = 1e-10,
+                          int seed = 1,
+                          bool full_covariance_matrices = false) {
 
         arma::wall_clock timer;
-
         timer.tic();
-
         set_seed(seed);             // R's RNG
-
-        arma::gmm_diag model;
-
         arma::mat means;
 
-        bool status;
+        if (full_covariance_matrices) {
+          arma::gmm_full model_inner;
+          model_inner = GMM_arma_covariance_type<arma::gmm_full>(model_inner,
+                                                                 data,
+                                                                 gaussian_comps,
+                                                                 dist_mode,
+                                                                 seed_mode,
+                                                                 km_iter,
+                                                                 em_iter,
+                                                                 verbose,
+                                                                 var_floor,
+                                                                 seed);
 
-        if (seed_mode == "static_subset" && dist_mode == "eucl_dist") {
+          arma::mat loglik(data.n_rows, gaussian_comps, arma::fill::zeros);
 
-          status = model.learn(data.t(), gaussian_comps, arma::eucl_dist, arma::static_subset, km_iter, em_iter, var_floor, verbose);}
+          for (int j = 0; j < gaussian_comps; j++) {
+            loglik.col(j) = arma::conv_to< arma::vec >::from(model_inner.log_p(data.t(), j));
+          }
 
-        else if (seed_mode == "random_subset" && dist_mode == "eucl_dist") {
+          arma::mat model_means = model_inner.means.t();
+          arma::cube model_COVS = model_inner.fcovs;
 
-          status = model.learn(data.t(), gaussian_comps, arma::eucl_dist, arma::random_subset, km_iter, em_iter, var_floor, verbose);}
+          arma::rowvec model_hefts = arma::conv_to< arma::rowvec >::from(model_inner.hefts.t());
+          double model_avg_log_p = model_inner.avg_log_p(data.t(), gaussian_comps - 1);
 
-        else if (seed_mode == "static_spread" && dist_mode == "eucl_dist") {
+          double n = timer.toc();
+          if (verbose) { Rcpp::Rcout << "\ntime to complete : " << n << "\n" << std::endl; }
 
-          status = model.learn(data.t(), gaussian_comps, arma::eucl_dist, arma::static_spread, km_iter, em_iter, var_floor, verbose);}
-
-        else if (seed_mode == "random_spread" && dist_mode == "eucl_dist") {
-
-          status = model.learn(data.t(), gaussian_comps, arma::eucl_dist, arma::random_spread, km_iter, em_iter, var_floor, verbose);}
-
-        else if (seed_mode == "static_subset" && dist_mode == "maha_dist") {
-
-          status = model.learn(data.t(), gaussian_comps, arma::maha_dist, arma::static_subset, km_iter, em_iter, var_floor, verbose);}
-
-        else if (seed_mode == "random_subset" && dist_mode == "maha_dist") {
-
-          status = model.learn(data.t(), gaussian_comps, arma::maha_dist, arma::random_subset, km_iter, em_iter, var_floor, verbose);}
-
-        else if (seed_mode == "static_spread" && dist_mode == "maha_dist") {
-
-          status = model.learn(data.t(), gaussian_comps, arma::maha_dist, arma::static_spread, km_iter, em_iter, var_floor, verbose);}
-
-        else if (seed_mode == "random_spread" && dist_mode == "maha_dist") {
-
-          status = model.learn(data.t(), gaussian_comps, arma::maha_dist, arma::random_spread, km_iter, em_iter, var_floor, verbose);}
-
+          return Rcpp::List::create( Rcpp::Named("centroids") = model_means,
+                                     Rcpp::Named("covariance_matrices") = model_COVS,
+                                     Rcpp::Named("weights") = model_hefts,
+                                     Rcpp::Named("Log_likelihood_raw") = loglik,
+                                     Rcpp::Named("avg_Log_likelihood_DATA") = model_avg_log_p );
+        }
         else {
+          arma::gmm_diag model_inner;
+          model_inner = GMM_arma_covariance_type<arma::gmm_diag>(model_inner,
+                                                                 data,
+                                                                 gaussian_comps,
+                                                                 dist_mode,
+                                                                 seed_mode,
+                                                                 km_iter,
+                                                                 em_iter,
+                                                                 verbose,
+                                                                 var_floor,
+                                                                 seed);
 
-          Rcpp::stop("Invalid seed_mode OR dist_mode. Valid 'seed_modes' are : 'static_subset', 'random_subset', 'static_spread' and 'random_spread'. Valid 'dist_modes' are : 'eucl_dist' and 'maha_dist'.");
+          arma::mat loglik(data.n_rows, gaussian_comps, arma::fill::zeros);
+
+          for (int j = 0; j < gaussian_comps; j++) {
+            loglik.col(j) = arma::conv_to< arma::vec >::from(model_inner.log_p(data.t(), j));
+          }
+
+          arma::mat model_means = model_inner.means.t();
+          arma::mat model_COVS = model_inner.dcovs.t();           // each row of the 'covariance_matrices' is a different covariance matrix, use diag() to build each square diagonal matrix
+
+          arma::rowvec model_hefts = arma::conv_to< arma::rowvec >::from(model_inner.hefts.t());
+          double model_avg_log_p = model_inner.avg_log_p(data.t(), gaussian_comps - 1);
+
+          double n = timer.toc();
+          if (verbose) { Rcpp::Rcout << "\ntime to complete : " << n << "\n" << std::endl; }
+
+          return Rcpp::List::create( Rcpp::Named("centroids") = model_means,
+                                     Rcpp::Named("covariance_matrices") = model_COVS,
+                                     Rcpp::Named("weights") = model_hefts,
+                                     Rcpp::Named("Log_likelihood_raw") = loglik,
+                                     Rcpp::Named("avg_Log_likelihood_DATA") = model_avg_log_p );
         }
-
-        // if(status == false) {
-        //
-        //   Rcpp::Rcout << "learning failed" << std::endl;
-        // }
-
-        arma::mat loglik(data.n_rows, gaussian_comps, arma::fill::zeros);
-
-        for (int j = 0; j < gaussian_comps; j++) {
-
-          loglik.col(j) = arma::conv_to< arma::vec >::from(model.log_p(data.t(), j));
-        }
-
-        double n = timer.toc();
-
-        if (verbose) { Rcpp::Rcout << "\ntime to complete : " << n << "\n" << std::endl; }
-
-        arma::mat model_means = model.means.t();
-
-        arma::mat model_dcovs = model.dcovs.t();
-
-        arma::rowvec model_hefts = arma::conv_to< arma::rowvec >::from(model.hefts.t());
-
-        double model_avg_log_p = model.avg_log_p(data.t(), gaussian_comps - 1);
-
-        return Rcpp::List::create( Rcpp::Named("centroids") = model_means, Rcpp::Named("covariance_matrices") = model_dcovs,           // each row of the 'covariance_matrices' is a different covariance matrix, use diag() to build each square diagonal matrix
-
-                                   Rcpp::Named("weights") = model_hefts, Rcpp::Named("Log_likelihood_raw") = loglik,
-
-                                   Rcpp::Named("avg_Log_likelihood_DATA") = model_avg_log_p );
       }
-
 
 
       // take a diagonal matrix in form of a vector and build a square diagonal matrix, then invert it
@@ -1738,9 +1789,16 @@ namespace clustR {
       // the various distance metric methods for the 'dissim_mat' function
       //
 
-      double METHODS(arma::mat& data, arma::mat& data1, std::string& method, unsigned int i, unsigned int j, bool flag_isfinite, arma::mat& cov_mat, double minkowski_p = 1.0,
-
-                     double eps = 1.0e-6, bool exception_nan = true) {
+      double METHODS(arma::mat& data,
+                     arma::mat& data1,
+                     std::string& method,
+                     unsigned int i,
+                     unsigned int j,
+                     bool flag_isfinite,
+                     arma::mat& cov_mat,
+                     double minkowski_p = 1.0,
+                     double eps = 1.0e-6,
+                     bool exception_nan = true) {
 
         double tmp_idx;
 

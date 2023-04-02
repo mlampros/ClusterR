@@ -13,7 +13,8 @@ GMM(
   em_iter = 5,
   verbose = FALSE,
   var_floor = 1e-10,
-  seed = 1
+  seed = 1,
+  full_covariance_matrices = FALSE
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ GMM(
 \item{var_floor}{the variance floor (smallest allowed value) for the diagonal covariances}
 
 \item{seed}{integer value for random number generator (RNG)}
+
+\item{full_covariance_matrices}{a boolean. If FALSE "diagonal" covariance matrices (i.e. in each covariance matrix, all entries outside the main diagonal are assumed to be zero) otherwise "full" covariance matrices will be returned. Be aware in case of "full" covariance matrices a cube (3-dimensional) rather than a matrix for the output "covariance_matrices" value will be returned.}
 }
 \value{
 a list consisting of the centroids, covariance matrix ( where each row of the matrix represents a diagonal covariance matrix), weights and the log-likelihoods for each gaussian component. In case of Error it returns the error message and the possible causes.

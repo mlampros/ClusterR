@@ -16,7 +16,7 @@ extern SEXP _ClusterR_cost_clusters_from_dis_meds(SEXP, SEXP);
 extern SEXP _ClusterR_dissim_mat(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_dissim_MEDOIDS(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_evaluation_rcpp(SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_GMM_arma(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP _ClusterR_GMM_arma(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_GMM_arma_AIC_BIC(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_KMEANS_arma(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_KMEANS_rcpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -41,7 +41,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_ClusterR_dissim_mat",                  (DL_FUNC) &_ClusterR_dissim_mat,                   7},
     {"_ClusterR_dissim_MEDOIDS",              (DL_FUNC) &_ClusterR_dissim_MEDOIDS,               6},
     {"_ClusterR_evaluation_rcpp",             (DL_FUNC) &_ClusterR_evaluation_rcpp,              3},
-    {"_ClusterR_GMM_arma",                    (DL_FUNC) &_ClusterR_GMM_arma,                     9},
+    {"_ClusterR_GMM_arma",                    (DL_FUNC) &_ClusterR_GMM_arma,                    10},
     {"_ClusterR_GMM_arma_AIC_BIC",            (DL_FUNC) &_ClusterR_GMM_arma_AIC_BIC,            10},
     {"_ClusterR_KMEANS_arma",                 (DL_FUNC) &_ClusterR_KMEANS_arma,                  7},
     {"_ClusterR_KMEANS_rcpp",                 (DL_FUNC) &_ClusterR_KMEANS_rcpp,                 12},

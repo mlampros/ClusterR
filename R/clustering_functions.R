@@ -6,9 +6,27 @@ utils::globalVariables(c("x", "y"))           # to avoid the following NOTE when
 #'
 #' @keywords internal
 
-tryCatch_GMM <- function(data, gaussian_comps, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, seed) {
+tryCatch_GMM <- function(data,
+                         gaussian_comps,
+                         dist_mode,
+                         seed_mode,
+                         km_iter,
+                         em_iter,
+                         verbose,
+                         var_floor,
+                         seed,
+                         full_covariance_matrices) {
 
-  Error = tryCatch(GMM_arma(data, gaussian_comps, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, seed),
+  Error = tryCatch(GMM_arma(data,
+                            gaussian_comps,
+                            dist_mode,
+                            seed_mode,
+                            km_iter,
+                            em_iter,
+                            verbose,
+                            var_floor,
+                            seed,
+                            full_covariance_matrices),
 
                    error = function(e) e)
 
@@ -34,6 +52,7 @@ tryCatch_GMM <- function(data, gaussian_comps, dist_mode, seed_mode, km_iter, em
 #' @param verbose either TRUE or FALSE; enable or disable printing of progress during the k-means and EM algorithms
 #' @param var_floor the variance floor (smallest allowed value) for the diagonal covariances
 #' @param seed integer value for random number generator (RNG)
+#' @param full_covariance_matrices a boolean. If FALSE "diagonal" covariance matrices (i.e. in each covariance matrix, all entries outside the main diagonal are assumed to be zero) otherwise "full" covariance matrices will be returned. Be aware in case of "full" covariance matrices a cube (3-dimensional) rather than a matrix for the output "covariance_matrices" value will be returned.
 #' @return a list consisting of the centroids, covariance matrix ( where each row of the matrix represents a diagonal covariance matrix), weights and the log-likelihoods for each gaussian component. In case of Error it returns the error message and the possible causes.
 #' @details
 #' This function is an R implementation of the 'gmm_diag' class of the Armadillo library. The only exception is that user defined parameter settings are not supported, such as seed_mode = 'keep_existing'.
@@ -64,7 +83,8 @@ GMM = function(data,
                em_iter = 5,
                verbose = FALSE,
                var_floor = 1e-10,
-               seed = 1) {
+               seed = 1,
+               full_covariance_matrices = FALSE) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
@@ -75,12 +95,22 @@ GMM = function(data,
   if (em_iter < 0 ) stop('the em_iter parameter can not be negative')
   if (!is.logical(verbose)) stop('the verbose parameter should be either TRUE or FALSE')
   if (var_floor < 0 ) stop('the var_floor parameter can not be negative')
+  if (!inherits(full_covariance_matrices, 'logical')) stop('The full_covariance_matrices parameter must be a boolean!')
 
   flag_non_finite = check_NaN_Inf(data)
 
   if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values")
 
-  res = tryCatch_GMM(data, gaussian_comps, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, seed)
+  res = tryCatch_GMM(data,
+                     gaussian_comps,
+                     dist_mode,
+                     seed_mode,
+                     km_iter,
+                     em_iter,
+                     verbose,
+                     var_floor,
+                     seed,
+                     full_covariance_matrices)
 
   if ('Error' %in% names(res)) {
 

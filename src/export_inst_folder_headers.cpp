@@ -195,13 +195,29 @@ Rcpp::List Predict_mini_batch_kmeans(arma::mat& data, arma::mat& CENTROIDS, bool
 //
 
 // [[Rcpp::export]]
-Rcpp::List GMM_arma(arma::mat& data, int gaussian_comps, std::string dist_mode, std::string seed_mode, int km_iter, int em_iter,
-
-                    bool verbose, double var_floor = 1e-10, int seed = 1) {
+Rcpp::List GMM_arma(arma::mat& data,
+                    int gaussian_comps,
+                    std::string dist_mode,
+                    std::string seed_mode,
+                    int km_iter,
+                    int em_iter,
+                    bool verbose,
+                    double var_floor = 1e-10,
+                    int seed = 1,
+                    bool full_covariance_matrices = false) {
 
   ClustHeader CRH;
 
-  return CRH.GMM_arma(data, gaussian_comps, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, seed);
+  return CRH.GMM_arma(data,
+                      gaussian_comps,
+                      dist_mode,
+                      seed_mode,
+                      km_iter,
+                      em_iter,
+                      verbose,
+                      var_floor,
+                      seed,
+                      full_covariance_matrices);
 }
 
 
