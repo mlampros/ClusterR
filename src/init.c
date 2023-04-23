@@ -30,7 +30,7 @@ extern SEXP _ClusterR_preferenceRange(SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_SCALE(SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_silhouette_clusters(SEXP, SEXP);
 extern SEXP _ClusterR_split_rcpp_lst(SEXP);
-extern SEXP _ClusterR_validate_centroids(SEXP, SEXP, SEXP);
+extern SEXP _ClusterR_validate_centroids(SEXP, SEXP, SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_ClusterR_affinity_propagation",        (DL_FUNC) &_ClusterR_affinity_propagation,         9},
@@ -55,7 +55,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_ClusterR_SCALE",                       (DL_FUNC) &_ClusterR_SCALE,                        3},
     {"_ClusterR_silhouette_clusters",         (DL_FUNC) &_ClusterR_silhouette_clusters,          2},
     {"_ClusterR_split_rcpp_lst",              (DL_FUNC) &_ClusterR_split_rcpp_lst,               1},
-    {"_ClusterR_validate_centroids",          (DL_FUNC) &_ClusterR_validate_centroids,           3},
+    {"_ClusterR_validate_centroids",          (DL_FUNC) &_ClusterR_validate_centroids,           5},
     {NULL, NULL, 0}
 };
 

@@ -559,6 +559,7 @@ KMeans_rcpp = function(data,
 #' @param data matrix or data frame
 #' @param CENTROIDS a matrix of initial cluster centroids. The rows of the CENTROIDS matrix should be equal to the number of clusters and the columns should be equal to the columns of the data.
 #' @param threads an integer specifying the number of cores to run in parallel
+#' @param fuzzy either TRUE or FALSE. If TRUE, then probabilities for each cluster will be returned based on the distance between observations and centroids.
 #' @return a vector (clusters)
 #' @author Lampros Mouselimis
 #' @details
@@ -575,7 +576,7 @@ KMeans_rcpp = function(data,
 #' km = KMeans_rcpp(dat, clusters = 2, num_init = 5, max_iters = 100, initializer = 'kmeans++')
 #'
 #' pr = predict_KMeans(dat, km$centroids, threads = 1)
-predict_KMeans = function(data, CENTROIDS, threads = 1) {
+predict_KMeans = function(data, CENTROIDS, threads = 1, fuzzy = FALSE) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
@@ -583,6 +584,7 @@ predict_KMeans = function(data, CENTROIDS, threads = 1) {
   if (ncol(data) != ncol(CENTROIDS))
     stop('the number of columns of the data should match the number of columns of the CENTROIDS ')
   if (threads < 1) stop('the number of threads should be greater or equal to 1')
+  if (!is.logical(fuzzy)) stop('fuzzy should be either TRUE or FALSE')
 
   flag_non_finite = check_NaN_Inf(data)
   if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values", call. = F)
@@ -591,14 +593,29 @@ predict_KMeans = function(data, CENTROIDS, threads = 1) {
   flag_dups = duplicated(CENTROIDS)
   if (sum(flag_dups) > 0) stop("The 'CENTROIDS' input matrix includes duplicated rows!", call. = F)
 
-  as.vector(validate_centroids(data, CENTROIDS, threads)) + 1
+  res = validate_centroids(data = data,
+                           init_centroids = CENTROIDS,
+                           threads = threads,
+                           fuzzy = fuzzy,
+                           eps = 1.0e-6)
+  if (fuzzy) {
+    return(res$fuzzy_probs)
+  }
+  else {
+    return(as.vector(res$clusters) + 1)
+  }
 }
 
 #' @rdname predict_KMeans
 #' @param object,newdata,... arguments for the `predict` generic
 #' @export
-predict.KMeansCluster <- function(object, newdata, threads = 1, ...) {
-  predict_KMeans(newdata, CENTROIDS = object$centroids, threads = threads)
+predict.KMeansCluster <- function(object, newdata, fuzzy = FALSE, threads = 1, ...) {
+
+  out <- predict_KMeans(newdata,
+                        CENTROIDS = object$centroids,
+                        threads = threads,
+                        fuzzy = fuzzy)
+  return(out)
 }
 
 #' @export
@@ -1069,7 +1086,7 @@ MiniBatchKmeans = function(data,
 
   res = mini_batch_kmeans(data, clusters, batch_size, max_iters, num_init, init_fraction, initializer, early_stop_iter, verbose, CENTROIDS, tol, tol_optimal_init, seed)
 
-  structure(res, class = c("KMeansCluster", "k-means clustering"))
+  structure(res, class = c("KMeansCluster", "k-means clustering", "MBatchKMeans"))
 }
 
 
@@ -1117,8 +1134,24 @@ predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
     return(structure(list(clusters = as.vector(res$clusters + 1), fuzzy_clusters = res$fuzzy_clusters), class = "k-means clustering"))
   }
   else {
-    tmp_res = as.vector(res$clusters + 1)
-    return(tmp_res)
+    return(as.vector(res$clusters + 1))
+  }
+}
+
+
+#' @rdname predict_MBatchKMeans
+#' @param object,newdata,... arguments for the `predict` generic
+#' @export
+predict.MBatchKMeans <- function(object, newdata, fuzzy = FALSE, ...) {
+
+  out <- predict_MBatchKMeans(newdata,
+                              CENTROIDS = object$centroids,
+                              fuzzy = fuzzy)
+  if (fuzzy) {
+    return(out$fuzzy_clusters)
+  }
+  else {
+    return(out)
   }
 }
 
@@ -1395,15 +1428,19 @@ predict_Medoids = function(data, MEDOIDS = NULL, distance_metric = 'euclidean', 
 #' @rdname predict_Medoids
 #' @param object,newdata,... arguments for the `predict` generic
 #' @export
-predict.MedoidsCluster <- function(object, newdata,
-                                   fuzzy = FALSE, threads = 1, ...) {
-  out <- predict_Medoids(newdata, MEDOIDS = object$medoids,
+predict.MedoidsCluster <- function(object, newdata, fuzzy = FALSE, threads = 1, ...) {
+  out <- predict_Medoids(newdata,
+                         MEDOIDS = object$medoids,
                          distance_metric = object$distance_metric,
-                         fuzzy = fuzzy, threads = threads)
-  if (fuzzy)
-    out$fuzzy_clusters
-  else
-    out$clusters
+                         fuzzy = fuzzy,
+                         threads = threads,
+                         ...)
+  if (fuzzy) {
+    return(out$fuzzy_clusters)
+  }
+  else {
+    return(out$clusters)
+  }
 }
 
 #' @export

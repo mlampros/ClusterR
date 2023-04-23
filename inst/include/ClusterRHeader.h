@@ -190,23 +190,42 @@ namespace clustR {
       // returns the clusters. The returned clusters should match the clusters in case of the KMEANS_rcpp function.
       //
 
-      arma::rowvec validate_centroids(arma::mat& data, arma::mat init_centroids, int threads = 1) {
+      Rcpp::List validate_centroids(arma::mat& data,
+                                    arma::mat init_centroids,
+                                    int threads = 1,
+                                    bool fuzzy = false,
+                                    double eps = 1.0e-6) {
 
         #ifdef _OPENMP
         omp_set_num_threads(threads);
         #endif
 
         arma::rowvec tmp_idx(data.n_rows);
+        arma::mat soft_CLUSTERS;
 
-        unsigned int k;
+        if (fuzzy) {
+          soft_CLUSTERS.set_size(data.n_rows, init_centroids.n_rows);
+        }
+
+        unsigned int k,j;
 
         #ifdef _OPENMP
-        #pragma omp parallel for schedule(static) shared(data, init_centroids, tmp_idx) private(k)
+        #pragma omp parallel for schedule(static) shared(data, init_centroids, tmp_idx, soft_CLUSTERS, fuzzy) private(k,j)
         #endif
         for (k = 0; k < data.n_rows; k++) {
 
           arma::vec tmp_vec = WCSS(arma::conv_to< arma::rowvec >::from(data.row(k)), init_centroids);
           double iter_val = MinMat(tmp_vec);
+
+          if (fuzzy) {
+            for (j = 0; j < tmp_vec.n_elem; j++) {
+
+              #ifdef _OPENMP
+              #pragma omp atomic write
+              #endif
+              soft_CLUSTERS(k,j) = tmp_vec(j);
+            }
+          }
 
           #ifdef _OPENMP
           #pragma omp atomic write
@@ -214,7 +233,14 @@ namespace clustR {
           tmp_idx(k) = iter_val;
         }
 
-        return tmp_idx;
+        if (fuzzy) {
+          for (unsigned int i = 0; i < soft_CLUSTERS.n_rows; i++) {
+            soft_CLUSTERS.row(i) = norm_fuzzy(arma::conv_to< arma::rowvec >::from(soft_CLUSTERS.row(i)), eps);
+          }
+        }
+
+        return Rcpp::List::create(Rcpp::Named("clusters") = tmp_idx,
+                                  Rcpp::Named("fuzzy_probs") = soft_CLUSTERS);
       }
 
 
@@ -3302,6 +3328,10 @@ namespace clustR {
 
         arma::mat fuz_out;
 
+        if (fuzzy) {
+          fuz_out.set_size(tmp_dist.n_rows, tmp_dist.n_cols);
+        }
+
         arma::rowvec hard_clust(tmp_dist.n_rows);
 
         double global_dissimil = 0.0;
@@ -3319,8 +3349,6 @@ namespace clustR {
           global_dissimil += tmp_dist(i,idx);
 
           if (fuzzy) {
-
-            fuz_out.set_size(tmp_dist.n_rows, tmp_dist.n_cols);
 
             tmp_row = arma::abs(tmp_row);
 

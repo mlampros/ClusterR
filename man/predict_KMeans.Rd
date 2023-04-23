@@ -5,9 +5,9 @@
 \alias{predict.KMeansCluster}
 \title{Prediction function for the k-means}
 \usage{
-predict_KMeans(data, CENTROIDS, threads = 1)
+predict_KMeans(data, CENTROIDS, threads = 1, fuzzy = FALSE)
 
-\method{predict}{KMeansCluster}(object, newdata, threads = 1, ...)
+\method{predict}{KMeansCluster}(object, newdata, fuzzy = FALSE, threads = 1, ...)
 }
 \arguments{
 \item{data}{matrix or data frame}
@@ -15,6 +15,8 @@ predict_KMeans(data, CENTROIDS, threads = 1)
 \item{CENTROIDS}{a matrix of initial cluster centroids. The rows of the CENTROIDS matrix should be equal to the number of clusters and the columns should be equal to the columns of the data.}
 
 \item{threads}{an integer specifying the number of cores to run in parallel}
+
+\item{fuzzy}{either TRUE or FALSE. If TRUE, then probabilities for each cluster will be returned based on the distance between observations and centroids.}
 
 \item{object, newdata, ...}{arguments for the `predict` generic}
 }

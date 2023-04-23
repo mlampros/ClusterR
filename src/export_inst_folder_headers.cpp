@@ -31,11 +31,11 @@ bool check_NaN_Inf(arma::mat x) {
 //
 
 // [[Rcpp::export]]
-arma::rowvec validate_centroids(arma::mat& data, arma::mat init_centroids, int threads) {
+Rcpp::List validate_centroids(arma::mat& data, arma::mat init_centroids, int threads = 1, bool fuzzy = false, double eps = 1.0e-6) {
 
   ClustHeader CRH;
 
-  return CRH.validate_centroids(data, init_centroids, threads);
+  return CRH.validate_centroids(data, init_centroids, threads, fuzzy, eps);
 }
 
 

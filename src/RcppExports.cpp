@@ -23,15 +23,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // validate_centroids
-arma::rowvec validate_centroids(arma::mat& data, arma::mat init_centroids, int threads);
-RcppExport SEXP _ClusterR_validate_centroids(SEXP dataSEXP, SEXP init_centroidsSEXP, SEXP threadsSEXP) {
+Rcpp::List validate_centroids(arma::mat& data, arma::mat init_centroids, int threads, bool fuzzy, double eps);
+RcppExport SEXP _ClusterR_validate_centroids(SEXP dataSEXP, SEXP init_centroidsSEXP, SEXP threadsSEXP, SEXP fuzzySEXP, SEXP epsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type data(dataSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type init_centroids(init_centroidsSEXP);
     Rcpp::traits::input_parameter< int >::type threads(threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(validate_centroids(data, init_centroids, threads));
+    Rcpp::traits::input_parameter< bool >::type fuzzy(fuzzySEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    rcpp_result_gen = Rcpp::wrap(validate_centroids(data, init_centroids, threads, fuzzy, eps));
     return rcpp_result_gen;
 END_RCPP
 }

@@ -3,6 +3,9 @@
 
 * I fixed a mistake related to a potential warning of the *'Optimal_Clusters_GMM()'* function (see issue: https://github.com/mlampros/ClusterR/issues/45)
 * I modified the *'GMM()'* function by adding the *'full_covariance_matrices'* parameter (see issue: https://github.com/mlampros/ClusterR/issues/48)
+* I modified slightly the *'predict_medoids()'* function in case the *'fuzzy'* parameter is set to TRUE
+* I modified the *'validate_centroids()'* Rcpp function and the *'predict_KMeans()'* R function and now they take also the 'fuzzy' and 'eps' parameters (the latter is only included in the Rcpp function)
+* I added a 'predict()' function for mini-batch-kmeans
 
 
 ## Cluster 1.3.0
