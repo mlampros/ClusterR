@@ -63,10 +63,10 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predict_KMeans</span><span class="op">(</span><span class="va">data</span>, <span class="va">CENTROIDS</span>, threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predict_KMeans</span><span class="op">(</span><span class="va">data</span>, <span class="va">CENTROIDS</span>, threads <span class="op">=</span> <span class="fl">1</span>, fuzzy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for KMeansCluster</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">newdata</span>, threads <span class="op">=</span> <span class="fl">1</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">newdata</span>, fuzzy <span class="op">=</span> <span class="cn">FALSE</span>, threads <span class="op">=</span> <span class="fl">1</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -81,6 +81,10 @@
 
 <dt>threads</dt>
 <dd><p>an integer specifying the number of cores to run in parallel</p></dd>
+
+
+<dt>fuzzy</dt>
+<dd><p>either TRUE or FALSE. If TRUE, then probabilities for each cluster will be returned based on the distance between observations and centroids.</p></dd>
 
 
 <dt>object, newdata, ...</dt>

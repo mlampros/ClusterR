@@ -63,7 +63,10 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predict_MBatchKMeans</span><span class="op">(</span><span class="va">data</span>, <span class="va">CENTROIDS</span>, fuzzy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predict_MBatchKMeans</span><span class="op">(</span><span class="va">data</span>, <span class="va">CENTROIDS</span>, fuzzy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for MBatchKMeans</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">newdata</span>, fuzzy <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -78,6 +81,10 @@
 
 <dt>fuzzy</dt>
 <dd><p>either TRUE or FALSE. If TRUE then prediction probabilities will be calculated using the distance between observations and centroids.</p></dd>
+
+
+<dt>object, newdata, ...</dt>
+<dd><p>arguments for the `predict` generic</p></dd>
 
 </dl></div>
     <div id="value">
