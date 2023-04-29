@@ -465,6 +465,18 @@ testthat::test_that("the predict_KMeans works using the CENTROIDS of the KMeans_
 })
 
 
+testthat::test_that("the unified predict() function returns the same result as the hard clustering when the parameter fuzzy is TRUE", {
+
+  km = KMeans_rcpp(X, clusters = 2, num_init = 5, max_iters = 100)
+  km_hard_clusts = predict(object = km, newdata = X, fuzzy = FALSE)
+  km_soft_clusts = predict(object = km, newdata = X, fuzzy = TRUE)
+  conv_soft_to_hard = apply(km_soft_clusts, 1, which.max)
+
+  testthat::expect_true(all.equal(target = km_hard_clusts, current = conv_soft_to_hard))
+})
+
+
+
 
 #########################################
 # error handling Optimal_Clusters_KMeans
@@ -1053,5 +1065,16 @@ testthat::test_that("in case that the data is a matrix (fuzzy = FALSE) the resul
   km = predict_MBatchKMeans(X, MbatchKm$centroids, fuzzy = FALSE)
 
   testthat::expect_true( is.numeric(km) && length(km) == nrow(X) )
+})
+
+
+testthat::test_that("the unified predict() function returns the same result as the hard clustering when the parameter fuzzy is TRUE", {
+
+  MbatchKm = MiniBatchKmeans(X, clusters = 2, batch_size = 20, num_init = 5, early_stop_iter = 10)
+  mbkm_hard_clusts = predict(object = MbatchKm, newdata = X, fuzzy = FALSE)
+  mbkm_soft_clusts = predict(object = MbatchKm, newdata = X, fuzzy = TRUE)
+  conv_soft_to_hard = apply(mbkm_soft_clusts, 1, which.max)
+
+  testthat::expect_true(all.equal(target = mbkm_hard_clusts, current = conv_soft_to_hard))
 })
 

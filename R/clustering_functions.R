@@ -1086,7 +1086,7 @@ MiniBatchKmeans = function(data,
 
   res = mini_batch_kmeans(data, clusters, batch_size, max_iters, num_init, init_fraction, initializer, early_stop_iter, verbose, CENTROIDS, tol, tol_optimal_init, seed)
 
-  structure(res, class = c("KMeansCluster", "k-means clustering", "MBatchKMeans"))
+  structure(res, class = c("MBatchKMeans", "k-means clustering"))
 }
 
 
@@ -1097,8 +1097,10 @@ MiniBatchKmeans = function(data,
 #' @param data matrix or data frame
 #' @param CENTROIDS a matrix of initial cluster centroids. The rows of the CENTROIDS matrix should be equal to the number of clusters and the columns should equal the columns of the data.
 #' @param fuzzy either TRUE or FALSE. If TRUE then prediction probabilities will be calculated using the distance between observations and centroids.
+#' @param updated_output either TRUE or FALSE. If TRUE then the 'predict_MBatchKMeans' function will follow the same output object behaviour as the 'predict_KMeans' function (if fuzzy is TRUE it will return probabilities otherwise it will return the hard clusters). This parameter will be removed in version 1.4.0 because this will become the default output format.
 #' @return if fuzzy = TRUE the function returns a list with two attributes: a vector with the clusters and a matrix with cluster probabilities. Otherwise, it returns a vector with the clusters.
 #' @author Lampros Mouselimis
+#' @importFrom lifecycle deprecate_warn is_present
 #' @details
 #' This function takes the data and the output centroids and returns the clusters.
 #' @export
@@ -1116,7 +1118,16 @@ MiniBatchKmeans = function(data,
 #'
 
 
-predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
+predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE, updated_output = FALSE) {
+
+  if (lifecycle::is_present(fuzzy)) {
+
+    lifecycle::deprecate_warn(
+      when = "1.3.0",
+      what = "predict_MBatchKMeans()",
+      details = "Beginning from version 1.4.0, if the fuzzy parameter is TRUE the function 'predict_MBatchKMeans' will return only the probabilities, whereas currently it also returns the hard clusters"
+    )
+  }
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
@@ -1124,6 +1135,7 @@ predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
   if (!(ncol(data) == ncol(CENTROIDS)))
     stop('the number of columns of the data should match the number of columns of the CENTROIDS ')
   if (!is.logical(fuzzy)) stop('fuzzy should be either TRUE or FALSE')
+  if (!is.logical(updated_output)) stop('updated_output should be either TRUE or FALSE')
 
   flag_non_finite = check_NaN_Inf(data)
   if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values")
@@ -1131,7 +1143,12 @@ predict_MBatchKMeans = function(data, CENTROIDS, fuzzy = FALSE) {
   res = Predict_mini_batch_kmeans(data, CENTROIDS, fuzzy, eps = 1.0e-6)
 
   if (fuzzy) {
-    return(structure(list(clusters = as.vector(res$clusters + 1), fuzzy_clusters = res$fuzzy_clusters), class = "k-means clustering"))
+    if (updated_output) {
+      return(res$fuzzy_clusters)
+    }
+    else {
+      return(structure(list(clusters = as.vector(res$clusters + 1), fuzzy_clusters = res$fuzzy_clusters), class = "k-means clustering"))
+    }
   }
   else {
     return(as.vector(res$clusters + 1))

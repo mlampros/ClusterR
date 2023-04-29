@@ -2,7 +2,6 @@
 # include <RcppArmadillo.h>
 // [[Rcpp::depends("RcppArmadillo")]]
 // [[Rcpp::plugins(openmp)]]
-// [[Rcpp::plugins(cpp11)]]
 
 
 # include "ClusterRHeader.h"

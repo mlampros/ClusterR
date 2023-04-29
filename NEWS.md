@@ -4,8 +4,10 @@
 * I fixed a mistake related to a potential warning of the *'Optimal_Clusters_GMM()'* function (see issue: https://github.com/mlampros/ClusterR/issues/45)
 * I modified the *'GMM()'* function by adding the *'full_covariance_matrices'* parameter (see issue: https://github.com/mlampros/ClusterR/issues/48)
 * I modified slightly the *'predict_medoids()'* function in case the *'fuzzy'* parameter is set to TRUE
-* I modified the *'validate_centroids()'* Rcpp function and the *'predict_KMeans()'* R function and now they take also the 'fuzzy' and 'eps' parameters (the latter is only included in the Rcpp function)
+* I modified the *'validate_centroids()'* Rcpp function and the *'predict_KMeans()'* R function and now they take also the 'fuzzy' and 'eps' parameters (the latter is only included in the Rcpp function). I added tests for these cases.
 * I added a 'predict()' function for mini-batch-kmeans
+* I removed the "CXX_STD = CXX11" from the "Makevars" files, and the "[[Rcpp::plugins(cpp11)]]" from the "export_inst_folder_headers.cpp" file because due to the following NOTE from CRAN, "NOTE Specified C++11: please drop specification unless essential" (see also: https://www.tidyverse.org/blog/2023/03/cran-checks-compiled-code/#note-regarding-systemrequirements-c11)
+* I added a deprecation warning in the *'predict_MBatchKMeans()'* function because starting from version 1.4.0, if the 'fuzzy' parameter is TRUE then the function will return only the probabilities, whereas currently it also returns the hard clusters. Moreover, I added the 'updated_output' parameter which shows the new output format when set to TRUE.
 
 
 ## Cluster 1.3.0

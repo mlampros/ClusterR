@@ -248,7 +248,7 @@ If you use the code of this repository in your paper or research please cite bot
   title = {{ClusterR}: Gaussian Mixture Models, K-Means, Mini-Batch-Kmeans, K-Medoids and Affinity Propagation Clustering},
   author = {Lampros Mouselimis},
   year = {2022},
-  note = {R package version 1.3.0},
+  note = {R package version 1.3.1},
   url = {https://CRAN.R-project.org/package=ClusterR},
 }
 ```
