@@ -63,7 +63,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predict_MBatchKMeans</span><span class="op">(</span><span class="va">data</span>, <span class="va">CENTROIDS</span>, fuzzy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predict_MBatchKMeans</span><span class="op">(</span><span class="va">data</span>, <span class="va">CENTROIDS</span>, fuzzy <span class="op">=</span> <span class="cn">FALSE</span>, updated_output <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for MBatchKMeans</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">newdata</span>, fuzzy <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -81,6 +81,10 @@
 
 <dt>fuzzy</dt>
 <dd><p>either TRUE or FALSE. If TRUE then prediction probabilities will be calculated using the distance between observations and centroids.</p></dd>
+
+
+<dt>updated_output</dt>
+<dd><p>either TRUE or FALSE. If TRUE then the 'predict_MBatchKMeans' function will follow the same output object behaviour as the 'predict_KMeans' function (if fuzzy is TRUE it will return probabilities otherwise it will return the hard clusters). This parameter will be removed in version 1.4.0 because this will become the default output format.</p></dd>
 
 
 <dt>object, newdata, ...</dt>
@@ -114,6 +118,10 @@
 <span class="r-in"><span><span class="va">MbatchKm</span> <span class="op">=</span> <span class="fu"><a href="MiniBatchKmeans.html">MiniBatchKmeans</a></span><span class="op">(</span><span class="va">dat</span>, clusters <span class="op">=</span> <span class="fl">2</span>, batch_size <span class="op">=</span> <span class="fl">20</span>, num_init <span class="op">=</span> <span class="fl">5</span>, early_stop_iter <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pr</span> <span class="op">=</span> <span class="fu">predict_MBatchKMeans</span><span class="op">(</span><span class="va">dat</span>, <span class="va">MbatchKm</span><span class="op">$</span><span class="va">centroids</span>, fuzzy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`predict_MBatchKMeans()` was deprecated in ClusterR 1.3.0.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Beginning from version 1.4.0, if the fuzzy parameter is TRUE the function</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   'predict_MBatchKMeans' will return only the probabilities, whereas currently</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   it also returns the hard clusters</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
