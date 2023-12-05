@@ -8,29 +8,29 @@
 */
 
 /* .Call calls */
-extern SEXP _ClusterR_affinity_propagation(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_check_NaN_Inf(SEXP);
-extern SEXP _ClusterR_ClaraMedoids(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_ClusterMedoids(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_cost_clusters_from_dis_meds(SEXP, SEXP);
-extern SEXP _ClusterR_dissim_mat(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_dissim_MEDOIDS(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_evaluation_rcpp(SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_GMM_arma(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_GMM_arma_AIC_BIC(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_KMEANS_arma(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_KMEANS_rcpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_mini_batch_kmeans(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_OptClust(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_opt_clust_fK(SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_predict_medoids(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_predict_MGausDPDF(SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_Predict_mini_batch_kmeans(SEXP, SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_preferenceRange(SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_SCALE(SEXP, SEXP, SEXP);
-extern SEXP _ClusterR_silhouette_clusters(SEXP, SEXP);
-extern SEXP _ClusterR_split_rcpp_lst(SEXP);
-extern SEXP _ClusterR_validate_centroids(SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP _ClusterR_affinity_propagation(void *, void *, void *, void *, void *, void *, void *, void *, void *);
+extern SEXP _ClusterR_check_NaN_Inf(void *);
+extern SEXP _ClusterR_ClaraMedoids(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
+extern SEXP _ClusterR_ClusterMedoids(void *, void *, void *, void *, void *, void *, void *, void *, void *);
+extern SEXP _ClusterR_cost_clusters_from_dis_meds(void *, void *);
+extern SEXP _ClusterR_dissim_mat(void *, void *, void *, void *, void *, void *, void *);
+extern SEXP _ClusterR_dissim_MEDOIDS(void *, void *, void *, void *, void *, void *);
+extern SEXP _ClusterR_evaluation_rcpp(void *, void *, void *);
+extern SEXP _ClusterR_GMM_arma(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
+extern SEXP _ClusterR_GMM_arma_AIC_BIC(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
+extern SEXP _ClusterR_KMEANS_arma(void *, void *, void *, void *, void *, void *, void *);
+extern SEXP _ClusterR_KMEANS_rcpp(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
+extern SEXP _ClusterR_mini_batch_kmeans(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
+extern SEXP _ClusterR_opt_clust_fK(void *, void *, void *);
+extern SEXP _ClusterR_OptClust(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
+extern SEXP _ClusterR_predict_medoids(void *, void *, void *, void *, void *, void *, void *);
+extern SEXP _ClusterR_predict_MGausDPDF(void *, void *, void *, void *, void *);
+extern SEXP _ClusterR_Predict_mini_batch_kmeans(void *, void *, void *, void *);
+extern SEXP _ClusterR_preferenceRange(void *, void *, void *);
+extern SEXP _ClusterR_SCALE(void *, void *, void *);
+extern SEXP _ClusterR_silhouette_clusters(void *, void *);
+extern SEXP _ClusterR_split_rcpp_lst(void *);
+extern SEXP _ClusterR_validate_centroids(void *, void *, void *, void *, void *);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_ClusterR_affinity_propagation",        (DL_FUNC) &_ClusterR_affinity_propagation,         9},
@@ -46,8 +46,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_ClusterR_KMEANS_arma",                 (DL_FUNC) &_ClusterR_KMEANS_arma,                  7},
     {"_ClusterR_KMEANS_rcpp",                 (DL_FUNC) &_ClusterR_KMEANS_rcpp,                 12},
     {"_ClusterR_mini_batch_kmeans",           (DL_FUNC) &_ClusterR_mini_batch_kmeans,           13},
-    {"_ClusterR_OptClust",                    (DL_FUNC) &_ClusterR_OptClust,                    12},
     {"_ClusterR_opt_clust_fK",                (DL_FUNC) &_ClusterR_opt_clust_fK,                 3},
+    {"_ClusterR_OptClust",                    (DL_FUNC) &_ClusterR_OptClust,                    12},
     {"_ClusterR_predict_medoids",             (DL_FUNC) &_ClusterR_predict_medoids,              7},
     {"_ClusterR_predict_MGausDPDF",           (DL_FUNC) &_ClusterR_predict_MGausDPDF,            5},
     {"_ClusterR_Predict_mini_batch_kmeans",   (DL_FUNC) &_ClusterR_Predict_mini_batch_kmeans,    4},

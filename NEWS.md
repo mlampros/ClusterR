@@ -1,4 +1,11 @@
 
+## Cluster 1.3.2
+
+* I've fixed the CRAN *warning: format specifies type 'double' but the argument has type 'int''* in the following files & lines by replacing the `%g` expression with `%d`: 
+  * /inst/include/affinity_propagation.h:474:37 *and* 476:58
+* I removed the `-mthreads` compilation option from the "Makevars.win" file
+
+
 ## Cluster 1.3.1
 
 * I fixed a mistake related to a potential warning of the *'Optimal_Clusters_GMM()'* function (see issue: https://github.com/mlampros/ClusterR/issues/45)

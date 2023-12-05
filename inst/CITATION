@@ -57,7 +57,7 @@ bibentry(
   author   = person("Delbert", "Dueck"),
   year     = "2009",
   school   = "University of Toronto",
-  url      = "http://old.psi.toronto.edu/~psi/pubs2/2009/DDueck-thesis_printable.pdf"
+  url      = "https://hdl.handle.net/1807/17755"
 )
 
 bibentry(

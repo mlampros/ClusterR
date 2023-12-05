@@ -243,7 +243,7 @@ Values below the fixed threshold (here fK_threshold = 0.85) could be recommended
 <br>
 
 
-[Mini-batch-kmeans](http://www.eecs.tufts.edu/~dsculley/papers/fastkmeans.pdf) is a variation of the classical k-means algorithm. It is particularly useful for big data sets because rather than using the whole data (as k-means does) it uses mini-batches from random data samples to optimize the objective function.
+Mini-batch-kmeans (`http://www.eecs.tufts.edu/~dsculley/papers/fastkmeans.pdf`) is a variation of the classical k-means algorithm. It is particularly useful for big data sets because rather than using the whole data (as k-means does) it uses mini-batches from random data samples to optimize the objective function.
 <br>
 
 The parameters of the **MiniBatchKmeans** algorithm are almost the same as for the KMeans_rcpp function in the ClusterR package. The most important differences are the *batch_size* (the size of the mini batches) and the *init_fraction* (the percentage of data to use for the initialized centroids, which applies if the initializer equals to 'kmeans++' or 'quantile_init').

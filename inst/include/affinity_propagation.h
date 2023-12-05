@@ -471,9 +471,9 @@ Rcpp::List Affinity_Propagation::affinity_propagation(arma::mat &s, std::vector<
 
   if (details) {
     Rprintf("\nNumber of exemplars identified: %d  (for %d data points)\n", K, N);
-    Rprintf("Net similarity: %g\n", tmpnetsim);
+    Rprintf("Net similarity: %d\n", tmpnetsim);
     Rprintf("  Similarities of data points to exemplars: %g\n", dpsim(0,i));
-    Rprintf("  Preferences of selected exemplars: %g\n", tmpexpref);
+    Rprintf("  Preferences of selected exemplars: %d\n", tmpexpref);
     Rprintf("Number of iterations: %d\n\n", i);
   }
 
