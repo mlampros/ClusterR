@@ -58,7 +58,7 @@ class Affinity_Propagation {
 //---------------------------------------------------------------------------------
 
 void Affinity_Propagation::set_seed(int seed) {
-  if (Rcpp::all(Rcpp::is_na(Rcpp::IntegerVector(seed)))) return;
+  if (Rcpp::all(Rcpp::is_na(Rcpp::IntegerVector{seed}))) return;
   Rcpp::Environment base_env("package:base");
   Rcpp::Function set_seed_r = base_env["set.seed"];
   set_seed_r(seed);
