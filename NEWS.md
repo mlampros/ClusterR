@@ -1,4 +1,9 @@
 
+## Cluster 1.3.3
+
+* I fixed an issue related to the *R_NilValue* of the *'KMEANS_rcpp()'* Rcpp function in the *src/export_inst_folder_headers.cpp* file. I mistakenly used as input the *R_NilValue* whereas I should have used the *CENTROIDS* argument (see issue: https://github.com/mlampros/ClusterR/issues/54)
+
+
 ## Cluster 1.3.2
 
 * I've fixed the CRAN *warning: format specifies type 'double' but the argument has type 'int''* in the following files & lines by replacing the `%g` expression with `%d`: 

@@ -63,13 +63,32 @@ arma::mat SCALE(arma::mat data, bool mean_center = true, bool sd_scale = true) {
 //
 
 // [[Rcpp::export]]
-Rcpp::List KMEANS_rcpp(arma::mat& data, int clusters, int num_init = 1, int max_iters = 200, std::string initializer = "kmeans++", bool fuzzy = false, bool verbose = false,
-
-                       Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS = R_NilValue, double tol = 1e-4, double eps = 1.0e-6, double tol_optimal_init = 0.5, int seed = 1) {
-
+Rcpp::List KMEANS_rcpp(arma::mat& data, 
+                       int clusters,
+                       int num_init = 1,
+                       int max_iters = 200,
+                       std::string initializer = "kmeans++",
+                       bool fuzzy = false,
+                       bool verbose = false,
+                       Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS = R_NilValue,
+                       double tol = 1e-4,
+                       double eps = 1.0e-6, 
+                       double tol_optimal_init = 0.5,
+                       int seed = 1) {
   ClustHeader CRH;
 
-  return CRH.KMEANS_rcpp(data, clusters, num_init, max_iters, initializer, fuzzy, verbose, R_NilValue, tol, eps, tol_optimal_init, seed);
+  return CRH.KMEANS_rcpp(data, 
+                         clusters, 
+                         num_init, 
+                         max_iters, 
+                         initializer,
+                         fuzzy, 
+                         verbose,
+                         CENTROIDS, 
+                         tol, 
+                         eps, 
+                         tol_optimal_init, 
+                         seed);
 }
 
 
@@ -81,13 +100,22 @@ Rcpp::List KMEANS_rcpp(arma::mat& data, int clusters, int num_init = 1, int max_
 //
 
 // [[Rcpp::export]]
-arma::mat KMEANS_arma(arma::mat& data, int clusters, int n_iter, bool verbose, std::string seed_mode = "random_subset",
-
-                      Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS = R_NilValue, int seed = 1) {
-
+arma::mat KMEANS_arma(arma::mat& data, 
+                      int clusters, 
+                      int n_iter, 
+                      bool verbose, 
+                      std::string seed_mode = "random_subset",
+                      Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS = R_NilValue,
+                      int seed = 1) {
   ClustHeader CRH;
 
-  return CRH.KMEANS_arma(data, clusters, n_iter, verbose, seed_mode, CENTROIDS, seed);
+  return CRH.KMEANS_arma(data, 
+                         clusters, 
+                         n_iter, 
+                         verbose, 
+                         seed_mode,
+                         CENTROIDS, 
+                         seed);
 }
 
 
@@ -159,13 +187,34 @@ Rcpp::List silhouette_clusters(arma::mat& data, arma::vec CLUSTER) {
 //
 
 // [[Rcpp::export]]
-Rcpp::List mini_batch_kmeans(arma::mat& data, int clusters, int batch_size, int max_iters, int num_init = 1, double init_fraction = 1.0, std::string initializer = "kmeans++",
-
-                             int early_stop_iter = 10, bool verbose = false, Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS = R_NilValue, double tol = 1e-4, double tol_optimal_init = 0.5, int seed = 1) {
-
+Rcpp::List mini_batch_kmeans(arma::mat& data,
+                             int clusters,
+                             int batch_size,
+                             int max_iters, 
+                             int num_init = 1,
+                             double init_fraction = 1.0,
+                             std::string initializer = "kmeans++",
+                             int early_stop_iter = 10,
+                             bool verbose = false,
+                             Rcpp::Nullable<Rcpp::NumericMatrix> CENTROIDS = R_NilValue, 
+                             double tol = 1e-4,
+                             double tol_optimal_init = 0.5,
+                             int seed = 1) {
   ClustHeader CRH;
 
-  return CRH.mini_batch_kmeans(data, clusters, batch_size, max_iters, num_init, init_fraction, initializer, early_stop_iter, verbose, CENTROIDS, tol, tol_optimal_init, seed);
+  return CRH.mini_batch_kmeans(data,
+                               clusters,
+                               batch_size,
+                               max_iters, 
+                               num_init, 
+                               init_fraction, 
+                               initializer, 
+                               early_stop_iter, 
+                               verbose, 
+                               CENTROIDS,
+                               tol, 
+                               tol_optimal_init,
+                               seed);
 }
 
 
