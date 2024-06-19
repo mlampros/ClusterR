@@ -2,7 +2,7 @@ Package: ClusterR
 Type: Package
 Title: Gaussian Mixture Models, K-Means, Mini-Batch-Kmeans, K-Medoids and Affinity Propagation Clustering
 Version: 1.3.3
-Date: 2024-06-16
+Date: 2024-06-18
 Authors@R: c( person(given = "Lampros", family = "Mouselimis", email = "mouselimislampros@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "https://orcid.org/0000-0002-8024-1546")), person(given = "Conrad", family = "Sanderson", role = "cph", comment = "Author of the C++ Armadillo library"), person(given = "Ryan", family = "Curtin", role = "cph", comment = "Author of the C++ Armadillo library"), person(given = "Siddharth", family = "Agrawal", role = "cph", comment = "Author of the C code of the Mini-Batch-Kmeans algorithm (https://github.com/siddharth-agrawal/Mini-Batch-K-Means)"), person(given = "Brendan", family = "Frey", email = "frey@psi.toronto.edu", role = "cph", comment = "Author of the matlab code of the Affinity propagation algorithm (for commercial use please contact the author of the matlab code)"), person(given = "Delbert", family = "Dueck", role = "cph", comment = "Author of the matlab code of the Affinity propagation algorithm"), person(given = "Vitalie", family = "Spinu", email = "spinuvit@gmail.com", role = "ctb", comment = c(Github = "Github Contributor")) )  
 Maintainer: Lampros Mouselimis <mouselimislampros@gmail.com>
 BugReports: https://github.com/mlampros/ClusterR/issues
