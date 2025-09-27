@@ -1,11 +1,10 @@
 
-[![tic](https://github.com/mlampros/ClusterR/workflows/tic/badge.svg?branch=master)](https://github.com/mlampros/ClusterR/actions)
-[![codecov.io](https://codecov.io/github/mlampros/ClusterR/coverage.svg?branch=master)](https://codecov.io/github/mlampros/ClusterR?branch=master)
+[![R-CMD-check](https://github.com/mlampros/ClusterR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mlampros/ClusterR/actions/workflows/R-CMD-check.yaml)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ClusterR)](http://cran.r-project.org/package=ClusterR)
 [![Downloads](http://cranlogs.r-pkg.org/badges/grand-total/ClusterR?color=blue)](http://www.r-pkg.org/pkg/ClusterR)
 <a href="https://www.buymeacoffee.com/VY0x8snyh" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" height="21px" ></a>
 [![](https://img.shields.io/docker/automated/mlampros/clusterr.svg)](https://hub.docker.com/r/mlampros/clusterr)
-[![Dependencies](https://tinyverse.netlify.com/badge/ClusterR)](https://cran.r-project.org/package=ClusterR)
+[![status](https://tinyverse.netlify.app/badge/ClusterR)](https://CRAN.R-project.org/package=ClusterR)
 
 
 ## ClusterR
@@ -39,7 +38,7 @@ pak::pak("ClusterR")
 
 <br>
 
-or download the latest version from Github using the *remotes* package,
+or download the latest version from Github using the *pak* package,
 
 <br>
 
