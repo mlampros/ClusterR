@@ -720,7 +720,7 @@ namespace clustR {
             }
             if (initializer == "optimal_init") {
               arma::vec tmp_conv = check_medoids(data, clusters, tol_optimal_init);             // tolerance parameter 'tol' here by default equals to 0.5 [ this parameter is important in case of duplicated rows ]
-              flag_exception(init_count) = !arma::is_finite(tmp_conv);                          // necessary in order to stop the function in case of UBSAN memory errors
+              flag_exception(init_count) = !tmp_conv.is_finite();                               // necessary in order to stop the function in case of UBSAN memory errors  [ arma::is_finite() was deprecated - see NEWS.md package version 1.3.4 ]
               arma::uvec idx_out = arma::conv_to< arma::uvec >::from(tmp_conv);
               conv = data.rows(idx_out);
             }
@@ -1333,7 +1333,7 @@ namespace clustR {
 
               arma::vec tmp_update_centroids = check_medoids(data, clusters, tol_optimal_init);       // tolerance parameter 'tol' here by default equals to 0.5 [ this parameter is important in case of duplicated rows ]
 
-              flag_exception(init) = !arma::is_finite(tmp_update_centroids);                          // necessary in order to stop the function in case of UBSAN memory errors
+              flag_exception(init) = !tmp_update_centroids.is_finite();                               // necessary in order to stop the function in case of UBSAN memory errors [ arma::is_finite() was deprecated - see NEWS.md package version 1.3.4 ]
 
               arma::uvec idx_out = arma::conv_to< arma::uvec >::from(tmp_update_centroids);
 
@@ -1842,7 +1842,7 @@ namespace clustR {
 
             for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
 
-              if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
+              if (std::isfinite(data.row(i)(f)) && std::isfinite(data1.row(j)(f))) {         // replaced all "arma::is_finite(...)" with "std::isfinite(...)"  [ arma::is_finite() was deprecated - see NEWS.md package version 1.3.4 ]
 
                 tmp_idx1.set_size(count);
 
@@ -1870,7 +1870,7 @@ namespace clustR {
 
             for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
 
-              if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
+              if (std::isfinite(data.row(i)(f)) && std::isfinite(data1.row(j)(f))) {
 
                 tmp_idx1.set_size(count);
 
@@ -1898,7 +1898,7 @@ namespace clustR {
 
             for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
 
-              if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
+              if (std::isfinite(data.row(i)(f)) && std::isfinite(data1.row(j)(f))) {
 
                 tmp_idx1.set_size(count);
 
@@ -1926,7 +1926,7 @@ namespace clustR {
 
             for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
 
-              if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
+              if (std::isfinite(data.row(i)(f)) && std::isfinite(data1.row(j)(f))) {
 
                 tmp_idx1.set_size(count);
 
@@ -1965,7 +1965,7 @@ namespace clustR {
 
             for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
 
-              if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
+              if (std::isfinite(data.row(i)(f)) && std::isfinite(data1.row(j)(f))) {
 
                 tmp_idx1.set_size(count);
 
@@ -2004,7 +2004,7 @@ namespace clustR {
 
             for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
 
-              if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
+              if (std::isfinite(data.row(i)(f)) && std::isfinite(data1.row(j)(f))) {
 
                 tmp_idx1.set_size(count);
 
@@ -2043,7 +2043,7 @@ namespace clustR {
 
             for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
 
-              if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
+              if (std::isfinite(data.row(i)(f)) && std::isfinite(data1.row(j)(f))) {
 
                 tmp_idx1.set_size(count);
 
@@ -2098,7 +2098,7 @@ namespace clustR {
 
             for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
 
-              if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
+              if (std::isfinite(data.row(i)(f)) && std::isfinite(data1.row(j)(f))) {
 
                 tmp_idx1.set_size(count);
 
@@ -2154,7 +2154,7 @@ namespace clustR {
 
             for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
 
-              if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
+              if (std::isfinite(data.row(i)(f)) && std::isfinite(data1.row(j)(f))) {
 
                 tmp_idx1.set_size(count);
 
@@ -2194,7 +2194,7 @@ namespace clustR {
 
             for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
 
-              if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
+              if (std::isfinite(data.row(i)(f)) && std::isfinite(data1.row(j)(f))) {
 
                 tmp_idx1.set_size(count);
 
@@ -2259,7 +2259,7 @@ namespace clustR {
 
             for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
 
-              if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
+              if (std::isfinite(data.row(i)(f)) && std::isfinite(data1.row(j)(f))) {
 
                 tmp_idx1.set_size(count);
 
@@ -2330,7 +2330,7 @@ namespace clustR {
 
             for (unsigned int f = 0; f < data.row(i).n_elem; f++) {
 
-              if (arma::is_finite(data.row(i)(f)) && arma::is_finite(data1.row(j)(f))) {
+              if (std::isfinite(data.row(i)(f)) && std::isfinite(data1.row(j)(f))) {
 
                 tmp_idx1.set_size(count);
 

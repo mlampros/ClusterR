@@ -32,7 +32,7 @@ Assumming that an R package ('PackageA') calls one of the *ClusterR* Rcpp functi
 
 ```R
 
-install.packages("ClusterR")
+pak::pak("ClusterR")
  
 
 ```
@@ -45,7 +45,7 @@ or download the latest version from Github using the *remotes* package,
 
 ```R
 
-remotes::install_github('mlampros/ClusterR', upgrade = 'always', dependencies = TRUE, repos = 'https://cloud.r-project.org/')
+pak::pak('mlampros/ClusterR')
  
 
 ```
@@ -247,8 +247,8 @@ If you use the code of this repository in your paper or research please cite bot
 @Manual{,
   title = {{ClusterR}: Gaussian Mixture Models, K-Means, Mini-Batch-Kmeans, K-Medoids and Affinity Propagation Clustering},
   author = {Lampros Mouselimis},
-  year = {2024},
-  note = {R package version 1.3.3},
+  year = {2025},
+  note = {R package version 1.3.4},
   url = {https://CRAN.R-project.org/package=ClusterR},
 }
 ```

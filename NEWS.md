@@ -1,17 +1,26 @@
 
-## Cluster 1.3.3
+## ClusterR 1.3.4
+
+* I updated the `Makevars` and `Makevars.win` files by adding `-DARMA_USE_CURRENT` (see issue: https://github.com/RcppCore/RcppArmadillo/issues/476)
+* I modified the line 723 of the `ClusterRHeader.h` file from `!arma::is_finite(tmp_conv);` to `!arma::all(tmp_conv.is_finite());`
+* I modified the line 1336 of the `ClusterRHeader.h` file from `!arma::is_finite(tmp_update_centroids);` to `!arma::all(tmp_update_centroids.is_finite());`
+* I replaced all cases of `arma::is_finite(...)` from line 1845 to line 2333 of the `ClusterRHeader.h` file with `std::isfinite(...)`
+* I adjusted the `Authors@R` field in the DESCRIPTION file due to a CRAN NOTE
+
+
+## ClusterR 1.3.3
 
 * I fixed an issue related to the *R_NilValue* of the *'KMEANS_rcpp()'* Rcpp function in the *src/export_inst_folder_headers.cpp* file. I mistakenly used as input the *R_NilValue* whereas I should have used the *CENTROIDS* argument (see issue: https://github.com/mlampros/ClusterR/issues/54)
 
 
-## Cluster 1.3.2
+## ClusterR 1.3.2
 
 * I've fixed the CRAN *warning: format specifies type 'double' but the argument has type 'int''* in the following files & lines by replacing the `%g` expression with `%d`: 
   * /inst/include/affinity_propagation.h:474:37 *and* 476:58
 * I removed the `-mthreads` compilation option from the "Makevars.win" file
 
 
-## Cluster 1.3.1
+## ClusterR 1.3.1
 
 * I fixed a mistake related to a potential warning of the *'Optimal_Clusters_GMM()'* function (see issue: https://github.com/mlampros/ClusterR/issues/45)
 * I modified the *'GMM()'* function by adding the *'full_covariance_matrices'* parameter (see issue: https://github.com/mlampros/ClusterR/issues/48)
@@ -22,7 +31,7 @@
 * I added a deprecation warning in the *'predict_MBatchKMeans()'* function because starting from version 1.4.0, if the 'fuzzy' parameter is TRUE then the function will return only the probabilities, whereas currently it also returns the hard clusters. Moreover, I added the 'updated_output' parameter which shows the new output format when set to TRUE.
 
 
-## Cluster 1.3.0
+## ClusterR 1.3.0
 
 * I updated the documentation of the *'Optimal_Clusters_KMeans()'* function related to the *'silhouette'* metric (see issue: https://github.com/mlampros/ClusterR/issues/42)
 * I added the R *'silhouette_of_clusters()'* and Rcpp *'silhouette_clusters()'* functions which return the clusters, intra_cluster_dissimilarity and silhouette width for pre-computed clusters
@@ -32,19 +41,19 @@
 * I removed the *gtools* R package as a dependency of the *ClusterR* package
 
 
-## Cluster 1.2.9
+## ClusterR 1.2.9
 
 * The pull request #41 removed the class *'Gaussian Mixture Models'* from the *'Optimal_Clusters_GMM()'* function and I adjusted the tests related to the *'Optimal_Clusters_GMM()'* function so that no errors are raised (see issue: https://github.com/mlampros/ClusterR/issues/40)
 
 
-## Cluster 1.2.8
+## ClusterR 1.2.8
 
 * I added the *cost_clusters_from_dissim_medoids()* function
 * I added an alternative 'build' phase Rcpp function that corresponds to the exact algorithm for comparison purposes (see the function *'updated_BUILD()'* in the 'inst/include/ClusterRHeader.h' file). I didn't see any differences compared to the existing 'build' phase in the *'Cluster_Medoids()'* function.
 * I updated the documentation of the *'Cluster_Medoids()'* function by mentioning that it is an approximate and not the exact *'partition around medoids'* function
 
 
-## Cluster 1.2.7
+## ClusterR 1.2.7
 
 * I updated the references weblink of the *Optimal_Clusters_KMeans()* function (github issue: https://github.com/mlampros/ClusterR/issues/27)
 * I added a deprecation warning to the *'seed'* parameter of the *'Cluster_Medoids()'* function (github issue: https://github.com/mlampros/ClusterR/issues/33). This parameter will be removed in version *'1.4.0'*
