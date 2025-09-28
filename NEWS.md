@@ -1,4 +1,9 @@
 
+## ClusterR 1.3.5
+
+* I removed the `SystemRequirements` from the DESCRIPTION file.
+
+
 ## ClusterR 1.3.4
 
 * I updated the `Makevars` and `Makevars.win` files by adding `-DARMA_USE_CURRENT` (see issue: https://github.com/RcppCore/RcppArmadillo/issues/476)
