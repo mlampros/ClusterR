@@ -58,9 +58,7 @@
 </h2>
 <p><br></p>
 <p>The ClusterR package consists of Gaussian mixture models, k-means, mini-batch-kmeans, k-medoids and affinity propagation clustering algorithms with the option to plot, validate, predict (new data) and find the optimal number of clusters. The package takes advantage of ‘RcppArmadillo’ to speed up the computationally intensive parts of the functions. More details on the functionality of ClusterR can be found in the blog-posts (<a href="http://mlampros.github.io/2016/09/12/clusterR_package/" class="external-link">first</a> and <a href="http://mlampros.github.io/2022/12/04/comparison_partition_around_medoid/" class="external-link">second</a>), Vignette and in the package Documentation ( <em>scroll down for information on how to use the</em> <strong>docker image</strong> ) <br><br></p>
-<p><strong>UPDATE 16-08-2018</strong></p>
-<p>As of version 1.1.4 the <em>ClusterR</em> package allows R package maintainers to perform <strong>linking between packages at a C++ code (Rcpp) level</strong>. This means that the Rcpp functions of the <em>ClusterR</em> package can be called in the C++ files of another package. In the next lines I’ll give detailed explanations on how this can be done:</p>
-<p><br></p>
+<p><strong><em>UPDATE 16-08-2018</em></strong>: As of version 1.1.4 the <em>ClusterR</em> package allows R package maintainers to perform <strong>linking between packages at a C++ code (Rcpp) level</strong>. This means that the Rcpp functions of the <em>ClusterR</em> package can be called in the C++ files of another package. In the next lines I’ll give detailed explanations on how this can be done:</p>
 <p>Assumming that an R package (‘PackageA’) calls one of the <em>ClusterR</em> Rcpp functions. Then the maintainer of ‘PackageA’ has to :</p>
 <p><br></p>
 <ul>
@@ -159,10 +157,7 @@
 <p>Use the following link to report bugs/issues, <br><br></p>
 <p><a href="https://github.com/mlampros/ClusterR/issues" class="external-link">https://github.com/mlampros/ClusterR/issues</a></p>
 <p><br></p>
-<p><strong>UPDATE 28-11-2019</strong></p>
-<p><br></p>
-<p><strong>Docker images</strong> of the <em>ClusterR</em> package are available to download from my <a href="https://hub.docker.com/r/mlampros/clusterr" class="external-link">dockerhub</a> account. The images come with <em>Rstudio</em> and the <em>R-development</em> version (latest) installed. The whole process was tested on Ubuntu 18.04. To <strong>pull</strong> &amp; <strong>run</strong> the image do the following,</p>
-<p><br></p>
+<p><strong><em>UPDATE 28-11-2019</em></strong>: <strong>Docker images</strong> of the <em>ClusterR</em> package are available to download from my <a href="https://hub.docker.com/r/mlampros/clusterr" class="external-link">dockerhub</a> account. The images come with <em>Rstudio</em> and the <em>R-development</em> version (latest) installed. The whole process was tested on Ubuntu 18.04. To <strong>pull</strong> &amp; <strong>run</strong> the image do the following,</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>docker pull mlampros<span class="sc">/</span>clusterr<span class="sc">:</span>rstudiodev</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
