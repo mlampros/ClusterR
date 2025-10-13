@@ -131,12 +131,13 @@ GMM = function(data,
 #'
 #' @param data matrix or data frame
 #' @param CENTROIDS matrix or data frame containing the centroids (means), stored as row vectors
-#' @param COVARIANCE matrix or data frame containing the diagonal covariance matrices, stored as row vectors
+#' @param COVARIANCE matrix or data frame (for diagonal covariance) or 3D array (for full covariance matrices)
 #' @param WEIGHTS vector containing the weights
 #' @return a list consisting of the log-likelihoods, cluster probabilities and cluster labels.
 #' @author Lampros Mouselimis
 #' @details
 #' This function takes the centroids, covariance matrix and weights from a trained model and returns the log-likelihoods, cluster probabilities and cluster labels for new data.
+#' The function handles both diagonal covariance matrices (2D matrix) and full covariance matrices (3D array/cube).
 #' @export
 #' @examples
 #'
@@ -156,10 +157,6 @@ predict_GMM = function(data, CENTROIDS, COVARIANCE, WEIGHTS) {
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
   if ('data.frame' %in% class(CENTROIDS)) CENTROIDS = as.matrix(CENTROIDS)
   if (!inherits(CENTROIDS, 'matrix')) stop('CENTROIDS should be either a matrix or a data frame')
-  if ('data.frame' %in% class(COVARIANCE)) COVARIANCE = as.matrix(COVARIANCE)
-  if (!inherits(COVARIANCE, 'matrix')) stop('COVARIANCE should be either a matrix or a data frame')
-  if (ncol(data) != ncol(CENTROIDS) || ncol(data) != ncol(COVARIANCE) || length(WEIGHTS) != nrow(CENTROIDS) || length(WEIGHTS) != nrow(COVARIANCE))
-    stop('the number of columns of the data, CENTROIDS and COVARIANCE should match and the number of rows of the CENTROIDS AND COVARIANCE should be equal to the length of the WEIGHTS vector')
   if (!inherits(WEIGHTS, 'numeric') || !is.vector(WEIGHTS))
     stop('WEIGHTS should be a numeric vector')
 
@@ -167,7 +164,27 @@ predict_GMM = function(data, CENTROIDS, COVARIANCE, WEIGHTS) {
 
   if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values")
 
-  res = predict_MGausDPDF(data, CENTROIDS, COVARIANCE, WEIGHTS, eps = 1.0e-8)
+  # Check if COVARIANCE is a 3D array (full covariance) or 2D matrix (diagonal covariance)
+  is_full_covariance = length(dim(COVARIANCE)) == 3
+
+  if (is_full_covariance) {
+    # Full covariance matrices - COVARIANCE is a 3D array (cube)
+    if (!is.array(COVARIANCE)) stop('COVARIANCE should be a 3D array for full covariance matrices')
+    if (dim(COVARIANCE)[1] != ncol(data) || dim(COVARIANCE)[2] != ncol(data) || dim(COVARIANCE)[3] != length(WEIGHTS))
+      stop('for full covariance: dim(COVARIANCE)[1] and dim(COVARIANCE)[2] should equal ncol(data), and dim(COVARIANCE)[3] should equal length(WEIGHTS)')
+    if (ncol(data) != ncol(CENTROIDS) || length(WEIGHTS) != nrow(CENTROIDS))
+      stop('the number of columns of the data and CENTROIDS should match and the number of rows of CENTROIDS should equal the length of the WEIGHTS vector')
+
+    res = predict_MGausDPDF_full(data, CENTROIDS, COVARIANCE, WEIGHTS, eps = 1.0e-8)
+  } else {
+    # Diagonal covariance matrices - COVARIANCE is a 2D matrix
+    if ('data.frame' %in% class(COVARIANCE)) COVARIANCE = as.matrix(COVARIANCE)
+    if (!inherits(COVARIANCE, 'matrix')) stop('COVARIANCE should be either a matrix or a data frame for diagonal covariance')
+    if (ncol(data) != ncol(CENTROIDS) || ncol(data) != ncol(COVARIANCE) || length(WEIGHTS) != nrow(CENTROIDS) || length(WEIGHTS) != nrow(COVARIANCE))
+      stop('the number of columns of the data, CENTROIDS and COVARIANCE should match and the number of rows of the CENTROIDS AND COVARIANCE should be equal to the length of the WEIGHTS vector')
+
+    res = predict_MGausDPDF(data, CENTROIDS, COVARIANCE, WEIGHTS, eps = 1.0e-8)
+  }
 
   # I've added 1 to the output cluster labels to account for the difference in indexing between R and C++
   list(log_likelihood = res$Log_likelihood_raw,

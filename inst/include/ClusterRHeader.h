@@ -1749,6 +1749,80 @@ namespace clustR {
 
 
 
+      // predict function for full covariance matrices (3D cube)
+      // This handles the case when GMM is fitted with full_covariance_matrices=TRUE
+      //
+
+      Rcpp::List predict_MGausDPDF_full(arma::mat data, arma::mat CENTROIDS, arma::cube COVARIANCE, arma::vec WEIGHTS, double eps = 1.0e-8) {
+
+        arma::mat gaus_mat(data.n_rows, WEIGHTS.n_elem, arma::fill::zeros);
+
+        arma::mat gaus_mat_log_lik(data.n_rows, WEIGHTS.n_elem, arma::fill::zeros);
+
+        for (unsigned int i = 0; i < WEIGHTS.n_elem; i++) {
+
+          arma::vec gaus_vec(data.n_rows, arma::fill::zeros);
+
+          arma::vec gaus_vec_log(data.n_rows, arma::fill::zeros);
+
+          // Extract the full covariance matrix for this Gaussian component
+          arma::mat tmp_cov_mt = COVARIANCE.slice(i);
+
+          double tmp_determinant = arma::det(tmp_cov_mt);
+
+          if (tmp_determinant == 0.0) {
+
+            Rcpp::stop("the determinant is zero or approximately zero. The data might include highly correlated variables or variables with low variance");
+          }
+
+          // Compute inverse of covariance matrix
+          arma::mat inv_cov_mt = arma::inv(tmp_cov_mt);
+
+          for (unsigned int j = 0; j < data.n_rows; j++) {
+
+            double n = data.n_cols;
+
+            arma::vec tmp_vec = (arma::conv_to< arma::vec >::from(data.row(j)) - arma::conv_to< arma::vec >::from(CENTROIDS.row(i)));
+
+            double tmp_val = 1.0 / std::sqrt(std::pow(2.0 * arma::datum::pi, n) * tmp_determinant);
+
+            double inner_likelih = 0.5 * (arma::as_scalar(tmp_vec.t() * inv_cov_mt * tmp_vec));
+
+            gaus_vec_log(j) = -(n / 2.0) * std::log(2.0 * arma::datum::pi) - (1.0 / 2.0) * (std::log(tmp_determinant)) - inner_likelih;
+
+            gaus_vec(j) = tmp_val * std::exp(-inner_likelih);
+          }
+
+          gaus_mat.col(i) = arma::as_scalar(WEIGHTS(i)) * gaus_vec;
+
+          gaus_mat_log_lik.col(i) = gaus_vec_log;
+        }
+
+        arma::mat loglik1(data.n_rows, WEIGHTS.n_elem, arma::fill::zeros);
+
+        arma::rowvec loglik2(data.n_rows, arma::fill::zeros);
+
+        for (unsigned int j = 0; j < loglik1.n_rows; j++) {
+
+          arma::rowvec tmp_vec = arma::conv_to< arma::rowvec >::from(gaus_mat.row(j)) + eps;
+
+          tmp_vec /= arma::sum(tmp_vec);                                                               // normalize row-data to get probabilities
+
+          loglik1.row(j) = tmp_vec;                                                                    // assign probabilities
+
+          arma::uvec log_lik_label = arma::find(tmp_vec == arma::max(tmp_vec));
+
+          loglik2(j) = arma::as_scalar(log_lik_label(0));                                              // assign labels
+        }
+
+        return Rcpp::List::create( Rcpp::Named("Log_likelihood_raw") = gaus_mat_log_lik,
+                                   Rcpp::Named("cluster_proba") = loglik1,
+                                   Rcpp::Named("cluster_labels") = loglik2 );
+      }
+
+
+
+
       // function to calculate bic-aic
       //
 
