@@ -25,6 +25,7 @@ extern SEXP _ClusterR_opt_clust_fK(SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_OptClust(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_predict_medoids(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_predict_MGausDPDF(SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP _ClusterR_predict_MGausDPDF_full(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_Predict_mini_batch_kmeans(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_preferenceRange(SEXP, SEXP, SEXP);
 extern SEXP _ClusterR_SCALE(SEXP, SEXP, SEXP);
@@ -50,6 +51,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_ClusterR_OptClust",                    (DL_FUNC) &_ClusterR_OptClust,                    12},
     {"_ClusterR_predict_medoids",             (DL_FUNC) &_ClusterR_predict_medoids,              7},
     {"_ClusterR_predict_MGausDPDF",           (DL_FUNC) &_ClusterR_predict_MGausDPDF,            5},
+    {"_ClusterR_predict_MGausDPDF_full",      (DL_FUNC) &_ClusterR_predict_MGausDPDF_full,       5},
     {"_ClusterR_Predict_mini_batch_kmeans",   (DL_FUNC) &_ClusterR_Predict_mini_batch_kmeans,    4},
     {"_ClusterR_preferenceRange",             (DL_FUNC) &_ClusterR_preferenceRange,              3},
     {"_ClusterR_SCALE",                       (DL_FUNC) &_ClusterR_SCALE,                        3},
