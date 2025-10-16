@@ -14,7 +14,7 @@ predict_GMM(data, CENTROIDS, COVARIANCE, WEIGHTS)
 
 \item{CENTROIDS}{matrix or data frame containing the centroids (means), stored as row vectors}
 
-\item{COVARIANCE}{matrix or data frame containing the diagonal covariance matrices, stored as row vectors}
+\item{COVARIANCE}{matrix or data frame (for diagonal covariance) or 3D array (for full covariance matrices)}
 
 \item{WEIGHTS}{vector containing the weights}
 
@@ -28,6 +28,7 @@ Prediction function for a Gaussian Mixture Model object
 }
 \details{
 This function takes the centroids, covariance matrix and weights from a trained model and returns the log-likelihoods, cluster probabilities and cluster labels for new data.
+The function handles both diagonal covariance matrices (2D matrix) and full covariance matrices (3D array/cube).
 }
 \examples{
 
