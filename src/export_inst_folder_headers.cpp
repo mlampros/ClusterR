@@ -315,11 +315,11 @@ Rcpp::List predict_MGausDPDF_full(arma::mat data, arma::mat CENTROIDS, arma::cub
 // [[Rcpp::export]]
 arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, arma::rowvec max_clusters, std::string dist_mode, std::string seed_mode,
 
-                              int km_iter, int em_iter, bool verbose, double var_floor = 1e-10, std::string criterion = "AIC", int seed = 1) {
+                              int km_iter, int em_iter, bool verbose, double var_floor = 1e-10, std::string criterion = "AIC", int seed = 1, bool full_covariance_matrices = false) {
 
   ClustHeader CRH;
 
-  return CRH.GMM_arma_AIC_BIC(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed);
+  return CRH.GMM_arma_AIC_BIC(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed, full_covariance_matrices);
 }
 
 

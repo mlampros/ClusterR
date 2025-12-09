@@ -1828,7 +1828,7 @@ namespace clustR {
 
       arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, arma::rowvec max_clusters, std::string dist_mode, std::string seed_mode,
 
-                                    int km_iter, int em_iter, bool verbose, double var_floor = 1e-10, std::string criterion = "AIC", int seed = 1) {
+                                    int km_iter, int em_iter, bool verbose, double var_floor = 1e-10, std::string criterion = "AIC", int seed = 1, bool full_covariance_matrices = false) {
 
         int LEN_max_clust = max_clusters.n_elem;
 
@@ -1840,7 +1840,7 @@ namespace clustR {
 
           if (verbose) { Rcpp::Rcout << "iteration: " << i + 1 << "  num-clusters: " << max_clusters(i) << std::endl; }
 
-          Rcpp::List gmm = GMM_arma(data, max_clusters(i), dist_mode, seed_mode, km_iter, em_iter, false, var_floor = 1e-10);
+          Rcpp::List gmm = GMM_arma(data, max_clusters(i), dist_mode, seed_mode, km_iter, em_iter, false, var_floor, seed, full_covariance_matrices);
 
           arma::mat loglik = Rcpp::as<arma::mat> (gmm[3]);
 
@@ -1865,14 +1865,25 @@ namespace clustR {
 
           arma::mat centers = Rcpp::as<arma::mat> (gmm[0]);
 
+          // Calculate number of free parameters depending on covariance type
+          int num_free_params;
+          if (full_covariance_matrices) {
+            // For full covariance: k * (d + d*(d+1)/2) where k = num clusters, d = dimensions
+            // centers.n_rows = k (number of clusters), centers.n_cols = d (dimensions)
+            num_free_params = centers.n_rows * (centers.n_cols + (centers.n_cols * (centers.n_cols + 1)) / 2);
+          } else {
+            // For diagonal covariance: k * d (mean) + k * d (diagonal covariance)
+            num_free_params = centers.n_rows * centers.n_cols * 2;
+          }
+
           if (criterion == "AIC") {
 
-            evaluate_comps(i) = -2.0 * arma::accu(log_sum_exp) + 2.0 * centers.n_rows * centers.n_cols;
+            evaluate_comps(i) = -2.0 * arma::accu(log_sum_exp) + 2.0 * num_free_params;
           }
 
           if (criterion == "BIC") {
 
-            evaluate_comps(i) = -2.0 * arma::accu(log_sum_exp) + std::log(data.n_rows) * centers.n_rows * centers.n_cols;
+            evaluate_comps(i) = -2.0 * arma::accu(log_sum_exp) + std::log(data.n_rows) * num_free_params;
           }
         }
 
