@@ -1867,13 +1867,15 @@ namespace clustR {
 
           // Calculate number of free parameters depending on covariance type
           int num_free_params;
+          int k = centers.n_rows;  // number of clusters
+          int d = centers.n_cols;  // number of dimensions
+          
           if (full_covariance_matrices) {
-            // For full covariance: k * (d + d*(d+1)/2) where k = num clusters, d = dimensions
-            // centers.n_rows = k (number of clusters), centers.n_cols = d (dimensions)
-            num_free_params = centers.n_rows * (centers.n_cols + (centers.n_cols * (centers.n_cols + 1)) / 2);
+            // For full covariance: k * d (means) + k * d*(d+1)/2 (full covariances) + (k-1) (mixture weights)
+            num_free_params = k * d + k * (d * (d + 1)) / 2 + (k - 1);
           } else {
-            // For diagonal covariance: k * d (mean) + k * d (diagonal covariance)
-            num_free_params = centers.n_rows * centers.n_cols * 2;
+            // For diagonal covariance: k * d (means) + k * d (diagonal covariances) + (k-1) (mixture weights)
+            num_free_params = k * d + k * d + (k - 1);
           }
 
           if (criterion == "AIC") {

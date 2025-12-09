@@ -309,7 +309,7 @@ Optimal_Clusters_GMM = function(data,
   if (em_iter < 0 ) stop('the em_iter parameter can not be negative')
   if (!is.logical(verbose)) stop('the verbose parameter should be either TRUE or FALSE')
   if (var_floor < 0 ) stop('the var_floor parameter can not be negative')
-  if (!inherits(full_covariance_matrices, 'logical')) stop('The full_covariance_matrices parameter must be a boolean!')
+  if (!is.logical(full_covariance_matrices)) stop('The full_covariance_matrices parameter must be a boolean!')
 
   if (length(max_clusters) != 1) {
     plot_data = FALSE                       # set "plot_data" to FALSE if the "max_clusters" parameter is not of length 1
