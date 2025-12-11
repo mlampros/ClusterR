@@ -1840,7 +1840,7 @@ namespace clustR {
 
           if (verbose) { Rcpp::Rcout << "iteration: " << i + 1 << "  num-clusters: " << max_clusters(i) << std::endl; }
 
-          Rcpp::List gmm = GMM_arma(data, max_clusters(i), dist_mode, seed_mode, km_iter, em_iter, false, var_floor, seed, full_covariance_matrices);
+          Rcpp::List gmm = GMM_arma(data, max_clusters(i), dist_mode, seed_mode, km_iter, em_iter, false, var_floor = 1e-10, seed, full_covariance_matrices);
 
           arma::mat loglik = Rcpp::as<arma::mat> (gmm[3]);
 
