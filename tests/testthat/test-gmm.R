@@ -731,3 +731,72 @@ testthat::test_that("predict_GMM backward compatible with diagonal covariance", 
     testthat::expect_equal(length(pred$cluster_labels), nrow(X))
   }
 })
+
+
+#################################################
+# Optimal_Clusters_GMM with full covariance matrices
+#################################################
+
+testthat::test_that("Optimal_Clusters_GMM with full_covariance_matrices=TRUE returns correct output", {
+  Nr_clusters = 3
+  
+  res = Optimal_Clusters_GMM(X, Nr_clusters, criterion = "AIC", full_covariance_matrices = TRUE, plot_data = FALSE)
+  
+  if ('Error' %in% names(res)) {
+    testthat::expect_true(length(res) == 2)
+  } else {
+    testthat::expect_true(length(res) == Nr_clusters)
+    testthat::expect_true(is.numeric(res))
+  }
+})
+
+testthat::test_that("Optimal_Clusters_GMM with full_covariance_matrices works with BIC criterion", {
+  Nr_clusters = 3
+  
+  res = Optimal_Clusters_GMM(X, Nr_clusters, criterion = "BIC", full_covariance_matrices = TRUE, plot_data = FALSE)
+  
+  if ('Error' %in% names(res)) {
+    testthat::expect_true(length(res) == 2)
+  } else {
+    testthat::expect_true(length(res) == Nr_clusters)
+    testthat::expect_true(is.numeric(res))
+  }
+})
+
+testthat::test_that("Optimal_Clusters_GMM with full_covariance_matrices works with vector input", {
+  Nr_clusters = c(2, 3, 4)
+  
+  res = Optimal_Clusters_GMM(X, Nr_clusters, criterion = "AIC", full_covariance_matrices = TRUE, plot_data = FALSE)
+  
+  if ('Error' %in% names(res)) {
+    testthat::expect_true(length(res) == 2)
+  } else {
+    testthat::expect_true(length(res) == length(Nr_clusters))
+    testthat::expect_true(is.numeric(res))
+  }
+})
+
+testthat::test_that("Optimal_Clusters_GMM with full_covariance_matrices returns different values than diagonal", {
+  Nr_clusters = 3
+  
+  res_full = Optimal_Clusters_GMM(X, Nr_clusters, criterion = "AIC", full_covariance_matrices = TRUE, plot_data = FALSE)
+  res_diag = Optimal_Clusters_GMM(X, Nr_clusters, criterion = "AIC", full_covariance_matrices = FALSE, plot_data = FALSE)
+  
+  if (!'Error' %in% names(res_full) && !'Error' %in% names(res_diag)) {
+    # Values should differ because full covariance has more parameters
+    testthat::expect_true(!identical(res_full, res_diag))
+  }
+})
+
+testthat::test_that("Optimal_Clusters_GMM backward compatible - default is FALSE", {
+  Nr_clusters = 3
+  
+  # Without specifying full_covariance_matrices (should default to FALSE)
+  res_default = Optimal_Clusters_GMM(X, Nr_clusters, criterion = "AIC", plot_data = FALSE)
+  # Explicitly setting to FALSE
+  res_false = Optimal_Clusters_GMM(X, Nr_clusters, criterion = "AIC", full_covariance_matrices = FALSE, plot_data = FALSE)
+  
+  if (!'Error' %in% names(res_default) && !'Error' %in% names(res_false)) {
+    testthat::expect_equal(res_default, res_false)
+  }
+})
