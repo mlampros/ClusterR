@@ -1,0 +1,55 @@
+# 2-dimensional plots
+
+2-dimensional plots
+
+## Usage
+
+``` r
+plot_2d(data, clusters, centroids_medoids)
+```
+
+## Arguments
+
+- data:
+
+  a 2-dimensional matrix or data frame
+
+- clusters:
+
+  numeric vector of length equal to the number of rows of the data,
+  which is the result of a clustering method
+
+- centroids_medoids:
+
+  a matrix of centroids or medoids. The rows of the centroids_medoids
+  should be equal to the length of the unique values of the clusters and
+  the columns should be equal to the columns of the data.
+
+## Value
+
+a plot
+
+## Details
+
+This function plots the clusters using 2-dimensional data and medoids or
+centroids.
+
+## Author
+
+Lampros Mouselimis
+
+## Examples
+
+``` r
+# data(dietary_survey_IBS)
+
+# dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]
+
+# dat = center_scale(dat)
+
+# pca_dat = stats::princomp(dat)$scores[, 1:2]
+
+# km = KMeans_rcpp(pca_dat, clusters = 2, num_init = 5, max_iters = 100)
+
+# plot_2d(pca_dat, km$clusters, km$centroids)
+```
