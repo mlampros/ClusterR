@@ -14,7 +14,8 @@ tryCatch_optimal_clust_GMM(
   verbose,
   var_floor,
   criterion,
-  seed
+  seed,
+  full_covariance_matrices
 )
 }
 \description{

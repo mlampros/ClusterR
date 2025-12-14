@@ -211,9 +211,9 @@ print.GMMCluster <- function(x, ...) {
 #' tryCatch function to prevent armadillo errors in GMM_arma_AIC_BIC
 #'
 #' @keywords internal
-tryCatch_optimal_clust_GMM <- function(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed) {
+tryCatch_optimal_clust_GMM <- function(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed, full_covariance_matrices) {
 
-  Error = tryCatch(GMM_arma_AIC_BIC(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed),
+  Error = tryCatch(GMM_arma_AIC_BIC(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed, full_covariance_matrices),
 
                    error = function(e) e)
 
@@ -242,6 +242,7 @@ tryCatch_optimal_clust_GMM <- function(data, max_clusters, dist_mode, seed_mode,
 #' @param var_floor the variance floor (smallest allowed value) for the diagonal covariances
 #' @param plot_data either TRUE or FALSE indicating whether the results of the function should be plotted
 #' @param seed integer value for random number generator (RNG)
+#' @param full_covariance_matrices a boolean. If FALSE "diagonal" covariance matrices (i.e. in each covariance matrix, all entries outside the main diagonal are assumed to be zero) otherwise "full" covariance matrices will be used. Note: when using full covariance matrices, the AIC/BIC calculation accounts for the increased number of parameters.
 #' @return a vector with either the AIC or BIC for each iteration. In case of Error it returns the error message and the possible causes.
 #' @author Lampros Mouselimis
 #' @details
@@ -250,6 +251,8 @@ tryCatch_optimal_clust_GMM <- function(data, max_clusters, dist_mode, seed_mode,
 #' \strong{BIC}  : the Bayesian information criterion
 #'
 #' In case that the \emph{max_clusters} parameter is a contiguous or non-contiguous vector then plotting is disabled. Therefore, plotting is enabled only if the \emph{max_clusters} parameter is of length 1.
+#'
+#' When \emph{full_covariance_matrices} is TRUE, the AIC/BIC values will be different from when it is FALSE because full covariance matrices have more free parameters (k*(d + d*(d+1)/2)) compared to diagonal covariance matrices (k*2*d), where k is the number of clusters and d is the number of dimensions.
 #'
 #' @importFrom grDevices dev.cur
 #' @importFrom grDevices dev.off
@@ -289,7 +292,8 @@ Optimal_Clusters_GMM = function(data,
                                 verbose = FALSE,
                                 var_floor = 1e-10,
                                 plot_data = TRUE,
-                                seed = 1) {
+                                seed = 1,
+                                full_covariance_matrices = FALSE) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
@@ -305,6 +309,7 @@ Optimal_Clusters_GMM = function(data,
   if (em_iter < 0 ) stop('the em_iter parameter can not be negative')
   if (!is.logical(verbose)) stop('the verbose parameter should be either TRUE or FALSE')
   if (var_floor < 0 ) stop('the var_floor parameter can not be negative')
+  if (!is.logical(full_covariance_matrices)) stop('The full_covariance_matrices parameter must be a boolean!')
 
   if (length(max_clusters) != 1) {
     plot_data = FALSE                       # set "plot_data" to FALSE if the "max_clusters" parameter is not of length 1
@@ -332,7 +337,7 @@ Optimal_Clusters_GMM = function(data,
     stop("The 'max_clusters' vector can not include a 0 value !", call. = F)
   }
 
-  gmm = tryCatch_optimal_clust_GMM(data, pass_vector, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed)
+  gmm = tryCatch_optimal_clust_GMM(data, pass_vector, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed, full_covariance_matrices)
 
   if ('Error' %in% names(gmm)) {
     return(gmm)
