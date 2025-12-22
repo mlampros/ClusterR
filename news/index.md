@@ -4,6 +4,9 @@
 
 - The `Optimal_Clusters_GMM` function was updated
   (<https://github.com/mlampros/ClusterR/pull/70>)
+- Fixed an `affinity_propagation` warning
+  (`/inst/include/affinity_propagation.h: warning: overflow in conversion from 'double' to 'long long unsigned int' changes value from '+QNaN' to '0' [-Woverflow]`)
+  in lines 360 and 448 of the `affinity_propagation.h` file
 
 ## ClusterR 1.3.5
 
