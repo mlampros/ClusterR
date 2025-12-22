@@ -1,7 +1,14 @@
 
+## ClusterR 1.3.6
+
+* The `Optimal_Clusters_GMM` function was updated (https://github.com/mlampros/ClusterR/pull/70)
+
+
 ## ClusterR 1.3.5
 
 * I removed the `SystemRequirements` from the DESCRIPTION file.
+* The `predict_GMM` function was updated and now it supports also the full covariance type (https://github.com/mlampros/ClusterR/pull/66)
+* I fixed a bug in the `normalization constant calculation` of the `predict_MGausDPDF()` function.
 
 
 ## ClusterR 1.3.4

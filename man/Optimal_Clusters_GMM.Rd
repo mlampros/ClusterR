@@ -15,7 +15,8 @@ Optimal_Clusters_GMM(
   verbose = FALSE,
   var_floor = 1e-10,
   plot_data = TRUE,
-  seed = 1
+  seed = 1,
+  full_covariance_matrices = FALSE
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ Optimal_Clusters_GMM(
 \item{plot_data}{either TRUE or FALSE indicating whether the results of the function should be plotted}
 
 \item{seed}{integer value for random number generator (RNG)}
+
+\item{full_covariance_matrices}{a boolean. If FALSE "diagonal" covariance matrices (i.e. in each covariance matrix, all entries outside the main diagonal are assumed to be zero) otherwise "full" covariance matrices will be used. Note: when using full covariance matrices, the AIC/BIC calculation accounts for the increased number of parameters.}
 }
 \value{
 a vector with either the AIC or BIC for each iteration. In case of Error it returns the error message and the possible causes.
@@ -53,6 +56,8 @@ Optimal number of Clusters for the gaussian mixture models
 \strong{BIC}  : the Bayesian information criterion
 
 In case that the \emph{max_clusters} parameter is a contiguous or non-contiguous vector then plotting is disabled. Therefore, plotting is enabled only if the \emph{max_clusters} parameter is of length 1.
+
+When \emph{full_covariance_matrices} is TRUE, the AIC/BIC values will be different from when it is FALSE because full covariance matrices have more free parameters (k*(d + d*(d+1)/2)) compared to diagonal covariance matrices (k*2*d), where k is the number of clusters and d is the number of dimensions.
 }
 \examples{
 

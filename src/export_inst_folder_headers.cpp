@@ -294,17 +294,32 @@ Rcpp::List predict_MGausDPDF(arma::mat data, arma::mat CENTROIDS, arma::mat COVA
 
 
 
+// predict function for full covariance matrices (3D cube)
+// This handles the case when GMM is fitted with full_covariance_matrices=TRUE
+//
+
+// [[Rcpp::export]]
+Rcpp::List predict_MGausDPDF_full(arma::mat data, arma::mat CENTROIDS, arma::cube COVARIANCE, arma::vec WEIGHTS, double eps = 1.0e-8) {
+
+  ClustHeader CRH;
+
+  return CRH.predict_MGausDPDF_full(data, CENTROIDS, COVARIANCE, WEIGHTS, eps);
+}
+
+
+
+
 // function to calculate bic-aic
 //
 
 // [[Rcpp::export]]
 arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, arma::rowvec max_clusters, std::string dist_mode, std::string seed_mode,
 
-                              int km_iter, int em_iter, bool verbose, double var_floor = 1e-10, std::string criterion = "AIC", int seed = 1) {
+                              int km_iter, int em_iter, bool verbose, double var_floor = 1e-10, std::string criterion = "AIC", int seed = 1, bool full_covariance_matrices = false) {
 
   ClustHeader CRH;
 
-  return CRH.GMM_arma_AIC_BIC(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed);
+  return CRH.GMM_arma_AIC_BIC(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed, full_covariance_matrices);
 }
 
 

@@ -1710,9 +1710,83 @@ namespace clustR {
               Rcpp::stop("the determinant is zero or approximately zero. The data might include highly correlated variables or variables with low variance");
             }
 
-            double tmp_val = 1.0 / std::sqrt(2.0 * arma::datum::pi * tmp_determinant);               // use determinant to get a single value
+            double tmp_val = 1.0 / std::sqrt(std::pow(2.0 * arma::datum::pi, n) * tmp_determinant);               // use determinant to get a single value
 
             double inner_likelih = 0.5 * (arma::as_scalar(tmp_vec.t() * INV_COV(arma::conv_to< arma::vec >::from(COVARIANCE.row(i))) * arma::conv_to< arma::mat >::from(tmp_vec)));
+
+            gaus_vec_log(j) = -(n / 2.0) * std::log(2.0 * arma::datum::pi) - (1.0 / 2.0) * (std::log(tmp_determinant)) - inner_likelih;
+
+            gaus_vec(j) = tmp_val * std::exp(-inner_likelih);
+          }
+
+          gaus_mat.col(i) = arma::as_scalar(WEIGHTS(i)) * gaus_vec;
+
+          gaus_mat_log_lik.col(i) = gaus_vec_log;
+        }
+
+        arma::mat loglik1(data.n_rows, WEIGHTS.n_elem, arma::fill::zeros);
+
+        arma::rowvec loglik2(data.n_rows, arma::fill::zeros);
+
+        for (unsigned int j = 0; j < loglik1.n_rows; j++) {
+
+          arma::rowvec tmp_vec = arma::conv_to< arma::rowvec >::from(gaus_mat.row(j)) + eps;
+
+          tmp_vec /= arma::sum(tmp_vec);                                                               // normalize row-data to get probabilities
+
+          loglik1.row(j) = tmp_vec;                                                                    // assign probabilities
+
+          arma::uvec log_lik_label = arma::find(tmp_vec == arma::max(tmp_vec));
+
+          loglik2(j) = arma::as_scalar(log_lik_label(0));                                              // assign labels
+        }
+
+        return Rcpp::List::create( Rcpp::Named("Log_likelihood_raw") = gaus_mat_log_lik,
+                                   Rcpp::Named("cluster_proba") = loglik1,
+                                   Rcpp::Named("cluster_labels") = loglik2 );
+      }
+
+
+
+
+      // predict function for full covariance matrices (3D cube)
+      // This handles the case when GMM is fitted with full_covariance_matrices=TRUE
+      //
+
+      Rcpp::List predict_MGausDPDF_full(arma::mat data, arma::mat CENTROIDS, arma::cube COVARIANCE, arma::vec WEIGHTS, double eps = 1.0e-8) {
+
+        arma::mat gaus_mat(data.n_rows, WEIGHTS.n_elem, arma::fill::zeros);
+
+        arma::mat gaus_mat_log_lik(data.n_rows, WEIGHTS.n_elem, arma::fill::zeros);
+
+        for (unsigned int i = 0; i < WEIGHTS.n_elem; i++) {
+
+          arma::vec gaus_vec(data.n_rows, arma::fill::zeros);
+
+          arma::vec gaus_vec_log(data.n_rows, arma::fill::zeros);
+
+          // Extract the full covariance matrix for this Gaussian component
+          arma::mat tmp_cov_mt = COVARIANCE.slice(i);
+
+          double tmp_determinant = arma::det(tmp_cov_mt);
+
+          if (tmp_determinant == 0.0) {
+
+            Rcpp::stop("the determinant is zero or approximately zero. The data might include highly correlated variables or variables with low variance");
+          }
+
+          // Compute inverse of covariance matrix
+          arma::mat inv_cov_mt = arma::inv(tmp_cov_mt);
+
+          for (unsigned int j = 0; j < data.n_rows; j++) {
+
+            double n = data.n_cols;
+
+            arma::vec tmp_vec = (arma::conv_to< arma::vec >::from(data.row(j)) - arma::conv_to< arma::vec >::from(CENTROIDS.row(i)));
+
+            double tmp_val = 1.0 / std::sqrt(std::pow(2.0 * arma::datum::pi, n) * tmp_determinant);
+
+            double inner_likelih = 0.5 * (arma::as_scalar(tmp_vec.t() * inv_cov_mt * tmp_vec));
 
             gaus_vec_log(j) = -(n / 2.0) * std::log(2.0 * arma::datum::pi) - (1.0 / 2.0) * (std::log(tmp_determinant)) - inner_likelih;
 
@@ -1754,7 +1828,7 @@ namespace clustR {
 
       arma::rowvec GMM_arma_AIC_BIC(arma::mat& data, arma::rowvec max_clusters, std::string dist_mode, std::string seed_mode,
 
-                                    int km_iter, int em_iter, bool verbose, double var_floor = 1e-10, std::string criterion = "AIC", int seed = 1) {
+                                    int km_iter, int em_iter, bool verbose, double var_floor = 1e-10, std::string criterion = "AIC", int seed = 1, bool full_covariance_matrices = false) {
 
         int LEN_max_clust = max_clusters.n_elem;
 
@@ -1766,7 +1840,7 @@ namespace clustR {
 
           if (verbose) { Rcpp::Rcout << "iteration: " << i + 1 << "  num-clusters: " << max_clusters(i) << std::endl; }
 
-          Rcpp::List gmm = GMM_arma(data, max_clusters(i), dist_mode, seed_mode, km_iter, em_iter, false, var_floor = 1e-10);
+          Rcpp::List gmm = GMM_arma(data, max_clusters(i), dist_mode, seed_mode, km_iter, em_iter, false, var_floor = 1e-10, seed, full_covariance_matrices);
 
           arma::mat loglik = Rcpp::as<arma::mat> (gmm[3]);
 
@@ -1791,14 +1865,27 @@ namespace clustR {
 
           arma::mat centers = Rcpp::as<arma::mat> (gmm[0]);
 
+          // Calculate number of free parameters depending on covariance type
+          int num_free_params;
+          int k = centers.n_rows;  // number of clusters
+          int d = centers.n_cols;  // number of dimensions
+          
+          if (full_covariance_matrices) {
+            // For full covariance: k * d (means) + k * d*(d+1)/2 (full covariances) + (k-1) (mixture weights)
+            num_free_params = k * d + k * (d * (d + 1)) / 2 + (k - 1);
+          } else {
+            // For diagonal covariance: k * d (means) + k * d (diagonal covariances) + (k-1) (mixture weights)
+            num_free_params = k * d + k * d + (k - 1);
+          }
+
           if (criterion == "AIC") {
 
-            evaluate_comps(i) = -2.0 * arma::accu(log_sum_exp) + 2.0 * centers.n_rows * centers.n_cols;
+            evaluate_comps(i) = -2.0 * arma::accu(log_sum_exp) + 2.0 * num_free_params;
           }
 
           if (criterion == "BIC") {
 
-            evaluate_comps(i) = -2.0 * arma::accu(log_sum_exp) + std::log(data.n_rows) * centers.n_rows * centers.n_cols;
+            evaluate_comps(i) = -2.0 * arma::accu(log_sum_exp) + std::log(data.n_rows) * num_free_params;
           }
         }
 

@@ -49,8 +49,12 @@ predict_MGausDPDF <- function(data, CENTROIDS, COVARIANCE, WEIGHTS, eps = 1.0e-8
     .Call(`_ClusterR_predict_MGausDPDF`, data, CENTROIDS, COVARIANCE, WEIGHTS, eps)
 }
 
-GMM_arma_AIC_BIC <- function(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor = 1e-10, criterion = "AIC", seed = 1L) {
-    .Call(`_ClusterR_GMM_arma_AIC_BIC`, data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed)
+predict_MGausDPDF_full <- function(data, CENTROIDS, COVARIANCE, WEIGHTS, eps = 1.0e-8) {
+    .Call(`_ClusterR_predict_MGausDPDF_full`, data, CENTROIDS, COVARIANCE, WEIGHTS, eps)
+}
+
+GMM_arma_AIC_BIC <- function(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor = 1e-10, criterion = "AIC", seed = 1L, full_covariance_matrices = FALSE) {
+    .Call(`_ClusterR_GMM_arma_AIC_BIC`, data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed, full_covariance_matrices)
 }
 
 dissim_mat <- function(data, method, minkowski_p = 1.0, upper = TRUE, diagonal = TRUE, threads = 1L, eps = 1.0e-6) {

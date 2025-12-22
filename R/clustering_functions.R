@@ -131,12 +131,13 @@ GMM = function(data,
 #'
 #' @param data matrix or data frame
 #' @param CENTROIDS matrix or data frame containing the centroids (means), stored as row vectors
-#' @param COVARIANCE matrix or data frame containing the diagonal covariance matrices, stored as row vectors
+#' @param COVARIANCE matrix or data frame (for diagonal covariance) or 3D array (for full covariance matrices)
 #' @param WEIGHTS vector containing the weights
 #' @return a list consisting of the log-likelihoods, cluster probabilities and cluster labels.
 #' @author Lampros Mouselimis
 #' @details
 #' This function takes the centroids, covariance matrix and weights from a trained model and returns the log-likelihoods, cluster probabilities and cluster labels for new data.
+#' The function handles both diagonal covariance matrices (2D matrix) and full covariance matrices (3D array/cube).
 #' @export
 #' @examples
 #'
@@ -156,10 +157,6 @@ predict_GMM = function(data, CENTROIDS, COVARIANCE, WEIGHTS) {
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
   if ('data.frame' %in% class(CENTROIDS)) CENTROIDS = as.matrix(CENTROIDS)
   if (!inherits(CENTROIDS, 'matrix')) stop('CENTROIDS should be either a matrix or a data frame')
-  if ('data.frame' %in% class(COVARIANCE)) COVARIANCE = as.matrix(COVARIANCE)
-  if (!inherits(COVARIANCE, 'matrix')) stop('COVARIANCE should be either a matrix or a data frame')
-  if (ncol(data) != ncol(CENTROIDS) || ncol(data) != ncol(COVARIANCE) || length(WEIGHTS) != nrow(CENTROIDS) || length(WEIGHTS) != nrow(COVARIANCE))
-    stop('the number of columns of the data, CENTROIDS and COVARIANCE should match and the number of rows of the CENTROIDS AND COVARIANCE should be equal to the length of the WEIGHTS vector')
   if (!inherits(WEIGHTS, 'numeric') || !is.vector(WEIGHTS))
     stop('WEIGHTS should be a numeric vector')
 
@@ -167,7 +164,27 @@ predict_GMM = function(data, CENTROIDS, COVARIANCE, WEIGHTS) {
 
   if (!flag_non_finite) stop("the data includes NaN's or +/- Inf values")
 
-  res = predict_MGausDPDF(data, CENTROIDS, COVARIANCE, WEIGHTS, eps = 1.0e-8)
+  # Check if COVARIANCE is a 3D array (full covariance) or 2D matrix (diagonal covariance)
+  is_full_covariance = length(dim(COVARIANCE)) == 3
+
+  if (is_full_covariance) {
+    # Full covariance matrices - COVARIANCE is a 3D array (cube)
+    if (!is.array(COVARIANCE)) stop('COVARIANCE should be a 3D array for full covariance matrices')
+    if (dim(COVARIANCE)[1] != ncol(data) || dim(COVARIANCE)[2] != ncol(data) || dim(COVARIANCE)[3] != length(WEIGHTS))
+      stop('for full covariance: dim(COVARIANCE)[1] and dim(COVARIANCE)[2] should equal ncol(data), and dim(COVARIANCE)[3] should equal length(WEIGHTS)')
+    if (ncol(data) != ncol(CENTROIDS) || length(WEIGHTS) != nrow(CENTROIDS))
+      stop('the number of columns of the data and CENTROIDS should match and the number of rows of CENTROIDS should equal the length of the WEIGHTS vector')
+
+    res = predict_MGausDPDF_full(data, CENTROIDS, COVARIANCE, WEIGHTS, eps = 1.0e-8)
+  } else {
+    # Diagonal covariance matrices - COVARIANCE is a 2D matrix
+    if ('data.frame' %in% class(COVARIANCE)) COVARIANCE = as.matrix(COVARIANCE)
+    if (!inherits(COVARIANCE, 'matrix')) stop('COVARIANCE should be either a matrix or a data frame for diagonal covariance')
+    if (ncol(data) != ncol(CENTROIDS) || ncol(data) != ncol(COVARIANCE) || length(WEIGHTS) != nrow(CENTROIDS) || length(WEIGHTS) != nrow(COVARIANCE))
+      stop('the number of columns of the data, CENTROIDS and COVARIANCE should match and the number of rows of the CENTROIDS AND COVARIANCE should be equal to the length of the WEIGHTS vector')
+
+    res = predict_MGausDPDF(data, CENTROIDS, COVARIANCE, WEIGHTS, eps = 1.0e-8)
+  }
 
   # I've added 1 to the output cluster labels to account for the difference in indexing between R and C++
   list(log_likelihood = res$Log_likelihood_raw,
@@ -194,9 +211,9 @@ print.GMMCluster <- function(x, ...) {
 #' tryCatch function to prevent armadillo errors in GMM_arma_AIC_BIC
 #'
 #' @keywords internal
-tryCatch_optimal_clust_GMM <- function(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed) {
+tryCatch_optimal_clust_GMM <- function(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed, full_covariance_matrices) {
 
-  Error = tryCatch(GMM_arma_AIC_BIC(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed),
+  Error = tryCatch(GMM_arma_AIC_BIC(data, max_clusters, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed, full_covariance_matrices),
 
                    error = function(e) e)
 
@@ -225,6 +242,7 @@ tryCatch_optimal_clust_GMM <- function(data, max_clusters, dist_mode, seed_mode,
 #' @param var_floor the variance floor (smallest allowed value) for the diagonal covariances
 #' @param plot_data either TRUE or FALSE indicating whether the results of the function should be plotted
 #' @param seed integer value for random number generator (RNG)
+#' @param full_covariance_matrices a boolean. If FALSE "diagonal" covariance matrices (i.e. in each covariance matrix, all entries outside the main diagonal are assumed to be zero) otherwise "full" covariance matrices will be used. Note: when using full covariance matrices, the AIC/BIC calculation accounts for the increased number of parameters.
 #' @return a vector with either the AIC or BIC for each iteration. In case of Error it returns the error message and the possible causes.
 #' @author Lampros Mouselimis
 #' @details
@@ -233,6 +251,8 @@ tryCatch_optimal_clust_GMM <- function(data, max_clusters, dist_mode, seed_mode,
 #' \strong{BIC}  : the Bayesian information criterion
 #'
 #' In case that the \emph{max_clusters} parameter is a contiguous or non-contiguous vector then plotting is disabled. Therefore, plotting is enabled only if the \emph{max_clusters} parameter is of length 1.
+#'
+#' When \emph{full_covariance_matrices} is TRUE, the AIC/BIC values will be different from when it is FALSE because full covariance matrices have more free parameters (k*(d + d*(d+1)/2)) compared to diagonal covariance matrices (k*2*d), where k is the number of clusters and d is the number of dimensions.
 #'
 #' @importFrom grDevices dev.cur
 #' @importFrom grDevices dev.off
@@ -272,7 +292,8 @@ Optimal_Clusters_GMM = function(data,
                                 verbose = FALSE,
                                 var_floor = 1e-10,
                                 plot_data = TRUE,
-                                seed = 1) {
+                                seed = 1,
+                                full_covariance_matrices = FALSE) {
 
   if ('data.frame' %in% class(data)) data = as.matrix(data)
   if (!inherits(data, 'matrix')) stop('data should be either a matrix or a data frame')
@@ -288,6 +309,7 @@ Optimal_Clusters_GMM = function(data,
   if (em_iter < 0 ) stop('the em_iter parameter can not be negative')
   if (!is.logical(verbose)) stop('the verbose parameter should be either TRUE or FALSE')
   if (var_floor < 0 ) stop('the var_floor parameter can not be negative')
+  if (!is.logical(full_covariance_matrices)) stop('The full_covariance_matrices parameter must be a boolean!')
 
   if (length(max_clusters) != 1) {
     plot_data = FALSE                       # set "plot_data" to FALSE if the "max_clusters" parameter is not of length 1
@@ -315,7 +337,7 @@ Optimal_Clusters_GMM = function(data,
     stop("The 'max_clusters' vector can not include a 0 value !", call. = F)
   }
 
-  gmm = tryCatch_optimal_clust_GMM(data, pass_vector, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed)
+  gmm = tryCatch_optimal_clust_GMM(data, pass_vector, dist_mode, seed_mode, km_iter, em_iter, verbose, var_floor, criterion, seed, full_covariance_matrices)
 
   if ('Error' %in% names(gmm)) {
     return(gmm)
