@@ -268,7 +268,7 @@ Rcpp::List Affinity_Propagation::affinity_propagation(arma::mat &s, std::vector<
 
   int tmpdpsim = 0;                                                                // initialize 'tmpdpsim' to 0 . By setting this to 'arma::datum::nan' it gives "runtime error: nan is outside the range of representable values of type 'int'" ( clang-UBSAN )
   int tmpnetsim,tmpexpref;
-  arma::uvec tmpidx;
+  arma::vec tmpidx;
   bool unconverged = true;                                                         // unconverged set initially to 'true' [ see line 478 ]
 
   while (!dn) {
@@ -357,7 +357,7 @@ Rcpp::List Affinity_Propagation::affinity_propagation(arma::mat &s, std::vector<
         tmpdpsim = 0;                                                // same as line 352
         tmpexpref = 0;                                               // same as line 352
         tmpidx.set_size(N);
-        tmpidx.fill(arma::datum::nan);                               // 'tmpidx' can take 'arma::datum::nan' because it is initialized as 'arma::uvec' ( of type double )
+        tmpidx.fill(arma::datum::nan);                               // 'tmpidx' can take 'arma::datum::nan' because it is a vector of type double
       }
       else {
         arma::uvec I = arma::find(E == 1);                           // 'I' can be empty or having 1 or more items
@@ -369,9 +369,10 @@ Rcpp::List Affinity_Propagation::affinity_propagation(arma::mat &s, std::vector<
           arma::uvec tmp_c = arma::unique(c);
           arma::uvec tmp_Ic = I(c);
           c(I) = arma::regspace<arma::uvec>( 0, 1, K-1 );
-          tmpidx = I(c);
+          tmpidx = arma::conv_to<arma::vec>::from(I(c));
           arma::umat tmp_um(2, notI.n_elem);
-          arma::uvec tmp_v_um = tmpidx(notI);
+          arma::uvec tmpidx_uvec = arma::conv_to<arma::uvec>::from(tmpidx);
+          arma::uvec tmp_v_um = tmpidx_uvec(notI);
           for (unsigned int f = 0; f < notI.n_elem; f++) {
             tmp_um(0,f) = notI(f);
             tmp_um(1,f) = tmp_v_um(f);
@@ -397,8 +398,7 @@ Rcpp::List Affinity_Propagation::affinity_propagation(arma::mat &s, std::vector<
       dpsim.col(i-1) = tmpdpsim;
       expref.col(i-1) = tmpexpref;
 
-      arma::uvec tmp_unq = arma::unique(tmpidx);
-      idx.col(i-1) = arma::conv_to<arma::colvec>::from(tmpidx);
+      idx.col(i-1) = tmpidx;
     }
   }                                                                 // end of while loop
 
@@ -423,9 +423,10 @@ Rcpp::List Affinity_Propagation::affinity_propagation(arma::mat &s, std::vector<
     arma::uvec notI = matlab_setdiff(arma::regspace<arma::uvec>( 0, 1, N-1 ), I);   // converted 'N' to 'N-1' due to dif in indexing compared to matlab && I didn't use reshape() compared to initial code
     c = arma::index_max(S.cols(I), 1);
     c(I) = arma::regspace<arma::uvec>( 0, 1, K-1 );                                 // Identify clusters [ converted 'K' to 'K-1' due to dif in indexing compared to matlab ]
-    tmpidx = I(c);
+    tmpidx = arma::conv_to<arma::vec>::from(I(c));
     arma::umat tmp_um(2, notI.n_elem);
-    arma::uvec tmp_v_um = tmpidx(notI);
+    arma::uvec tmpidx_uvec = arma::conv_to<arma::uvec>::from(tmpidx);
+    arma::uvec tmp_v_um = tmpidx_uvec(notI);
     for (unsigned int f = 0; f < notI.n_elem; f++) {
       tmp_um(0,f) = notI(f);
       tmp_um(1,f) = tmp_v_um(f);
@@ -445,7 +446,7 @@ Rcpp::List Affinity_Propagation::affinity_propagation(arma::mat &s, std::vector<
   }
   else {
     tmpidx.set_size(N);
-    tmpidx.fill(arma::datum::nan);                          // 'tmpidx' can take 'arma::datum::nan' because it is initialized as 'arma::uvec' ( of type double )        
+    tmpidx.fill(arma::datum::nan);                          // 'tmpidx' can take 'arma::datum::nan' because it is a vector of type double
     tmpnetsim = 0;                                          // initialize this to 0. By setting it to 'arma::datum::nan' it gives "runtime error: nan is outside the range of representable values of type 'int'" ( clang-UBSAN )
     tmpexpref = 0;                                          // same as line 445
   }
@@ -457,14 +458,14 @@ Rcpp::List Affinity_Propagation::affinity_propagation(arma::mat &s, std::vector<
     dpsim = dpsim.submat(0, 0, 0, i);
     expref(i) = tmpexpref;
     expref=expref.submat(0, 0, 0, i);
-    idx.col(i) = arma::conv_to<arma::colvec>::from(tmpidx);
+    idx.col(i) = tmpidx;
     idx = idx.submat(0, 0, N-1, i);
   }
   else {
     netsim=tmpnetsim;
     dpsim=tmpdpsim;
     expref=tmpexpref;
-    idx = arma::conv_to<arma::mat>::from(tmpidx);
+    idx = tmpidx;
   }
 
   double n_time = timer.toc();
