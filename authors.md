@@ -35,13 +35,13 @@ Source:
 
 Mouselimis L (2025). *ClusterR: Gaussian Mixture Models, K-Means,
 Mini-Batch-Kmeans, K-Medoids and Affinity Propagation Clustering*. R
-package version 1.3.5, <https://CRAN.R-project.org/package=ClusterR>.
+package version 1.3.6, <https://CRAN.R-project.org/package=ClusterR>.
 
     @Manual{,
       title = {{ClusterR}: Gaussian Mixture Models, K-Means, Mini-Batch-Kmeans, K-Medoids and Affinity Propagation Clustering},
       author = {Lampros Mouselimis},
       year = {2025},
-      note = {R package version 1.3.5},
+      note = {R package version 1.3.6},
       url = {https://CRAN.R-project.org/package=ClusterR},
     }
 
