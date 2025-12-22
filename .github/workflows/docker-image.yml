@@ -53,7 +53,7 @@ jobs:
           cache-to: type=registry,ref=${{ github.repository_owner }}/${{ steps.string.outputs.lowercase }}:buildcache,mode=max
 
       - name: Update Docker Hub Description
-        uses: peter-evans/dockerhub-description@v4
+        uses: peter-evans/dockerhub-description@v5
         with:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.DOCKER_PASSWORD }}
