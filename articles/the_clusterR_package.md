@@ -388,7 +388,7 @@ t = end - start
 cat('time to complete :', t, attributes(t)$units, '\n')
 ```
 
-    ## time to complete : 1.6514 secs
+    ## time to complete : 1.750049 secs
 
 ``` r
 getcent_init = km_init$centroids
@@ -436,7 +436,7 @@ t = end - start
 cat('time to complete :', t, attributes(t)$units, '\n')
 ```
 
-    ## time to complete : 0.9067619 secs
+    ## time to complete : 0.9853036 secs
 
 ``` r
 getcent_mb = km_mb$centroids
@@ -657,7 +657,7 @@ t = end - start
 cat('time to complete :', t, attributes(t)$units, '\n')
 ```
 
-    ## time to complete : 1.460821 secs
+    ## time to complete : 1.965394 secs
 
   
 
@@ -683,7 +683,7 @@ t = end - start
 cat('time to complete :', t, attributes(t)$units, '\n')
 ```
 
-    ## time to complete : 5.922554 secs
+    ## time to complete : 7.045414 secs
 
   
 

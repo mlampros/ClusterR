@@ -2,6 +2,8 @@
 
 ## ClusterR 1.3.6
 
+CRAN release: 2025-12-22
+
 - The `Optimal_Clusters_GMM` function was updated
   (<https://github.com/mlampros/ClusterR/pull/70>)
 - Fixed an `affinity_propagation` warning
