@@ -8,7 +8,7 @@ Prediction function for a Gaussian Mixture Model object
 predict_GMM(data, CENTROIDS, COVARIANCE, WEIGHTS)
 
 # S3 method for class 'GMMCluster'
-predict(object, newdata, ...)
+predict(object, newdata, type = c("cluster", "prob", "all"), ...)
 ```
 
 ## Arguments
@@ -35,10 +35,19 @@ predict(object, newdata, ...)
 
   arguments for the \`predict\` generic
 
+- type:
+
+  the type of prediction to return. One of \`"cluster"\` (hard cluster
+  labels), \`"prob"\` (cluster probabilities), or \`"all"\` (the
+  complete list returned by \`predict_GMM()\`).
+
 ## Value
 
-a list consisting of the log-likelihoods, cluster probabilities and
-cluster labels.
+\`predict_GMM()\` returns a list consisting of the log-likelihoods,
+cluster probabilities and cluster labels. The \`predict()\` method
+returns the hard cluster labels when \`type = "cluster"\`, the cluster
+probabilities when \`type = "prob"\`, and the complete \`predict_GMM()\`
+list when \`type = "all"\`.
 
 ## Details
 
@@ -55,6 +64,7 @@ Lampros Mouselimis
 ## Examples
 
 ``` r
+
 data(dietary_survey_IBS)
 
 dat = as.matrix(dietary_survey_IBS[, -ncol(dietary_survey_IBS)])

@@ -115,6 +115,7 @@ Lampros Mouselimis
 ## Examples
 
 ``` r
+
 if (FALSE) { # \dontrun{
 data(soybean)
 

@@ -1,5 +1,16 @@
 # Changelog
 
+## ClusterR 1.3.7
+
+- The [`predict()`](https://rdrr.io/r/stats/predict.html) method for
+  `GMMCluster` objects now has a `type` argument. It returns hard
+  cluster labels by default (`type = "cluster"`), cluster probabilities
+  with `type = "prob"`, and the complete output of
+  [`predict_GMM()`](https://mlampros.github.io/ClusterR/reference/predict_GMM.md)
+  with `type = "all"` (see
+  [issue](https://github.com/mlampros/ClusterR/issues/73)
+  [\#73](https://github.com/mlampros/ClusterR/issues/73)).
+
 ## ClusterR 1.3.6
 
 CRAN release: 2025-12-22

@@ -46,6 +46,7 @@ download source: https://archive.ics.uci.edu/ml/datasets/Soybean+(Large)
 ## Examples
 
 ``` r
+
 data(soybean)
 
 X = soybean[, -ncol(soybean)]

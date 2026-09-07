@@ -39,6 +39,7 @@ replaced with 1.0, so that NaN's can be avoided by division
 ## Examples
 
 ``` r
+
 data(dietary_survey_IBS)
 
 dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]

@@ -38,6 +38,7 @@ Lampros Mouselimis
 ## Examples
 
 ``` r
+
 # data(soybean)
 
 # dat = soybean[, -ncol(soybean)]

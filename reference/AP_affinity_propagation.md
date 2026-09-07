@@ -116,6 +116,7 @@ https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5650075/ ( SEE chapter 2 )
 ## Examples
 
 ``` r
+
 set.seed(1)
 dat = matrix(sample(1:255, 2500, replace = TRUE), 100, 25)
 

@@ -33,6 +33,7 @@ Rcpp functions. Then the maintainer of ‘PackageA’ has to :
 
 ``` r
 
+
 install.packages("ClusterR")
  
 ```
@@ -44,6 +45,7 @@ or download the latest version from Github using the *pak* package,
   
 
 ``` r
+
 
 pak::pak('mlampros/ClusterR')
  
@@ -59,6 +61,7 @@ pak::pak('mlampros/ClusterR')
 
 ``` r
 
+
 LinkingTo: ClusterR
 ```
 
@@ -70,6 +73,7 @@ LinkingTo: ClusterR
   
 
 ``` r
+
 # include <RcppArmadillo.h>
 # include <ClusterRHeader.h>
 # include <affinity_propagation.h>
@@ -132,6 +136,7 @@ function using,
 
 ``` r
 
+
 Rcpp::sourceCpp('example.cpp')              # assuming that the previous Rcpp code is included in 'example.cpp' 
              
 set.seed(1)
@@ -163,6 +168,7 @@ installed. The whole process was tested on Ubuntu 18.04. To **pull** &
 **run** the image do the following,
 
 ``` r
+
 docker pull mlampros/clusterr:rstudiodev
 
 docker run -d --name rstudio_dev -e USER=rstudio -e PASSWORD=give_here_your_password --rm -p 8787:8787 mlampros/clusterr:rstudiodev
@@ -176,6 +182,7 @@ its files by specifying the **-v** command,
   
 
 ``` r
+
 docker run -d --name rstudio_dev -e USER=rstudio -e PASSWORD=give_here_your_password --rm -p 8787:8787 -v /home/YOUR_DIR:/home/rstudio/YOUR_DIR mlampros/clusterr:rstudiodev
 ```
 
@@ -187,6 +194,7 @@ write access to **YOUR_DIR** directory (not necessarily) using,
   
 
 ``` r
+
 chmod -R 777 /home/YOUR_DIR
 ```
 
@@ -240,8 +248,8 @@ cite both **ClusterR** and the **original articles / software**
 @Manual{,
   title = {{ClusterR}: Gaussian Mixture Models, K-Means, Mini-Batch-Kmeans, K-Medoids and Affinity Propagation Clustering},
   author = {Lampros Mouselimis},
-  year = {2025},
-  note = {R package version 1.3.6},
+  year = {2026},
+  note = {R package version 1.3.7},
   url = {https://CRAN.R-project.org/package=ClusterR},
 }
 ```

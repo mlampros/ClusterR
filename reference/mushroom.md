@@ -94,6 +94,7 @@ download source: https://archive.ics.uci.edu/ml/datasets/Mushroom
 ## Examples
 
 ``` r
+
 data(mushroom)
 
 X = mushroom[, -1]

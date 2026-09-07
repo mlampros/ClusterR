@@ -34,6 +34,7 @@ Lampros Mouselimis
 ## Examples
 
 ``` r
+
 data(dietary_survey_IBS)
 dat = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]
 dat = center_scale(dat)

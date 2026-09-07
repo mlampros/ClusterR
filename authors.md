@@ -33,15 +33,15 @@
 Source:
 [`inst/CITATION`](https://github.com/mlampros/ClusterR/blob/master/inst/CITATION)
 
-Mouselimis L (2025). *ClusterR: Gaussian Mixture Models, K-Means,
+Mouselimis L (2026). *ClusterR: Gaussian Mixture Models, K-Means,
 Mini-Batch-Kmeans, K-Medoids and Affinity Propagation Clustering*. R
-package version 1.3.6, <https://CRAN.R-project.org/package=ClusterR>.
+package version 1.3.7, <https://CRAN.R-project.org/package=ClusterR>.
 
     @Manual{,
       title = {{ClusterR}: Gaussian Mixture Models, K-Means, Mini-Batch-Kmeans, K-Medoids and Affinity Propagation Clustering},
       author = {Lampros Mouselimis},
-      year = {2025},
-      note = {R package version 1.3.6},
+      year = {2026},
+      note = {R package version 1.3.7},
       url = {https://CRAN.R-project.org/package=ClusterR},
     }
 
@@ -136,7 +136,7 @@ Object-Oriented Environment.” *Journal of Statistical Software*.
 Pham D, Dimov S, Nguyen C (2004). “Selection of K in K-means
 clustering.” *Proceedings of the Institution of Mechanical Engineers,
 Part C: Journal of Mechanical Engineering Science*.
-[doi:10.1243/095440605X8298](https://doi.org/10.1243/095440605X8298),
+[doi:10.1243/095440605X8298](https://doi.org/10.1243/095440605X8298).
 <https://www.ee.columbia.edu/~dpwe/papers/PhamDN05-kmeans.pdf>.
 
     @Article{,

@@ -60,6 +60,7 @@ https://www.psi.toronto.edu/affinitypropagation/preferenceRange.m
 ## Examples
 
 ``` r
+
 set.seed(1)
 dat = matrix(sample(1:255, 2500, replace = TRUE), 100, 25)
 

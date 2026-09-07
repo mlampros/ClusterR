@@ -53,6 +53,7 @@ package documentation). I’ll illustrate the *GMM* function using the
 synthetic data *dietary_survey_IBS*,
 
 ``` r
+
 library(ClusterR)
 
 data(dietary_survey_IBS)
@@ -63,6 +64,7 @@ dim(dietary_survey_IBS)
     ## [1] 400  43
 
 ``` r
+
 X = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]   # data (excluding the response variable)
 
 y = dietary_survey_IBS[, ncol(dietary_survey_IBS)]    # the response variable
@@ -71,6 +73,7 @@ dat = center_scale(X, mean_center = T, sd_scale = T)  # centering and scaling th
 ```
 
 ``` r
+
 gmm = GMM(dat, 2, dist_mode = "maha_dist", seed_mode = "random_subset", km_iter = 10,
           em_iter = 10, verbose = F)          
 
@@ -92,6 +95,7 @@ clusters of the data using either the *AIC* (Akaike information) or the
 *BIC* (Bayesian information) criterion,
 
 ``` r
+
 opt_gmm = Optimal_Clusters_GMM(dat, max_clusters = 10, criterion = "BIC", 
                                
                                dist_mode = "maha_dist", seed_mode = "random_subset",
@@ -120,6 +124,7 @@ Assuming that true labels are available, then one could use the
 (variation of information) to validate the output clusters,
 
 ``` r
+
 res = external_validation(dietary_survey_IBS$class, pr$cluster_labels, 
                           
                           method = "adjusted_rand_index", summary_stats = T)
@@ -194,6 +199,7 @@ particularly the *princomp* function of the *stats* package, so that a
 2-dimensional plot of the resulted clusters is possible,
 
 ``` r
+
 pca_dat = stats::princomp(dat)$scores[, 1:2]
 
 km = KMeans_arma(pca_dat, clusters = 2, n_iter = 10, seed_mode = "random_subset", 
@@ -241,6 +247,7 @@ quantization](https://en.wikipedia.org/wiki/Vector_quantization) example
 and the OpenImageR package,  
 
 ``` r
+
 library(OpenImageR)
 
 im = readImage('elephant.jpg')
@@ -254,12 +261,14 @@ imageShow(im)                                                # plot the original
 ![](the_clusterR_package_files/figure-html/unnamed-chunk-6-1.png)
 
 ``` r
+
 im2 = apply(im, 3, as.vector)                                # vectorize RGB
 ```
 
   
 
 ``` r
+
 # perform KMeans_rcpp clustering
 
 km_rc = KMeans_rcpp(im2, clusters = 5, num_init = 5, max_iters = 100, 
@@ -271,6 +280,7 @@ km_rc$between.SS_DIV_total.SS
     ## [1] 0.9873009
 
 ``` r
+
 pr = predict(km_rc, newdata = im2)
 ```
 
@@ -285,6 +295,7 @@ attribute is close to 1.0 then the observations cluster pretty well.
   
 
 ``` r
+
 getcent = km_rc$centroids
 
 getclust = km_rc$clusters
@@ -313,6 +324,7 @@ fully described in the “Selection of K in K-means clustering, Pham.,
 Dimov., Nguyen., (2004)” paper,  
 
 ``` r
+
 opt = Optimal_Clusters_KMeans(im2, max_clusters = 10, plot_clusters = T,
                               
                               criterion = 'distortion_fK', fK_threshold = 0.85,
@@ -353,6 +365,7 @@ differences in computation time and output quality between the
 KMeans_rcpp and MiniBatchKmeans functions,  
 
 ``` r
+
 im_d = readImage('dog.jpg')
 
 # first resize the image to reduce the dimensions
@@ -364,6 +377,7 @@ imageShow(im_d)                                                # plot the origin
 ![](the_clusterR_package_files/figure-html/unnamed-chunk-10-1.png)
 
 ``` r
+
 im3 = apply(im_d, 3, as.vector)                                # vectorize RGB
 
 dim(im3)                                              # initial dimensions of the data
@@ -376,6 +390,7 @@ dim(im3)                                              # initial dimensions of th
 First, we perform a *k-means* clustering,  
 
 ``` r
+
 start = Sys.time()
 
 km_init = KMeans_rcpp(im3, clusters = 5, num_init = 5, max_iters = 100, 
@@ -388,9 +403,10 @@ t = end - start
 cat('time to complete :', t, attributes(t)$units, '\n')
 ```
 
-    ## time to complete : 1.750049 secs
+    ## time to complete : 1.407933 secs
 
 ``` r
+
 getcent_init = km_init$centroids
 
 getclust_init = km_init$clusters
@@ -409,6 +425,7 @@ imageShow(new_im_init)
 and then a *mini-batch-kmeans* clustering,  
 
 ``` r
+
 start = Sys.time()
 
 km_mb = MiniBatchKmeans(im3, clusters = 5, batch_size = 20, num_init = 5, max_iters = 100, 
@@ -424,11 +441,12 @@ pr_mb = predict(object = km_mb, newdata = im3)
     ##   it also returns the hard clusters
     ## ℹ The deprecated feature was likely used in the ClusterR package.
     ##   Please report the issue at <https://github.com/mlampros/ClusterR/issues>.
-    ## This warning is displayed once every 8 hours.
+    ## This warning is displayed once per session.
     ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
     ## generated.
 
 ``` r
+
 end = Sys.time()
 
 t = end - start
@@ -436,9 +454,10 @@ t = end - start
 cat('time to complete :', t, attributes(t)$units, '\n')
 ```
 
-    ## time to complete : 0.9853036 secs
+    ## time to complete : 0.8723602 secs
 
 ``` r
+
 getcent_mb = km_mb$centroids
 
 new_im_mb = getcent_mb[pr_mb, ]   # each observation is associated with the nearby centroid
@@ -513,6 +532,7 @@ advantage of the *gowdis* function of the FD package as it also allows
 user-defined weights for each separate predictor,
 
 ``` r
+
 data(mushroom)
 
 X = mushroom[, -1]
@@ -528,7 +548,7 @@ cm = Cluster_Medoids(gwd_mat, clusters = 2, swap_phase = TRUE, verbose = F)
 
     ## Warning: The `seed` argument of `Cluster_Medoids()` is deprecated as of ClusterR 1.2.6.
     ## ℹ The 'seed' parameter will be removed in version 1.4.0
-    ## This warning is displayed once every 8 hours.
+    ## This warning is displayed once per session.
     ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
     ## generated.
 
@@ -538,7 +558,7 @@ cm = Cluster_Medoids(gwd_mat, clusters = 2, swap_phase = TRUE, verbose = F)
 |:-------------------|:---------------------|
 | 0.5733587          | 0.2545221            |
 
-Non-Weigthed-K-medoids
+Non-Weigthed-K-medoids {.table}
 
   
 
@@ -579,6 +599,7 @@ silhouette width* (internal validation),
   
 
 ``` r
+
 weights = c(4.626, 38.323, 55.899, 34.028, 169.608, 6.643, 42.08, 57.366, 37.938, 
             
             33.081, 65.105, 18.718, 76.165, 27.596, 26.238, 0.0, 1.507, 37.314, 
@@ -598,7 +619,7 @@ cm_w = Cluster_Medoids(gwd_mat_w, clusters = 2, swap_phase = TRUE, verbose = F)
 |:-------------------|:---------------------|
 | 0.6197672          | 0.3000048            |
 
-Weigthed-K-medoids
+Weigthed-K-medoids {.table}
 
   
   
@@ -638,6 +659,7 @@ Cichosz, 2015, page 318*).
   
 
 ``` r
+
 cl_X = X        # copy initial data 
 
 # the Clara_Medoids function allows only numeric attributes
@@ -657,7 +679,7 @@ t = end - start
 cat('time to complete :', t, attributes(t)$units, '\n')
 ```
 
-    ## time to complete : 1.965394 secs
+    ## time to complete : 1.381401 secs
 
   
 
@@ -665,12 +687,13 @@ cat('time to complete :', t, attributes(t)$units, '\n')
 |:-------------------|:---------------------|
 | 0.5733587          | 0.2436067            |
 
-hamming-Clara-Medoids
+hamming-Clara-Medoids {.table}
 
   
   
 
 ``` r
+
 start = Sys.time()
 
 cl_e = Cluster_Medoids(cl_X, clusters = 2, distance_metric = 'hamming', swap_phase = TRUE,  
@@ -683,7 +706,7 @@ t = end - start
 cat('time to complete :', t, attributes(t)$units, '\n')
 ```
 
-    ## time to complete : 7.045414 secs
+    ## time to complete : 5.72628 secs
 
   
 
@@ -691,7 +714,7 @@ cat('time to complete :', t, attributes(t)$units, '\n')
 |:-------------------|:---------------------|
 | 0.5733587          | 0.2545221            |
 
-hamming-Cluster-Medoids
+hamming-Cluster-Medoids {.table}
 
   
   
@@ -712,6 +735,7 @@ the *Cluster_Medoids* function.
   
 
 ``` r
+
 # Silhouette Plot for the "Clara_Medoids" object
 
 Silhouette_Dissimilarity_Plot(cl_f, silhouette = TRUE)
@@ -726,6 +750,7 @@ Silhouette_Dissimilarity_Plot(cl_f, silhouette = TRUE)
   
 
 ``` r
+
 # Silhouette Plot for the "Cluster_Medoids" object
 
 Silhouette_Dissimilarity_Plot(cl_e, silhouette = TRUE)

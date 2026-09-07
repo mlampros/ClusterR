@@ -39,6 +39,7 @@ Nutrition and Dietetics.
 ## Examples
 
 ``` r
+
 data(dietary_survey_IBS)
 
 X = dietary_survey_IBS[, -ncol(dietary_survey_IBS)]

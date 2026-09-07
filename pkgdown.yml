@@ -1,9 +1,9 @@
-pandoc: 3.1.11
-pkgdown: 2.2.0
+pandoc: 3.8.3
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   the_clusterR_package: the_clusterR_package.html
-last_built: 2025-12-30T16:28Z
+last_built: 2026-09-07T06:06Z
 urls:
   reference: https://mlampros.github.io/ClusterR/reference
   article: https://mlampros.github.io/ClusterR/articles
