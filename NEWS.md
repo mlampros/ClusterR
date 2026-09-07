@@ -1,4 +1,9 @@
 
+## ClusterR 1.3.7
+
+* The `predict()` method for `GMMCluster` objects now has a `type` argument. It returns hard cluster labels by default (`type = "cluster"`), cluster probabilities with `type = "prob"`, and the complete output of `predict_GMM()` with `type = "all"` (see [issue #73](https://github.com/mlampros/ClusterR/issues/73)).
+
+
 ## ClusterR 1.3.6
 
 * The `Optimal_Clusters_GMM` function was updated (https://github.com/mlampros/ClusterR/pull/70)

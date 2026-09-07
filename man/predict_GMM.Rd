@@ -7,7 +7,7 @@
 \usage{
 predict_GMM(data, CENTROIDS, COVARIANCE, WEIGHTS)
 
-\method{predict}{GMMCluster}(object, newdata, ...)
+\method{predict}{GMMCluster}(object, newdata, type = c("cluster", "prob", "all"), ...)
 }
 \arguments{
 \item{data}{matrix or data frame}
@@ -19,9 +19,16 @@ predict_GMM(data, CENTROIDS, COVARIANCE, WEIGHTS)
 \item{WEIGHTS}{vector containing the weights}
 
 \item{object, newdata, ...}{arguments for the `predict` generic}
+
+\item{type}{the type of prediction to return. One of `"cluster"` (hard
+cluster labels), `"prob"` (cluster probabilities), or `"all"` (the complete
+list returned by `predict_GMM()`).}
 }
 \value{
-a list consisting of the log-likelihoods, cluster probabilities and cluster labels.
+`predict_GMM()` returns a list consisting of the log-likelihoods,
+cluster probabilities and cluster labels. The `predict()` method returns the
+hard cluster labels when `type = "cluster"`, the cluster probabilities when
+`type = "prob"`, and the complete `predict_GMM()` list when `type = "all"`.
 }
 \description{
 Prediction function for a Gaussian Mixture Model object

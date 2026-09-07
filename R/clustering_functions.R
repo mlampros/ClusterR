@@ -133,7 +133,10 @@ GMM = function(data,
 #' @param CENTROIDS matrix or data frame containing the centroids (means), stored as row vectors
 #' @param COVARIANCE matrix or data frame (for diagonal covariance) or 3D array (for full covariance matrices)
 #' @param WEIGHTS vector containing the weights
-#' @return a list consisting of the log-likelihoods, cluster probabilities and cluster labels.
+#' @return `predict_GMM()` returns a list consisting of the log-likelihoods,
+#' cluster probabilities and cluster labels. The `predict()` method returns the
+#' hard cluster labels when `type = "cluster"`, the cluster probabilities when
+#' `type = "prob"`, and the complete `predict_GMM()` list when `type = "all"`.
 #' @author Lampros Mouselimis
 #' @details
 #' This function takes the centroids, covariance matrix and weights from a trained model and returns the log-likelihoods, cluster probabilities and cluster labels for new data.
@@ -195,9 +198,24 @@ predict_GMM = function(data, CENTROIDS, COVARIANCE, WEIGHTS) {
 
 #' @rdname predict_GMM
 #' @param object,newdata,... arguments for the `predict` generic
+#' @param type the type of prediction to return. One of `"cluster"` (hard
+#' cluster labels), `"prob"` (cluster probabilities), or `"all"` (the complete
+#' list returned by `predict_GMM()`).
 #' @export
-predict.GMMCluster <- function(object, newdata, ...) {
-  predict_GMM(newdata, object$centroids, object$covariance_matrices, object$weights)$cluster_labels
+predict.GMMCluster <- function(object, newdata,
+                               type = c("cluster", "prob", "all"), ...) {
+
+  type = match.arg(type)
+
+  out = predict_GMM(newdata,
+                    object$centroids,
+                    object$covariance_matrices,
+                    object$weights)
+
+  switch(type,
+         cluster = out$cluster_labels,
+         prob = out$cluster_proba,
+         all = out)
 }
 
 #' @export
