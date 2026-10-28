@@ -403,7 +403,7 @@ t = end - start
 cat('time to complete :', t, attributes(t)$units, '\n')
 ```
 
-    ## time to complete : 1.407933 secs
+    ## time to complete : 1.823662 secs
 
 ``` r
 
@@ -454,7 +454,7 @@ t = end - start
 cat('time to complete :', t, attributes(t)$units, '\n')
 ```
 
-    ## time to complete : 0.8723602 secs
+    ## time to complete : 0.9315503 secs
 
 ``` r
 
@@ -679,7 +679,7 @@ t = end - start
 cat('time to complete :', t, attributes(t)$units, '\n')
 ```
 
-    ## time to complete : 1.381401 secs
+    ## time to complete : 1.591856 secs
 
   
 
@@ -706,7 +706,7 @@ t = end - start
 cat('time to complete :', t, attributes(t)$units, '\n')
 ```
 
-    ## time to complete : 5.72628 secs
+    ## time to complete : 6.62118 secs
 
   
 
