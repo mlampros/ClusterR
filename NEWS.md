@@ -2,6 +2,7 @@
 ## ClusterR 1.3.7
 
 * The `predict()` method for `GMMCluster` objects now has a `type` argument. It returns hard cluster labels by default (`type = "cluster"`), cluster probabilities with `type = "prob"`, and the complete output of `predict_GMM()` with `type = "all"` (see [issue #73](https://github.com/mlampros/ClusterR/issues/73)).
+* I fixed the CRAN NOTE: "Found calls to structure() using deprecated special names: ClusterR/tests/testthat/test-gmm.R (.Dim: 2, .Names: 1) '.Dim' should be changed to 'dim'. '.Names' should be changed to 'names'."
 
 
 ## ClusterR 1.3.6
